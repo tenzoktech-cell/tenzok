@@ -57,7 +57,7 @@ export default function CtaFooter() {
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.id}
-                href={`/#${item.id}`}
+                href={item.href}
                 className="text-xs text-white/50 transition-colors hover:text-white"
               >
                 {item.label}

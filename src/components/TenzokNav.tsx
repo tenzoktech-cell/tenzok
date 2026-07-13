@@ -19,8 +19,11 @@ export default function TenzokNav() {
   const servicesRef = useRef<HTMLDivElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const closeTimer = useRef<number | null>(null);
-  const pathname = usePathname();
-  const onServicePage = pathname?.startsWith("/services") ?? false;
+  const pathname = usePathname() ?? "/";
+  const onServicePage = pathname.startsWith("/services");
+  const onFeedbacks = pathname.startsWith("/feedbacks");
+  const onBlogs = pathname.startsWith("/blogs");
+  const onHome = !onServicePage && !onFeedbacks && !onBlogs;
 
   const openServices = () => {
     if (closeTimer.current !== null) {
@@ -85,7 +88,7 @@ export default function TenzokNav() {
       </Link>
 
       <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-2 py-2 items-center gap-1">
-        <Link href="/" className={onServicePage ? PILL_INACTIVE : PILL_ACTIVE}>
+        <Link href="/" className={onHome ? PILL_ACTIVE : PILL_INACTIVE}>
           About Us
         </Link>
 
@@ -108,12 +111,12 @@ export default function TenzokNav() {
           </button>
         </div>
 
-        <a href="#" className={PILL_INACTIVE}>
+        <Link href="/feedbacks" className={onFeedbacks ? PILL_ACTIVE : PILL_INACTIVE}>
           Feedbacks
-        </a>
-        <a href="#" className={PILL_INACTIVE}>
+        </Link>
+        <Link href="/blogs" className={onBlogs ? PILL_ACTIVE : PILL_INACTIVE}>
           Blogs
-        </a>
+        </Link>
       </div>
 
       {/* Near-opaque panel: readable over bright imagery even where backdrop
@@ -196,20 +199,20 @@ export default function TenzokNav() {
             </div>
           )}
 
-          <a
-            href="#"
+          <Link
+            href="/feedbacks"
             onClick={() => setMenuOpen(false)}
             className="rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
           >
             Feedbacks
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            href="/blogs"
             onClick={() => setMenuOpen(false)}
             className="rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
           >
             Blogs
-          </a>
+          </Link>
 
           <a
             href="mailto:hello@tenzok.com"

@@ -61,6 +61,29 @@ html {
 }
 
 /* ---------------------------------------------------------------- */
+/* Coming-soon page                                                  */
+/* ---------------------------------------------------------------- */
+
+@keyframes csFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
+}
+
+@keyframes csRing {
+  0% { transform: scale(1); opacity: 0.55; }
+  100% { transform: scale(2.3); opacity: 0; }
+}
+
+@keyframes csDot {
+  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-5px); }
+}
+
+.cs-float { animation: csFloat 5s ease-in-out infinite; }
+.cs-ring { animation: csRing 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
+.cs-dot { animation: csDot 1.4s ease-in-out infinite; }
+
+/* ---------------------------------------------------------------- */
 /* Modal entrance                                                    */
 /* ---------------------------------------------------------------- */
 
@@ -121,7 +144,10 @@ html {
   .hero-zoom,
   .node-pulse,
   .modal-fade,
-  .modal-pop {
+  .modal-pop,
+  .cs-float,
+  .cs-ring,
+  .cs-dot {
     animation: none;
     opacity: 1;
   }

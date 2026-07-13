@@ -10,13 +10,14 @@ import {
 export interface NavItem {
   id: string;
   label: string;
+  href: string;
 }
 
 export const NAV_ITEMS: NavItem[] = [
-  { id: "about-us", label: "About Us" },
-  { id: "our-services", label: "Our Services" },
-  { id: "feedbacks", label: "Feedbacks" },
-  { id: "blogs", label: "Blogs" },
+  { id: "about-us", label: "About Us", href: "/" },
+  { id: "our-services", label: "Our Services", href: "/services" },
+  { id: "feedbacks", label: "Feedbacks", href: "/feedbacks" },
+  { id: "blogs", label: "Blogs", href: "/blogs" },
 ];
 
 export interface ServiceMenuItem {
