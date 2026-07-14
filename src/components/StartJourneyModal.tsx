@@ -1,115 +1,101 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { createPortal } from "react-dom";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowRight, Mail, X } from "lucide-react";
+import { ArrowRight, X } from "lucide-react";
 import { SERVICES } from "./services-data";
+import { Button, ButtonLink, type ButtonSize, type ButtonVariant } from "./ui/Button";
 
 interface StartJourneyButtonProps {
-  className?: string;
   label?: string;
+  variant?: ButtonVariant;
+  size?: ButtonSize;
+  className?: string;
   /** Slug of the service to preselect, e.g. on a service page. */
   defaultService?: string;
 }
 
 /**
- * "Start Your Journey" CTA: opens a modal where the visitor picks the
- * service that fits them, then continues by email (subject prefilled)
- * or explores that service's page.
+ * "Start Your Journey" CTA: opens a picker so the visitor tells us who they are,
+ * then hands them to the contact form with that service preselected.
  */
 export default function StartJourneyButton({
+  label = "Start your journey",
+  variant = "primary",
+  size = "md",
   className,
-  label = "Start Your Journey",
   defaultService,
 }: StartJourneyButtonProps) {
   const [open, setOpen] = useState(false);
+
   return (
     <>
-      <button type="button" onClick={() => setOpen(true)} className={className}>
+      <Button variant={variant} size={size} className={className} onClick={() => setOpen(true)}>
         {label}
-      </button>
-      {/* Portal to <body>: ancestors keep a transform after their entrance
-          animations, which would otherwise trap this fixed overlay. */}
-      {open &&
-        createPortal(
-          <JourneyModal defaultService={defaultService} onClose={() => setOpen(false)} />,
-          document.body,
-        )}
+      </Button>
+      {open && (
+        <JourneyDialog defaultService={defaultService} onClose={() => setOpen(false)} />
+      )}
     </>
   );
 }
 
-function JourneyModal({
+function JourneyDialog({
   defaultService,
   onClose,
 }: {
   defaultService?: string;
   onClose: () => void;
 }) {
+  const ref = useRef<HTMLDialogElement>(null);
   const [selected, setSelected] = useState(
     () => SERVICES.find((s) => s.slug === defaultService)?.slug ?? SERVICES[0].slug,
   );
   const service = SERVICES.find((s) => s.slug === selected) ?? SERVICES[0];
 
-  // Close on Escape; lock page scroll while open.
+  // showModal() gives us the focus trap, Escape, background inertness and
+  // top-layer stacking for free — no hand-rolled state, no body-overflow hack.
   useEffect(() => {
-    const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    document.addEventListener("keydown", onKeyDown);
+    const dialog = ref.current;
+    if (!dialog) return;
+    if (!dialog.open) dialog.showModal();
     const previousOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     return () => {
-      document.removeEventListener("keydown", onKeyDown);
       document.body.style.overflow = previousOverflow;
     };
-  }, [onClose]);
-
-  const mailHref = `mailto:hello@tenzok.com?subject=${encodeURIComponent(
-    `Start my journey — ${service.name}`,
-  )}`;
+  }, []);
 
   return (
-    <div
-      role="dialog"
-      aria-modal="true"
+    <dialog
+      ref={ref}
+      onClose={onClose}
+      onClick={(e) => {
+        // Clicks land on the dialog element itself only when they hit the backdrop.
+        if (e.target === ref.current) ref.current?.close();
+      }}
       aria-label="Start your journey"
-      className="fixed inset-0 z-[100] flex items-end justify-center sm:items-center sm:p-6"
+      className="modal-pop m-auto w-[calc(100%-2rem)] max-w-lg rounded-3xl border border-line bg-surface-overlay p-0 text-ink backdrop:bg-black/70 backdrop:backdrop-blur-sm"
     >
-      <div
-        className="modal-fade absolute inset-0 bg-black/70 backdrop-blur-sm"
-        onClick={onClose}
-        aria-hidden
-      />
-
-      <div className="modal-pop relative max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0c0c0c] p-6 shadow-2xl shadow-black/60 sm:rounded-3xl sm:p-8">
+      <div className="p-6 sm:p-8">
         <button
           type="button"
-          onClick={onClose}
+          onClick={() => ref.current?.close()}
           aria-label="Close"
-          className="absolute right-4 top-4 rounded-full p-2 text-white/50 transition-colors hover:bg-white/10 hover:text-white"
+          className="absolute right-4 top-4 flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-ink-subtle transition-colors hover:bg-surface-raised hover:text-ink"
         >
           <X size={18} />
         </button>
 
-        <p className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.25em] text-[#e8702a]">
-          <span className="h-px w-6 bg-[#e8702a]/60" aria-hidden />
-          Start your journey
-        </p>
-        <h2
-          className="mt-3 text-3xl leading-[1.05] text-white sm:text-4xl"
-          style={{ letterSpacing: "-0.04em" }}
-        >
-          What are we building{" "}
-          <span className="font-playfair italic text-[#e8702a]">together?</span>
+        <h2 className="max-w-xs text-2xl leading-tight text-ink sm:text-3xl">
+          What are we building together?
         </h2>
-        <p className="mt-3 text-sm leading-relaxed text-white/55">
-          Pick what fits where you are today — we&rsquo;ll take it from there. No
-          forms, no spam: it opens a plain email to our team.
+        <p className="mt-3 text-sm leading-relaxed text-ink-muted">
+          Pick what fits where you are today. We&rsquo;ll take you to a short form —
+          three fields, and a real person replies.
         </p>
 
-        <div className="mt-6 flex flex-col gap-2.5">
+        <div className="mt-6 flex flex-col gap-2">
           {SERVICES.map((s) => {
             const Icon = s.icon;
             const active = s.slug === selected;
@@ -119,31 +105,29 @@ function JourneyModal({
                 type="button"
                 onClick={() => setSelected(s.slug)}
                 aria-pressed={active}
-                className={`flex items-center gap-4 rounded-2xl border p-3.5 text-left transition-all sm:p-4 ${
+                className={`flex cursor-pointer items-center gap-4 rounded-2xl border p-4 text-left transition-colors ${
                   active
-                    ? "border-[#e8702a] bg-[#e8702a]/10"
-                    : "border-white/10 bg-white/[0.03] hover:border-white/25 hover:bg-white/[0.06]"
+                    ? "border-accent bg-accent/10"
+                    : "border-line bg-surface-raised hover:border-line-strong hover:bg-surface-overlay"
                 }`}
               >
                 <span
                   className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border ${
-                    active ? "border-[#e8702a]/40 bg-[#e8702a]/15" : "border-white/10 bg-white/5"
+                    active ? "border-accent/40 bg-accent/15" : "border-line bg-surface-overlay"
                   }`}
                 >
-                  <Icon size={18} className="text-[#e8702a]" />
+                  <Icon size={18} className={active ? "text-accent" : "text-ink-muted"} />
                 </span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-sm font-medium text-white">{s.name}</span>
-                  <span className="mt-0.5 block truncate text-xs text-white/50">
+                  <span className="block text-sm font-medium text-ink">{s.name}</span>
+                  <span className="mt-0.5 block truncate text-xs text-ink-subtle">
                     {s.audience}
                   </span>
                 </span>
                 <span
                   aria-hidden
-                  className={`h-4 w-4 shrink-0 rounded-full border transition-all ${
-                    active
-                      ? "border-[#e8702a] bg-[#e8702a] ring-4 ring-[#e8702a]/20"
-                      : "border-white/25"
+                  className={`h-4 w-4 shrink-0 rounded-full border ${
+                    active ? "border-accent bg-accent" : "border-line-strong"
                   }`}
                 />
               </button>
@@ -151,24 +135,24 @@ function JourneyModal({
           })}
         </div>
 
-        <div className="mt-7 flex flex-col gap-2.5 sm:flex-row">
-          <a
-            href={mailHref}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-[#e8702a] px-6 py-3 text-sm font-medium text-white transition-all hover:scale-[1.02] hover:bg-[#d2611f] hover:shadow-lg hover:shadow-[#e8702a]/30 active:scale-95"
+        <div className="mt-8 flex flex-col gap-3 sm:flex-row">
+          <ButtonLink
+            href={`/contact?service=${service.slug}`}
+            onClick={() => ref.current?.close()}
+            className="flex-1"
           >
-            <Mail size={15} />
-            Email us about {service.name}
-          </a>
+            Continue
+            <ArrowRight size={15} />
+          </ButtonLink>
           <Link
             href={`/services/${service.slug}`}
-            onClick={onClose}
-            className="inline-flex flex-1 items-center justify-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 py-3 text-sm text-white/80 transition-all hover:bg-white/10 hover:text-white"
+            onClick={() => ref.current?.close()}
+            className="inline-flex min-h-11 flex-1 cursor-pointer items-center justify-center rounded-full border border-line-strong bg-surface-raised px-5 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay"
           >
-            Explore {service.name}
-            <ArrowRight size={14} />
+            Read about {service.name}
           </Link>
         </div>
       </div>
-    </div>
+    </dialog>
   );
 }

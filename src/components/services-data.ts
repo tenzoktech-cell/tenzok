@@ -80,7 +80,7 @@ export const SERVICES: Service[] = [
       "Weekly 1:1s with working engineers, real code reviews, and a roadmap built around where you actually are — so every week ends with something shipped, not just watched.",
     stats: [
       { value: "1:1", label: "Live weekly sessions with a working engineer" },
-      { value: "0", label: "Recorded lectures — everything happens live" },
+      { value: "Live", label: "Every session — nothing is pre-recorded" },
       { value: "3", label: "Tracks: Foundation, Builder, Career" },
     ],
     steps: [
@@ -177,8 +177,8 @@ export const SERVICES: Service[] = [
       "We architect and build your academic project with you — every decision explained — so you walk into your viva knowing the why behind every line, with a live URL to prove it.",
     stats: [
       { value: "48h", label: "From problem statement to a scoped plan" },
-      { value: "100%", label: "Deployed live, with documentation" },
-      { value: "0", label: "Black-box handovers — you defend every line" },
+      { value: "Live", label: "Deployed to a real URL, with documentation" },
+      { value: "Yours", label: "Full source and docs — no black-box handovers" },
     ],
     steps: [
       {
