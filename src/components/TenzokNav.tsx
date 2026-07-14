@@ -156,7 +156,7 @@ export default function TenzokNav() {
             >
               <div
                 className={`mt-1 rounded-2xl border border-line bg-surface-overlay p-2 shadow-2xl shadow-black/70 ${
-                  twoColumn ? "w-[34rem]" : "w-72"
+                  twoColumn ? "w-[38rem]" : "w-72"
                 }`}
               >
                 <div

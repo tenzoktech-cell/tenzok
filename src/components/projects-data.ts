@@ -49,6 +49,12 @@ export interface ProjectBrief {
 export interface ProjectDomain {
   slug: string;
   name: string;
+  /**
+   * Shorter label for the nav dropdown, where a full name like "Power
+   * Electronics, EV & Energy Systems" gets truncated to an ellipsis.
+   * Only set it where the full name does not fit. Pages keep the full name.
+   */
+  shortName?: string;
   icon: LucideIcon;
   /** The one-line pitch used on cards. */
   tagline: string;
@@ -1041,6 +1047,7 @@ export const DOMAINS: ProjectDomain[] = [
   {
     slug: "power-electronics-ev",
     name: "Power Electronics, EV & Energy Systems",
+    shortName: "Power Electronics & EV",
     icon: BatteryCharging,
     tagline: "Converters, motor drives, and battery systems — proved in simulation before anything touches a bench.",
     intro:
@@ -1135,6 +1142,7 @@ export const DOMAINS: ProjectDomain[] = [
   {
     slug: "signal-processing-comms",
     name: "Signal Processing & Wireless Communications",
+    shortName: "Signal Processing & Wireless",
     icon: RadioTower,
     tagline: "Signals instead of datasets — BER curves, constellation plots, and PSNR tables that hold up.",
     intro:
@@ -1233,6 +1241,7 @@ export const DOMAINS: ProjectDomain[] = [
   {
     slug: "robotics-drones",
     name: "Robotics, Drones & Autonomous Systems",
+    shortName: "Robotics & Drones",
     icon: Bot,
     tagline: "Perception, control, and autonomy — proven in simulation before it touches a floor.",
     intro:
@@ -1316,6 +1325,7 @@ export const DOMAINS: ProjectDomain[] = [
   {
     slug: "data-analytics-bi",
     name: "Data Analytics & Business Intelligence",
+    shortName: "Data Analytics & BI",
     icon: ChartNoAxesCombined,
     tagline: "SQL, dimensional models, and dashboards where every number can be defended.",
     intro:
@@ -1497,6 +1507,7 @@ export const DOMAINS: ProjectDomain[] = [
   {
     slug: "network-protocol-simulation",
     name: "Computer Networks & Protocol Simulation",
+    shortName: "Computer Networks",
     icon: Network,
     tagline: "Routing, SDN, and vehicular protocols — measured with graphs that survive a second seed.",
     intro:

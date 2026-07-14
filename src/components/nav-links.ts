@@ -24,7 +24,9 @@ export const SERVICES_MENU = SERVICES.map((service) => ({
 
 export const PROJECTS_MENU = DOMAINS.map((domain) => ({
   id: domain.slug,
-  label: domain.name,
+  // Full names like "Power Electronics, EV & Energy Systems" do not fit a menu
+  // column and get cut to an ellipsis. The pages still use the full name.
+  label: domain.shortName ?? domain.name,
   icon: domain.icon,
 }));
 
