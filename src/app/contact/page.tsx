@@ -4,13 +4,15 @@ import TenzokNav from "@/components/TenzokNav";
 import { getService } from "@/components/services-data";
 import CtaFooter from "@/components/sections/CtaFooter";
 import { Container, Eyebrow } from "@/components/ui/Section";
-import { SITE } from "@/lib/site";
+import { SITE, url } from "@/lib/site";
 import ContactForm from "./ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
     "Tell us about your project, your startup, or your semester. Three fields, and a real person replies — usually within a working day.",
+  alternates: { canonical: url("/contact") },
+  openGraph: { url: url("/contact") },
 };
 
 const PROMISES = [

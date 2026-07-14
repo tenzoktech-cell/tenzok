@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowUpRight, Building2, GraduationCap } from "lucide-react";
+import JsonLd from "@/components/JsonLd";
 import ProjectCard from "@/components/ProjectCard";
 import StartJourneyButton from "@/components/StartJourneyModal";
 import TenzokNav from "@/components/TenzokNav";
@@ -10,6 +11,8 @@ import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow, Section } from "@/components/ui/Section";
+import { breadcrumbSchema, itemListSchema } from "@/lib/seo";
+import { url } from "@/lib/site";
 
 export function generateStaticParams() {
   return DOMAINS.map((domain) => ({ slug: domain.slug }));
@@ -23,9 +26,28 @@ export async function generateMetadata({
   const { slug } = await params;
   const domain = getDomain(slug);
   if (!domain) return {};
+
+  const mini = domain.projects.filter((p) => p.tier === "mini").length;
+  const major = domain.projects.length - mini;
+
   return {
-    title: `${domain.name} Projects`,
-    description: domain.tagline,
+    title: `${domain.name} Projects — Mini & Major`,
+    // Written for the search result, not for us: names the tiers and the stack,
+    // because that is what the query actually contains.
+    description: `${domain.projects.length} ${domain.name} project briefs for students and teams — ${mini} mini projects and ${major} major capstones. ${domain.tagline}`,
+    keywords: [
+      `${domain.name} projects`,
+      `${domain.name} final year project`,
+      `${domain.name} mini project`,
+      `${domain.name} major project`,
+      ...domain.stack.slice(0, 4).map((tech) => `${tech} project`),
+    ],
+    alternates: { canonical: url(`/projects/${slug}`) },
+    openGraph: {
+      title: `${domain.name} Projects — Tenzok`,
+      description: domain.tagline,
+      url: url(`/projects/${slug}`),
+    },
   };
 }
 
@@ -45,6 +67,22 @@ export default async function DomainPage({
 
   return (
     <main id="main" tabIndex={-1} className="bg-surface">
+      <JsonLd
+        schema={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Projects", path: "/projects" },
+            { name: domain.name, path: `/projects/${domain.slug}` },
+          ]),
+          itemListSchema(
+            `${domain.name} project briefs`,
+            domain.projects.map((p) => ({
+              name: p.title,
+              path: `/projects/${domain.slug}`,
+            })),
+          ),
+        ]}
+      />
       <TenzokNav />
 
       <section className="pt-36 pb-8 sm:pt-44">

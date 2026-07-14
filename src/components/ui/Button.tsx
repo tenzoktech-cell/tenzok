@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
-export type ButtonVariant = "primary" | "secondary" | "ghost";
+export type ButtonVariant = "primary" | "secondary" | "inverse" | "ghost";
 export type ButtonSize = "md" | "lg";
 
 const BASE =
@@ -11,6 +11,9 @@ const VARIANTS: Record<ButtonVariant, string> = {
   primary: "bg-accent text-accent-ink hover:bg-accent-strong",
   secondary:
     "border border-line-strong bg-surface-raised text-ink hover:bg-surface-overlay",
+  // The nav's "Book a Call": solid light on dark. Distinct from the accent, so
+  // it never competes with the single primary CTA in the view below it.
+  inverse: "bg-ink text-surface hover:bg-white",
   ghost: "text-ink-muted hover:text-ink",
 };
 

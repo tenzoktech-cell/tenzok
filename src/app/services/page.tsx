@@ -1,22 +1,51 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import JsonLd from "@/components/JsonLd";
 import StartJourneyButton from "@/components/StartJourneyModal";
 import TenzokNav from "@/components/TenzokNav";
 import { SERVICES } from "@/components/services-data";
 import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
 import { Container, Eyebrow, Section } from "@/components/ui/Section";
+import { breadcrumbSchema, itemListSchema } from "@/lib/seo";
+import { url } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Services",
   description:
     "Mentorship, student projects, company services, digital marketing, and launch support — every Tenzok engagement, end to end.",
+  keywords: [
+    "software mentorship",
+    "final year project help",
+    "software development company",
+    "product engineering services",
+    "capstone project guidance",
+  ],
+  alternates: { canonical: url("/services") },
+  openGraph: {
+    title: "Services — Tenzok",
+    description:
+      "Five ways to work with Tenzok — scoped in writing, built in the open, handed over with nothing hidden.",
+    url: url("/services"),
+  },
 };
 
 export default function ServicesIndexPage() {
   return (
     <main id="main" tabIndex={-1} className="bg-surface">
+      <JsonLd
+        schema={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Services", path: "/services" },
+          ]),
+          itemListSchema(
+            "Tenzok services",
+            SERVICES.map((s) => ({ name: s.name, path: `/services/${s.slug}` })),
+          ),
+        ]}
+      />
       <TenzokNav />
 
       <section className="pt-36 pb-8 sm:pt-44">

@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import JsonLd from "@/components/JsonLd";
 import StartJourneyButton from "@/components/StartJourneyModal";
 import TenzokNav from "@/components/TenzokNav";
 import { DOMAINS, TOTAL_PROJECTS } from "@/components/projects-data";
@@ -8,11 +9,30 @@ import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow, Section } from "@/components/ui/Section";
+import { breadcrumbSchema, itemListSchema } from "@/lib/seo";
+import { url } from "@/lib/site";
 
 export const metadata: Metadata = {
-  title: "Projects",
+  title: "Mini & Major Project Ideas for Final Year Students",
   description:
-    "Mini and major project briefs across Python full-stack, Java, AI, machine learning, deep learning, data engineering, mobile, cloud, cybersecurity and IoT — scoped, built, deployed and defensible.",
+    "40 project briefs across Python full-stack, Java, AI, machine learning, deep learning, data engineering, mobile, cloud, security and IoT — scoped, built with you, deployed and defensible.",
+  keywords: [
+    "final year project ideas",
+    "mini project ideas",
+    "major project ideas",
+    "capstone project ideas",
+    "machine learning project ideas",
+    "python full stack project",
+    "java project ideas for final year",
+    "deep learning project ideas",
+  ],
+  alternates: { canonical: url("/projects") },
+  openGraph: {
+    title: "Mini & Major Project Ideas — Tenzok",
+    description:
+      "40 project briefs across 10 engineering domains. Scoped, built with you, deployed, and defensible in a viva.",
+    url: url("/projects"),
+  },
 };
 
 const MINI = DOMAINS.reduce(
@@ -30,6 +50,18 @@ const STATS = [
 export default function ProjectsIndexPage() {
   return (
     <main id="main" tabIndex={-1} className="bg-surface">
+      <JsonLd
+        schema={[
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Projects", path: "/projects" },
+          ]),
+          itemListSchema(
+            "Engineering project domains",
+            DOMAINS.map((d) => ({ name: d.name, path: `/projects/${d.slug}` })),
+          ),
+        ]}
+      />
       <TenzokNav />
 
       <section className="pt-36 pb-8 sm:pt-44">

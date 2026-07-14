@@ -54,17 +54,21 @@ export default function CtaFooter() {
             </div>
 
             <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
-              {[...NAV_ITEMS, { id: "contact", label: "Contact", href: "/contact" }].map(
-                (item) => (
-                  <Link
-                    key={item.id}
-                    href={item.href}
-                    className="flex min-h-11 items-center text-sm text-ink-muted transition-colors hover:text-ink"
-                  >
-                    {item.label}
-                  </Link>
+              {[
+                // Coming-soon routes are listed separately below, with a "Soon" badge.
+                ...NAV_ITEMS.filter(
+                  (item) => !FOOTER_COMING_SOON.some((soon) => soon.id === item.id),
                 ),
-              )}
+                { id: "contact", label: "Contact", href: "/contact" },
+              ].map((item) => (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className="flex min-h-11 items-center text-sm text-ink-muted transition-colors hover:text-ink"
+                >
+                  {item.label}
+                </Link>
+              ))}
               {FOOTER_COMING_SOON.map((item) => (
                 <Link
                   key={item.id}

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import JsonLd from "@/components/JsonLd";
 import ProcessBar from "@/components/ProcessBar";
 import StartJourneyButton from "@/components/StartJourneyModal";
 import TenzokNav from "@/components/TenzokNav";
@@ -11,6 +12,8 @@ import SectionHeading from "@/components/sections/SectionHeading";
 import { SERVICES, getService } from "@/components/services-data";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow, Section } from "@/components/ui/Section";
+import { breadcrumbSchema, serviceSchema } from "@/lib/seo";
+import { url } from "@/lib/site";
 
 interface ServicePageProps {
   params: Promise<{ slug: string }>;
@@ -27,6 +30,12 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   return {
     title: service.name,
     description: service.intro,
+    alternates: { canonical: url(`/services/${slug}`) },
+    openGraph: {
+      title: `${service.name} — Tenzok`,
+      description: service.intro,
+      url: url(`/services/${slug}`),
+    },
   };
 }
 
@@ -40,6 +49,21 @@ export default async function ServicePage({ params }: ServicePageProps) {
 
   return (
     <main id="main" tabIndex={-1} className="bg-surface">
+      <JsonLd
+        schema={[
+          serviceSchema({
+            name: service.name,
+            description: service.intro,
+            slug: service.slug,
+            audience: service.audience,
+          }),
+          breadcrumbSchema([
+            { name: "Home", path: "/" },
+            { name: "Services", path: "/services" },
+            { name: service.name, path: `/services/${service.slug}` },
+          ]),
+        ]}
+      />
       <TenzokNav />
 
       {/* ------------------------------ Hero ------------------------------ */}

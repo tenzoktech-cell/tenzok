@@ -7,11 +7,13 @@ export interface NavItem {
   href: string;
 }
 
-/** Primary nav. Every entry points at a page with real content on it. */
+/** Primary nav. */
 export const NAV_ITEMS: NavItem[] = [
-  { id: "home", label: "Home", href: "/" },
+  { id: "home", label: "About Us", href: "/" },
   { id: "projects", label: "Projects", href: "/projects" },
-  { id: "services", label: "Services", href: "/services" },
+  { id: "services", label: "Our Services", href: "/services" },
+  { id: "blogs", label: "Blogs", href: "/blogs" },
+  { id: "feedbacks", label: "Feedbacks", href: "/feedbacks" },
 ];
 
 /** Derived from the data, so the menu can never drift from the pages. */
@@ -27,10 +29,8 @@ export const PROJECTS_MENU = DOMAINS.map((domain) => ({
   icon: domain.icon,
 }));
 
-/** Kept out of the primary nav until they have content — an empty page in the
- *  nav reads as an abandoned site, and Feedbacks is exactly where a buyer
- *  goes to check that you are real. */
+/** Still a holding page. Labelled "Soon" in the footer so it never surprises
+ *  anyone who clicks it expecting testimonials. */
 export const FOOTER_COMING_SOON: NavItem[] = [
   { id: "feedbacks", label: "Feedbacks", href: "/feedbacks" },
-  { id: "blogs", label: "Blogs", href: "/blogs" },
 ];

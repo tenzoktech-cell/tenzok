@@ -20,10 +20,13 @@ const playfair = Playfair_Display({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — We turn projects into careers`,
+    default: `${SITE.name} — Final Year Projects, Mentorship & Software Delivery`,
     template: `%s — ${SITE.name}`,
   },
   description: SITE.description,
+  // Root OG deliberately carries only type/siteName/locale. Children inherit this
+  // object wholesale, so a title or url here would stamp the homepage's identity
+  // onto every service, project and blog page.
   openGraph: {
     type: "website",
     siteName: SITE.name,
@@ -31,6 +34,11 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
 };
 
