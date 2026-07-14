@@ -1,23 +1,17 @@
-import {
-  ArrowRight,
-  ArrowUpRight,
-  Cloud,
-  Code2,
-  GraduationCap,
-  Users,
-  type LucideIcon,
-} from "lucide-react";
+import { ArrowRight, Cloud, Code2, GraduationCap, Users, type LucideIcon } from "lucide-react";
+import Link from "next/link";
+import { Section } from "../ui/Section";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 
-interface Service {
+interface Offer {
   icon: LucideIcon;
   title: string;
   desc: string;
   tags: string[];
 }
 
-const SERVICES: Service[] = [
+const OFFERS: Offer[] = [
   {
     icon: Code2,
     title: "Product Engineering",
@@ -44,87 +38,66 @@ const SERVICES: Service[] = [
   },
 ];
 
-const TRUST_POINTS = ["NDA-first", "Fixed scope or retainer", "Weekly demos", "Global time zones"];
-
 export default function CompanyServices() {
   return (
-    <section
-      id="company-services"
-      className="relative scroll-mt-20 border-t border-white/5 bg-black py-24 sm:py-32"
-    >
-      <div className="mx-auto grid max-w-6xl gap-14 px-5 sm:px-8 lg:grid-cols-[1fr_1.5fr]">
+    <Section id="company-services" bordered>
+      <div className="grid gap-12 lg:grid-cols-[1fr_1.4fr] lg:gap-16">
         <div className="lg:sticky lg:top-28 lg:self-start">
           <SectionHeading
             eyebrow="Company Services"
             title={
               <>
                 Your product,{" "}
-                <span className="font-playfair italic text-[#e8702a]">owned</span> like
-                ours.
+                <span className="font-display italic text-accent">owned</span> like ours.
               </>
             }
-            copy="We don’t just take the project — we own it, teach it, and ship it. Engagements built for startups and enterprises that want delivery plus durable knowledge."
+            copy="We don't just take the project — we own it, teach it, and ship it. Engagements built for startups and enterprises that want delivery plus durable knowledge."
           />
-          <Reveal delay={150}>
-            <div className="mt-8 flex flex-wrap gap-2">
-              {TRUST_POINTS.map((point) => (
-                <span
-                  key={point}
-                  className="rounded-full border border-white/10 bg-white/[0.04] px-3.5 py-1.5 text-xs text-white/55"
-                >
-                  {point}
-                </span>
-              ))}
-            </div>
-            <a
-              href="#contact"
-              className="mt-8 inline-flex items-center gap-2 text-sm font-medium text-white transition-colors hover:text-[#e8702a]"
+          <Reveal delay={120}>
+            <Link
+              href="/contact?service=company-services"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-line-strong bg-surface-raised px-5 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay"
             >
               Book a scoping call
-              <ArrowRight size={14} />
-            </a>
+              <ArrowRight size={15} />
+            </Link>
           </Reveal>
         </div>
 
-        <div className="divide-y divide-white/10 border-y border-white/10">
-          {SERVICES.map((service, i) => {
-            const Icon = service.icon;
+        <div className="divide-y divide-line border-y border-line">
+          {OFFERS.map((offer, i) => {
+            const Icon = offer.icon;
             return (
-              <Reveal key={service.title} delay={i * 80}>
-                <div className="group flex items-start gap-5 rounded-lg px-2 py-8 transition-colors hover:bg-white/[0.03] sm:gap-7 sm:px-4">
-                  <span className="pt-1 font-playfair text-xl italic text-white/30 transition-colors group-hover:text-[#e8702a] sm:text-2xl">
+              <Reveal key={offer.title} delay={i * 70}>
+                <div className="flex items-start gap-5 py-8">
+                  <span className="font-display text-xl italic text-ink-subtle">
                     0{i + 1}
                   </span>
-                  <div className="flex-1">
+                  <div className="min-w-0 flex-1">
                     <div className="flex items-center gap-3">
-                      <Icon size={18} className="text-[#e8702a]" />
-                      <h3 className="text-lg font-medium text-white sm:text-xl">
-                        {service.title}
-                      </h3>
+                      <Icon size={18} className="shrink-0 text-ink-muted" />
+                      <h3 className="text-lg text-ink">{offer.title}</h3>
                     </div>
-                    <p className="mt-2 max-w-lg text-sm leading-relaxed text-white/55">
-                      {service.desc}
+                    <p className="mt-3 max-w-lg text-sm leading-relaxed text-ink-muted">
+                      {offer.desc}
                     </p>
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                      {service.tags.map((tag) => (
+                    <div className="mt-4 flex flex-wrap gap-1.5">
+                      {offer.tags.map((tag) => (
                         <span
                           key={tag}
-                          className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] text-white/50"
+                          className="rounded-md border border-line px-2 py-1 text-xs text-ink-subtle"
                         >
                           {tag}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <span className="hidden h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/50 transition-all group-hover:border-[#e8702a] group-hover:bg-[#e8702a] group-hover:text-white sm:flex">
-                    <ArrowUpRight size={16} />
-                  </span>
                 </div>
               </Reveal>
             );
           })}
         </div>
       </div>
-    </section>
+    </Section>
   );
 }

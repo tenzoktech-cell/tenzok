@@ -4,48 +4,32 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
-import { SERVICES_MENU } from "./nav-links";
+import { PROJECTS_MENU, SERVICES_MENU } from "./nav-links";
 import TenzokLogo from "./TenzokLogo";
+import { ButtonLink } from "./ui/Button";
 
-const PILL_BASE = "px-4 py-1.5 rounded-full text-sm font-medium transition-colors";
-const PILL_ACTIVE = `bg-white text-gray-900 ${PILL_BASE}`;
-const PILL_INACTIVE = `text-white/80 hover:bg-white/20 hover:text-white ${PILL_BASE}`;
+/* The floating centre pill group. min-h-11 keeps every item at a 44px tap
+   target — the old version was 32px, which fails at the md breakpoint (iPad). */
+const PILL = "inline-flex min-h-11 items-center gap-1.5 rounded-full px-4 text-sm font-medium transition-colors";
+const PILL_ACTIVE = `${PILL} bg-ink text-surface`;
+const PILL_INACTIVE = `${PILL} text-ink/80 hover:bg-white/15 hover:text-ink`;
+
+/** Disclosure navigation: plain links behind an aria-expanded toggle.
+ *  Deliberately NOT role="menu" — these are navigation links, and menuitem
+ *  would strip the link role and oblige us to implement arrow-key semantics. */
+const DROPDOWNS = [
+  { id: "projects", label: "Projects", base: "/projects", items: PROJECTS_MENU },
+  { id: "services", label: "Our Services", base: "/services", items: SERVICES_MENU },
+] as const;
 
 export default function TenzokNav() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const [servicesOpen, setServicesOpen] = useState(false);
-  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [mobileOpenId, setMobileOpenId] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const servicesRef = useRef<HTMLDivElement>(null);
-  const panelRef = useRef<HTMLDivElement>(null);
-  const closeTimer = useRef<number | null>(null);
+  const navRef = useRef<HTMLElement>(null);
   const pathname = usePathname() ?? "/";
-  const onServicePage = pathname.startsWith("/services");
-  const onFeedbacks = pathname.startsWith("/feedbacks");
-  const onBlogs = pathname.startsWith("/blogs");
-  const onHome = !onServicePage && !onFeedbacks && !onBlogs;
 
-  const openServices = () => {
-    if (closeTimer.current !== null) {
-      clearTimeout(closeTimer.current);
-      closeTimer.current = null;
-    }
-    setServicesOpen(true);
-  };
-
-  // Delay closing slightly so the pointer can travel from trigger to panel.
-  const scheduleCloseServices = () => {
-    if (closeTimer.current !== null) clearTimeout(closeTimer.current);
-    closeTimer.current = window.setTimeout(() => setServicesOpen(false), 150);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (closeTimer.current !== null) clearTimeout(closeTimer.current);
-    };
-  }, []);
-
-  // Darken the bar once content starts scrolling underneath it.
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
@@ -53,18 +37,14 @@ export default function TenzokNav() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  // Close the services dropdown on Escape or on any press outside it.
+  // Close the open dropdown on Escape or on any press outside the nav.
   useEffect(() => {
-    if (!servicesOpen) return;
+    if (!openId) return;
     const onPointerDown = (e: PointerEvent) => {
-      const target = e.target as Node;
-      if (servicesRef.current?.contains(target) || panelRef.current?.contains(target)) {
-        return;
-      }
-      setServicesOpen(false);
+      if (!navRef.current?.contains(e.target as Node)) setOpenId(null);
     };
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setServicesOpen(false);
+      if (e.key === "Escape") setOpenId(null);
     };
     document.addEventListener("pointerdown", onPointerDown);
     document.addEventListener("keydown", onKeyDown);
@@ -72,155 +52,233 @@ export default function TenzokNav() {
       document.removeEventListener("pointerdown", onPointerDown);
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [servicesOpen]);
+  }, [openId]);
+
+  // Every link calls this, so a navigation always leaves the nav closed.
+  const closeAll = () => {
+    setOpenId(null);
+    setMenuOpen(false);
+    setMobileOpenId(null);
+  };
+
+  const isActive = (href: string) =>
+    href === "/" ? pathname === "/" : pathname.startsWith(href);
 
   return (
     <nav
-      className={`fixed top-0 left-0 right-0 z-[60] flex items-center justify-between border-b p-4 transition-colors duration-300 sm:p-5 ${
-        scrolled || menuOpen
-          ? "border-white/10 bg-black/80 backdrop-blur-md"
+      ref={navRef}
+      className={`fixed inset-x-0 top-0 z-60 border-b p-4 transition-colors duration-300 sm:p-5 ${
+        scrolled || menuOpen || openId
+          ? "border-line bg-surface/85 backdrop-blur-md"
           : "border-transparent bg-transparent"
       }`}
     >
-      <Link href="/" className="flex items-center gap-2.5">
-        <TenzokLogo size={26} />
-        <span className="text-white text-2xl font-playfair italic">Tenzok</span>
-      </Link>
-
-      <div className="hidden md:flex absolute left-1/2 -translate-x-1/2 bg-white/20 backdrop-blur-md border border-white/30 rounded-full px-2 py-2 items-center gap-1">
-        <Link href="/" className={onHome ? PILL_ACTIVE : PILL_INACTIVE}>
-          About Us
+      <div className="flex items-center justify-between">
+        <Link
+          href="/"
+          onClick={closeAll}
+          aria-label="Tenzok — home"
+          className="flex min-h-11 items-center gap-2.5"
+        >
+          <TenzokLogo size={26} />
+          <span className="font-display text-2xl italic text-ink">Tenzok</span>
         </Link>
 
-        <div
-          ref={servicesRef}
-          onMouseEnter={openServices}
-          onMouseLeave={scheduleCloseServices}
-        >
-          <button
-            aria-haspopup="true"
-            aria-expanded={servicesOpen}
-            onClick={openServices}
-            className={`flex items-center gap-1.5 ${onServicePage ? PILL_ACTIVE : PILL_INACTIVE}`}
+        {/* Floating centre pill group */}
+        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-1 rounded-full border border-white/20 bg-white/10 p-1.5 backdrop-blur-md md:flex">
+          <Link
+            href="/"
+            onClick={closeAll}
+            className={isActive("/") ? PILL_ACTIVE : PILL_INACTIVE}
           >
-            Our Services
-            <ChevronDown
-              size={14}
-              className={`transition-transform duration-200 ${servicesOpen ? "rotate-180" : ""}`}
-            />
-          </button>
-        </div>
+            About Us
+          </Link>
 
-        <Link href="/feedbacks" className={onFeedbacks ? PILL_ACTIVE : PILL_INACTIVE}>
-          Feedbacks
-        </Link>
-        <Link href="/blogs" className={onBlogs ? PILL_ACTIVE : PILL_INACTIVE}>
-          Blogs
-        </Link>
-      </div>
-
-      {/* Near-opaque panel: readable over bright imagery even where backdrop
-          blur is unsupported. Rendered outside the pill so its blur can work. */}
-      {servicesOpen && (
-        <div
-          ref={panelRef}
-          onMouseEnter={openServices}
-          onMouseLeave={scheduleCloseServices}
-          className="hidden md:block absolute left-1/2 top-full -translate-x-1/2 -mt-1"
-        >
-          <div className="w-64 rounded-2xl border border-white/15 bg-[#0e0e0e]/95 p-2 shadow-2xl shadow-black/70 backdrop-blur-xl">
-            {SERVICES_MENU.map(({ id, label, icon: Icon }) => (
-              <Link
-                key={id}
-                href={`/services/${id}`}
-                onClick={() => setServicesOpen(false)}
-                className="flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+          {/* The pill background lives on the WRAPPER, not the link — so the
+              chevron sits inside the pill instead of overhanging its rounded edge. */}
+          {DROPDOWNS.map((menu) => {
+            const open = openId === menu.id;
+            const active = isActive(menu.base);
+            return (
+              <div
+                key={menu.id}
+                className={`inline-flex min-h-11 items-center rounded-full transition-colors ${
+                  active
+                    ? "bg-ink text-surface"
+                    : "text-ink/80 hover:bg-white/15 hover:text-ink"
+                }`}
               >
-                <Icon size={15} className="shrink-0 text-[#e8702a]" />
-                {label}
-              </Link>
-            ))}
-          </div>
+                <Link
+                  href={menu.base}
+                  onClick={closeAll}
+                  className="flex min-h-11 items-center rounded-l-full pl-4 pr-1.5 text-sm font-medium"
+                >
+                  {menu.label}
+                </Link>
+                <button
+                  type="button"
+                  aria-expanded={open}
+                  aria-controls={`${menu.id}-panel`}
+                  aria-label={`${open ? "Hide" : "Show"} ${menu.label} menu`}
+                  onClick={() => setOpenId(open ? null : menu.id)}
+                  className="flex min-h-11 cursor-pointer items-center rounded-r-full pl-0.5 pr-3.5"
+                >
+                  <ChevronDown
+                    size={14}
+                    className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                  />
+                </button>
+              </div>
+            );
+          })}
+
+          <Link
+            href="/blogs"
+            onClick={closeAll}
+            className={isActive("/blogs") ? PILL_ACTIVE : PILL_INACTIVE}
+          >
+            Blogs
+          </Link>
         </div>
-      )}
 
-      <a
-        href="mailto:hello@tenzok.com"
-        className="hidden md:block bg-white text-gray-900 text-sm font-semibold px-6 py-2.5 rounded-full hover:bg-gray-100 transition-colors"
-      >
-        Book a Call
-      </a>
+        {/* Dropdown panels live outside the pill: the pill has backdrop-blur,
+            which makes any nested backdrop-blur a no-op. */}
+        {DROPDOWNS.map((menu) => {
+          if (openId !== menu.id) return null;
+          // With 18 project domains a single column runs off the bottom of a
+          // laptop screen, so long menus go two-up and the list scrolls.
+          const twoColumn = menu.items.length > 8;
+          return (
+            <div
+              key={menu.id}
+              id={`${menu.id}-panel`}
+              className="absolute left-1/2 top-full hidden -translate-x-1/2 md:block"
+            >
+              <div
+                className={`mt-1 rounded-2xl border border-line bg-surface-overlay p-2 shadow-2xl shadow-black/70 ${
+                  twoColumn ? "w-[34rem]" : "w-72"
+                }`}
+              >
+                <div
+                  className={`max-h-[min(60vh,26rem)] overflow-y-auto ${
+                    twoColumn ? "grid grid-cols-2 gap-x-1" : ""
+                  }`}
+                >
+                  {menu.items.map(({ id, label, icon: Icon }) => (
+                    <Link
+                      key={id}
+                      href={`${menu.base}/${id}`}
+                      onClick={closeAll}
+                      className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
+                    >
+                      <Icon size={15} className="shrink-0 text-ink-subtle" />
+                      <span className="truncate">{label}</span>
+                    </Link>
+                  ))}
+                </div>
+                <Link
+                  href={menu.base}
+                  onClick={closeAll}
+                  className="mt-1 flex min-h-11 items-center rounded-xl border-t border-line px-3 text-sm font-medium text-accent transition-colors hover:bg-surface-raised"
+                >
+                  View all {menu.label.replace("Our ", "").toLowerCase()}
+                </Link>
+              </div>
+            </div>
+          );
+        })}
 
-      <div className="md:hidden flex items-center gap-2">
+        <ButtonLink
+          href="/contact"
+          onClick={closeAll}
+          variant="inverse"
+          className="hidden md:inline-flex"
+        >
+          Book a Call
+        </ButtonLink>
+
         <button
+          type="button"
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
-          onClick={() => setMenuOpen((open) => !open)}
-          className="text-white p-2 rounded-full hover:bg-white/10 transition-colors"
+          onClick={() => setMenuOpen((o) => !o)}
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-ink transition-colors hover:bg-white/10 md:hidden"
         >
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {menuOpen && (
-        <div className="md:hidden absolute top-full left-4 right-4 mt-1 flex flex-col rounded-2xl border border-white/15 bg-[#0e0e0e]/95 p-3 shadow-2xl shadow-black/70 backdrop-blur-xl">
+        <div className="absolute inset-x-4 top-full mt-1 flex flex-col rounded-2xl border border-line bg-surface-overlay p-3 shadow-2xl shadow-black/70 md:hidden">
           <Link
             href="/"
-            onClick={() => setMenuOpen(false)}
-            className="rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+            onClick={closeAll}
+            className="flex min-h-12 items-center rounded-xl px-4 text-sm text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
           >
             About Us
           </Link>
 
-          <button
-            aria-expanded={mobileServicesOpen}
-            onClick={() => setMobileServicesOpen((open) => !open)}
-            className="flex items-center justify-between rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            Our Services
-            <ChevronDown
-              size={15}
-              className={`transition-transform duration-200 ${mobileServicesOpen ? "rotate-180" : ""}`}
-            />
-          </button>
-          {mobileServicesOpen && (
-            <div className="ml-4 flex flex-col border-l border-white/10 pl-3">
-              {SERVICES_MENU.map(({ id, label, icon: Icon }) => (
-                <Link
-                  key={id}
-                  href={`/services/${id}`}
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm font-medium text-white/85 transition-colors hover:bg-white/10 hover:text-white"
-                >
-                  <Icon size={14} className="shrink-0 text-[#e8702a]" />
-                  {label}
-                </Link>
-              ))}
-            </div>
-          )}
+          {DROPDOWNS.map((menu) => {
+            const open = mobileOpenId === menu.id;
+            return (
+              <div key={menu.id}>
+                <div className="flex items-center">
+                  <Link
+                    href={menu.base}
+                    onClick={closeAll}
+                    className="flex min-h-12 flex-1 items-center rounded-xl px-4 text-sm text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
+                  >
+                    {menu.label}
+                  </Link>
+                  <button
+                    type="button"
+                    aria-expanded={open}
+                    aria-label={`${open ? "Hide" : "Show"} ${menu.label} menu`}
+                    onClick={() => setMobileOpenId(open ? null : menu.id)}
+                    className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-ink-subtle hover:text-ink"
+                  >
+                    <ChevronDown
+                      size={15}
+                      className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+                    />
+                  </button>
+                </div>
+                {open && (
+                  <div className="ml-4 flex flex-col border-l border-line pl-3">
+                    {menu.items.map(({ id, label, icon: Icon }) => (
+                      <Link
+                        key={id}
+                        href={`${menu.base}/${id}`}
+                        onClick={closeAll}
+                        className="flex min-h-11 items-center gap-2.5 rounded-xl px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
+                      >
+                        <Icon size={14} className="shrink-0 text-ink-subtle" />
+                        {label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
 
           <Link
-            href="/feedbacks"
-            onClick={() => setMenuOpen(false)}
-            className="rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
-          >
-            Feedbacks
-          </Link>
-          <Link
             href="/blogs"
-            onClick={() => setMenuOpen(false)}
-            className="rounded-xl px-4 py-3 text-sm text-white/90 transition-colors hover:bg-white/10 hover:text-white"
+            onClick={closeAll}
+            className="flex min-h-12 items-center rounded-xl px-4 text-sm text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
           >
             Blogs
           </Link>
 
-          <a
-            href="mailto:hello@tenzok.com"
-            onClick={() => setMenuOpen(false)}
-            className="mt-2 rounded-xl bg-white py-3 text-center text-sm font-semibold text-gray-900"
+          <ButtonLink
+            href="/contact"
+            onClick={closeAll}
+            variant="inverse"
+            size="lg"
+            className="mt-2 w-full"
           >
             Book a Call
-          </a>
+          </ButtonLink>
         </div>
       )}
     </nav>

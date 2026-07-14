@@ -1,121 +1,101 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@1,400;1,500;1,600&display=swap');
 @import "tailwindcss";
 
 /* Tailwind v4: the single import above replaces the v3
-   `@tailwind base/components/utilities` directives. */
+   `@tailwind base/components/utilities` directives.
+   Fonts are loaded by next/font in layout.tsx — never with an @import here,
+   Next's CSS pipeline strips remote @imports and the font silently never loads. */
 
-html {
-  scroll-behavior: smooth;
+@theme {
+  /* ---- Surfaces: three levels, no more ---- */
+  --color-surface: #0b0c0e;
+  --color-surface-raised: #131417;
+  --color-surface-overlay: #1a1b1f;
+
+  /* ---- Lines: two, no more ---- */
+  --color-line: #ffffff14;
+  --color-line-strong: #ffffff2e;
+
+  /* ---- Ink: opaque, so contrast is the same on every surface ---- */
+  --color-ink: #f2f3f5;
+  --color-ink-muted: #a8acb4;
+  --color-ink-subtle: #7e838c;
+
+  /* ---- Accent: warm, for actions and brand ---- */
+  --color-accent: #e8702a;
+  --color-accent-strong: #d2611f;
+  --color-accent-ink: #17120e;
+
+  /* ---- Cool secondary: informational only (audience, domains) ---- */
+  --color-cool: #5b9dff;
+  --color-cool-ink: #08111f;
+
+  /* ---- Type ---- */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-playfair), Georgia, "Times New Roman", serif;
 }
 
-::selection {
-  background: rgba(232, 112, 42, 0.35);
-  color: #ffffff;
+@layer base {
+  body {
+    font-family: var(--font-sans);
+    background-color: var(--color-surface);
+    color: var(--color-ink);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2 {
+    font-weight: 600;
+    letter-spacing: -0.03em;
+  }
+
+  h3,
+  h4 {
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--color-accent) 35%, transparent);
+    color: #ffffff;
+  }
+
+  /* Two-tone: over photography no single-colour ring can be guaranteed
+     contrast, so one of the two bands always reads. */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  textarea:focus-visible,
+  [tabindex]:not([tabindex="-1"]):focus-visible {
+    outline: 2px solid #ffffff;
+    outline-offset: 2px;
+    box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-accent) 90%, transparent);
+    border-radius: 4px;
+  }
+
+  [tabindex="-1"]:focus {
+    outline: none;
+  }
 }
 
-* {
-  font-family: 'Inter', sans-serif;
+/* Skip link — a real class, because Tailwind's sr-only/focus:not-sr-only
+   utilities fight over `position` and the winner depends on emission order. */
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: -100%;
+  z-index: 200;
+  border-radius: 9999px;
+  background: var(--color-accent);
+  color: var(--color-accent-ink);
+  padding: 0.75rem 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: top 0.2s ease;
 }
 
-.font-playfair {
-  font-family: 'Playfair Display', serif;
-}
-
-/* ---------------------------------------------------------------- */
-/* Hero entrance animations                                          */
-/* ---------------------------------------------------------------- */
-
-@keyframes heroReveal {
-  0% { opacity: 0; transform: translateY(28px); filter: blur(12px); }
-  100% { opacity: 1; transform: translateY(0); filter: blur(0); }
-}
-
-@keyframes heroFadeUp {
-  0% { opacity: 0; transform: translateY(20px); }
-  100% { opacity: 1; transform: translateY(0); }
-}
-
-@keyframes heroZoom {
-  0% { transform: scale(1.12); }
-  100% { transform: scale(1); }
-}
-
-.hero-anim {
-  opacity: 0;
-  animation-fill-mode: forwards;
-  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.hero-reveal {
-  animation-name: heroReveal;
-  animation-duration: 1.1s;
-}
-
-.hero-fade {
-  animation-name: heroFadeUp;
-  animation-duration: 1s;
-}
-
-.hero-zoom {
-  animation: heroZoom 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-/* ---------------------------------------------------------------- */
-/* Coming-soon page                                                  */
-/* ---------------------------------------------------------------- */
-
-@keyframes csFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-12px); }
-}
-
-@keyframes csRing {
-  0% { transform: scale(1); opacity: 0.55; }
-  100% { transform: scale(2.3); opacity: 0; }
-}
-
-@keyframes csDot {
-  0%, 80%, 100% { opacity: 0.25; transform: translateY(0); }
-  40% { opacity: 1; transform: translateY(-5px); }
-}
-
-.cs-float { animation: csFloat 5s ease-in-out infinite; }
-.cs-ring { animation: csRing 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
-.cs-dot { animation: csDot 1.4s ease-in-out infinite; }
-
-/* ---------------------------------------------------------------- */
-/* Modal entrance                                                    */
-/* ---------------------------------------------------------------- */
-
-@keyframes modalFade {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes modalPop {
-  from { opacity: 0; transform: translateY(24px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.modal-fade {
-  animation: modalFade 0.25s ease-out both;
-}
-
-.modal-pop {
-  animation: modalPop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* ---------------------------------------------------------------- */
-/* Process bar — active step glow                                    */
-/* ---------------------------------------------------------------- */
-
-@keyframes nodePulse {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(232, 112, 42, 0.45); }
-  50% { box-shadow: 0 0 0 12px rgba(232, 112, 42, 0); }
-}
-
-.node-pulse {
-  animation: nodePulse 2.4s ease-out infinite;
+.skip-link:focus {
+  top: 1rem;
 }
 
 /* ---------------------------------------------------------------- */
@@ -124,10 +104,10 @@ html {
 
 .reveal {
   opacity: 0;
-  transform: translateY(26px);
+  transform: translateY(20px);
   transition:
-    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
-    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .reveal.is-visible {
@@ -135,19 +115,97 @@ html {
   transform: translateY(0);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
+/* ---------------------------------------------------------------- */
+/* Hero entrance                                                     */
+/* ---------------------------------------------------------------- */
 
-  .hero-anim,
-  .hero-zoom,
-  .node-pulse,
+@keyframes fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-up {
+  opacity: 0;
+  animation: fadeUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* ---------------------------------------------------------------- */
+/* Modal entrance                                                    */
+/* ---------------------------------------------------------------- */
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalPop {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modal-fade {
+  animation: modalFade 0.2s ease-out both;
+}
+
+.modal-pop {
+  animation: modalPop 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ---------------------------------------------------------------- */
+/* Coming-soon page                                                  */
+/* ---------------------------------------------------------------- */
+
+@keyframes csFloat {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes csRing {
+  0% {
+    transform: scale(1);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(2.2);
+    opacity: 0;
+  }
+}
+
+.cs-float {
+  animation: csFloat 5s ease-in-out infinite;
+}
+
+.cs-ring {
+  animation: csRing 2.8s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fade-up,
   .modal-fade,
   .modal-pop,
   .cs-float,
-  .cs-ring,
-  .cs-dot {
+  .cs-ring {
     animation: none;
     opacity: 1;
   }

@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { Eyebrow } from "../ui/Section";
 import Reveal from "./Reveal";
 
 interface SectionHeadingProps {
@@ -17,19 +18,12 @@ export default function SectionHeading({
   const centered = align === "center";
   return (
     <Reveal className={centered ? "flex flex-col items-center text-center" : ""}>
-      <p className="flex items-center gap-2.5 text-xs font-medium uppercase tracking-[0.25em] text-[#e8702a]">
-        <span className="h-px w-6 bg-[#e8702a]/60" aria-hidden />
-        {eyebrow}
-        {centered && <span className="h-px w-6 bg-[#e8702a]/60" aria-hidden />}
-      </p>
-      <h2
-        className="mt-4 max-w-2xl text-4xl sm:text-5xl text-white leading-[1.05]"
-        style={{ letterSpacing: "-0.04em" }}
-      >
+      <Eyebrow>{eyebrow}</Eyebrow>
+      <h2 className="mt-6 max-w-2xl text-3xl leading-[1.15] text-ink sm:text-4xl md:text-5xl">
         {title}
       </h2>
       {copy && (
-        <p className="mt-5 max-w-xl text-sm sm:text-base text-white/55 leading-relaxed">
+        <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-muted">
           {copy}
         </p>
       )}
