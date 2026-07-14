@@ -14,8 +14,7 @@ import { url } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Mini & Major Project Ideas for Final Year Students",
-  description:
-    "40 project briefs across Python full-stack, Java, AI, machine learning, deep learning, data engineering, mobile, cloud, security and IoT — scoped, built with you, deployed and defensible.",
+  description: `${TOTAL_PROJECTS} project briefs across Python full-stack, Java, AI, machine learning, deep learning, data engineering, mobile, cloud, security, test automation, IoT, robotics and VLSI chip design — scoped, built with you, deployed and defensible.`,
   keywords: [
     "final year project ideas",
     "mini project ideas",
@@ -25,12 +24,16 @@ export const metadata: Metadata = {
     "python full stack project",
     "java project ideas for final year",
     "deep learning project ideas",
+    "vlsi project ideas",
+    "ece final year project",
+    "eee final year project",
+    "robotics project ideas",
+    "mern stack project ideas",
   ],
   alternates: { canonical: url("/projects") },
   openGraph: {
     title: "Mini & Major Project Ideas — Tenzok",
-    description:
-      "40 project briefs across 10 engineering domains. Scoped, built with you, deployed, and defensible in a viva.",
+    description: `${TOTAL_PROJECTS} project briefs across ${DOMAINS.length} engineering domains — including robotics and VLSI chip design. Scoped, built with you, deployed, and defensible in a viva.`,
     url: url("/projects"),
   },
 };
@@ -43,7 +46,10 @@ const MAJOR = TOTAL_PROJECTS - MINI;
 
 const STATS = [
   { value: String(TOTAL_PROJECTS), label: "Project briefs, scoped and ready to build" },
-  { value: String(DOMAINS.length), label: "Engineering domains, from full-stack to IoT" },
+  {
+    value: String(DOMAINS.length),
+    label: "Engineering domains — CSE, IT, AI/DS, ECE and EEE",
+  },
   { value: `${MINI} / ${MAJOR}`, label: "Mini projects and major capstones" },
 ];
 

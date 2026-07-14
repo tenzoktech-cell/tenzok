@@ -6,7 +6,9 @@ import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
 
 /** The expertise grid. It answers a company's "have you built in my domain?"
- *  and a student's "is my project here?" with the same component. */
+ *  and a student's "is my project here?" with the same component.
+ *  Both counts derive from the data, so the heading can never contradict the
+ *  grid beneath it when a domain is added. */
 export default function ProjectDomains() {
   return (
     <Section id="domains" bordered>
@@ -15,7 +17,7 @@ export default function ProjectDomains() {
           eyebrow="What we build"
           title={
             <>
-              Ten domains.{" "}
+              {DOMAINS.length} domains.{" "}
               <span className="font-display italic text-accent">
                 {TOTAL_PROJECTS} briefs.
               </span>{" "}

@@ -10,7 +10,7 @@ export const SITE = {
   url: "https://www.tenzok.in",
   email: "tenzok.tech@gmail.com",
   description:
-    "Tenzok builds real software with students and for companies — mini and major projects across full-stack, AI, ML, deep learning and data engineering, plus mentorship and end-to-end product delivery.",
+    "Tenzok builds real systems with students and for companies — mini and major projects across full-stack, AI, machine learning, data, cloud, robotics, VLSI and power electronics, plus mentorship and end-to-end product delivery.",
 } as const;
 
 /** Absolute URL for a route. Used for canonicals, OG tags, sitemap and JSON-LD. */

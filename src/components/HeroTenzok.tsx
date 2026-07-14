@@ -44,10 +44,10 @@ export default function HeroTenzok() {
               className="fade-up mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted"
               style={{ animationDelay: "0.25s" }}
             >
-              Tenzok is an engineering studio that builds real software — with
-              students, and for companies. Full-stack, AI, machine learning, deep
-              learning, data, cloud. Scoped in writing, built in the open, handed
-              over with nothing hidden.
+              Tenzok is an engineering studio that builds real systems — with
+              students, and for companies. Full-stack, AI and machine learning, data,
+              cloud, robotics, VLSI and power electronics. Scoped in writing, built in
+              the open, handed over with nothing hidden.
             </p>
 
             <div
