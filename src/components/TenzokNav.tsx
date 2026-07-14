@@ -94,15 +94,24 @@ export default function TenzokNav() {
             About Us
           </Link>
 
+          {/* The pill background lives on the WRAPPER, not the link — so the
+              chevron sits inside the pill instead of overhanging its rounded edge. */}
           {DROPDOWNS.map((menu) => {
             const open = openId === menu.id;
             const active = isActive(menu.base);
             return (
-              <div key={menu.id} className="flex items-center">
+              <div
+                key={menu.id}
+                className={`inline-flex min-h-11 items-center rounded-full transition-colors ${
+                  active
+                    ? "bg-ink text-surface"
+                    : "text-ink/80 hover:bg-white/15 hover:text-ink"
+                }`}
+              >
                 <Link
                   href={menu.base}
                   onClick={closeAll}
-                  className={`${active ? PILL_ACTIVE : PILL_INACTIVE} pr-2`}
+                  className="flex min-h-11 items-center rounded-l-full pl-4 pr-1.5 text-sm font-medium"
                 >
                   {menu.label}
                 </Link>
@@ -112,9 +121,7 @@ export default function TenzokNav() {
                   aria-controls={`${menu.id}-panel`}
                   aria-label={`${open ? "Hide" : "Show"} ${menu.label} menu`}
                   onClick={() => setOpenId(open ? null : menu.id)}
-                  className={`-ml-3 flex min-h-11 cursor-pointer items-center rounded-full pr-3 pl-1 transition-colors ${
-                    active ? "text-surface" : "text-ink/60 hover:text-ink"
-                  }`}
+                  className="flex min-h-11 cursor-pointer items-center rounded-r-full pl-0.5 pr-3.5"
                 >
                   <ChevronDown
                     size={14}
@@ -132,36 +139,43 @@ export default function TenzokNav() {
           >
             Blogs
           </Link>
-          <Link
-            href="/feedbacks"
-            onClick={closeAll}
-            className={isActive("/feedbacks") ? PILL_ACTIVE : PILL_INACTIVE}
-          >
-            Feedbacks
-          </Link>
         </div>
 
         {/* Dropdown panels live outside the pill: the pill has backdrop-blur,
             which makes any nested backdrop-blur a no-op. */}
-        {DROPDOWNS.map((menu) =>
-          openId === menu.id ? (
+        {DROPDOWNS.map((menu) => {
+          if (openId !== menu.id) return null;
+          // With 18 project domains a single column runs off the bottom of a
+          // laptop screen, so long menus go two-up and the list scrolls.
+          const twoColumn = menu.items.length > 8;
+          return (
             <div
               key={menu.id}
               id={`${menu.id}-panel`}
               className="absolute left-1/2 top-full hidden -translate-x-1/2 md:block"
             >
-              <div className="mt-1 w-72 rounded-2xl border border-line bg-surface-overlay p-2 shadow-2xl shadow-black/70">
-                {menu.items.map(({ id, label, icon: Icon }) => (
-                  <Link
-                    key={id}
-                    href={`${menu.base}/${id}`}
-                    onClick={closeAll}
-                    className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
-                  >
-                    <Icon size={15} className="shrink-0 text-ink-subtle" />
-                    {label}
-                  </Link>
-                ))}
+              <div
+                className={`mt-1 rounded-2xl border border-line bg-surface-overlay p-2 shadow-2xl shadow-black/70 ${
+                  twoColumn ? "w-[34rem]" : "w-72"
+                }`}
+              >
+                <div
+                  className={`max-h-[min(60vh,26rem)] overflow-y-auto ${
+                    twoColumn ? "grid grid-cols-2 gap-x-1" : ""
+                  }`}
+                >
+                  {menu.items.map(({ id, label, icon: Icon }) => (
+                    <Link
+                      key={id}
+                      href={`${menu.base}/${id}`}
+                      onClick={closeAll}
+                      className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
+                    >
+                      <Icon size={15} className="shrink-0 text-ink-subtle" />
+                      <span className="truncate">{label}</span>
+                    </Link>
+                  ))}
+                </div>
                 <Link
                   href={menu.base}
                   onClick={closeAll}
@@ -171,8 +185,8 @@ export default function TenzokNav() {
                 </Link>
               </div>
             </div>
-          ) : null,
-        )}
+          );
+        })}
 
         <ButtonLink
           href="/contact"
@@ -254,13 +268,6 @@ export default function TenzokNav() {
             className="flex min-h-12 items-center rounded-xl px-4 text-sm text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
           >
             Blogs
-          </Link>
-          <Link
-            href="/feedbacks"
-            onClick={closeAll}
-            className="flex min-h-12 items-center rounded-xl px-4 text-sm text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
-          >
-            Feedbacks
           </Link>
 
           <ButtonLink

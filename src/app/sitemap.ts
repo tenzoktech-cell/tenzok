@@ -4,9 +4,7 @@ import { DOMAINS } from "@/components/projects-data";
 import { SERVICES } from "@/components/services-data";
 import { url } from "@/lib/site";
 
-/** Derived from the data, so it can never drift from the pages that exist.
- *  /feedbacks is deliberately omitted until it has content — submitting an
- *  empty holding page to Google is a thin-content signal, not a win. */
+/** Derived from the data, so it can never drift from the pages that exist. */
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
     { url: url("/"), priority: 1, changeFrequency: "monthly" },

@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Mail } from "lucide-react";
 import { SITE } from "@/lib/site";
-import { FOOTER_COMING_SOON, NAV_ITEMS } from "../nav-links";
+import { NAV_ITEMS } from "../nav-links";
 import StartJourneyButton from "../StartJourneyModal";
 import TenzokLogo from "../TenzokLogo";
 import { ButtonLink } from "../ui/Button";
@@ -54,33 +54,17 @@ export default function CtaFooter() {
             </div>
 
             <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-1">
-              {[
-                // Coming-soon routes are listed separately below, with a "Soon" badge.
-                ...NAV_ITEMS.filter(
-                  (item) => !FOOTER_COMING_SOON.some((soon) => soon.id === item.id),
+              {[...NAV_ITEMS, { id: "contact", label: "Contact", href: "/contact" }].map(
+                (item) => (
+                  <Link
+                    key={item.id}
+                    href={item.href}
+                    className="flex min-h-11 items-center text-sm text-ink-muted transition-colors hover:text-ink"
+                  >
+                    {item.label}
+                  </Link>
                 ),
-                { id: "contact", label: "Contact", href: "/contact" },
-              ].map((item) => (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className="flex min-h-11 items-center text-sm text-ink-muted transition-colors hover:text-ink"
-                >
-                  {item.label}
-                </Link>
-              ))}
-              {FOOTER_COMING_SOON.map((item) => (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className="flex min-h-11 items-center gap-2 text-sm text-ink-subtle transition-colors hover:text-ink-muted"
-                >
-                  {item.label}
-                  <span className="rounded-md border border-line px-1.5 py-0.5 text-[10px] uppercase tracking-wide">
-                    Soon
-                  </span>
-                </Link>
-              ))}
+              )}
             </nav>
 
             <p className="text-sm text-ink-subtle">
