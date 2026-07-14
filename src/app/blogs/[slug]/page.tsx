@@ -79,7 +79,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
       <TenzokNav />
 
       <article>
-        <header className="pt-36 pb-8 sm:pt-44">
+        <header className="pt-28 pb-8 sm:pt-44">
           <Container>
             <Link
               href="/blogs"
@@ -119,10 +119,15 @@ export default async function BlogPostPage({ params }: PostPageProps) {
         </header>
 
         <Container>
-          <div className="grid gap-12 border-t border-line pt-12 lg:grid-cols-[1fr_220px] lg:gap-16">
+          {/* grid-cols-1 and minmax(0,…) are load-bearing, not decoration: an
+              implicit `auto` track sizes to max-content and is NOT clamped by the
+              container, so the longest line of code in the article set the width
+              of the whole page and gave every phone a 300px horizontal scroll. */}
+          <div className="grid grid-cols-1 gap-12 border-t border-line pt-12 lg:grid-cols-[minmax(0,1fr)_220px] lg:gap-16">
             {/* max-w-2xl: a measure of ~70 characters. Long lines are the single
-                most common reason people bounce off a long article. */}
-            <div className="max-w-2xl">
+                most common reason people bounce off a long article.
+                min-w-0 lets this shrink below its content's intrinsic width. */}
+            <div className="min-w-0 max-w-2xl">
               <ArticleBody body={post.body} />
 
               {post.faq.length > 0 && (

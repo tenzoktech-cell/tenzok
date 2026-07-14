@@ -188,14 +188,16 @@ export default function TenzokNav() {
           );
         })}
 
-        <ButtonLink
-          href="/contact"
-          onClick={closeAll}
-          variant="inverse"
-          className="hidden md:inline-flex"
-        >
-          Book a Call
-        </ButtonLink>
+        {/* The wrapper does the hiding, not a `hidden` class on the button.
+            Button's base class already sets `inline-flex`, and two display
+            utilities of equal specificity are resolved by CSS source order, not
+            by the order they appear in the class attribute — `inline-flex` won,
+            so the button never hid on mobile and pushed the whole page sideways. */}
+        <div className="hidden md:block">
+          <ButtonLink href="/contact" onClick={closeAll} variant="inverse">
+            Book a Call
+          </ButtonLink>
+        </div>
 
         <button
           type="button"

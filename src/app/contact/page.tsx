@@ -46,7 +46,7 @@ export default async function ContactPage({
     <main id="main" tabIndex={-1} className="bg-surface">
       <TenzokNav />
 
-      <section className="pt-36 pb-24 sm:pt-44 md:pb-32">
+      <section className="pt-28 pb-24 sm:pt-44 md:pb-32">
         <Container>
           <div className="grid gap-16 lg:grid-cols-[1fr_1.1fr] lg:gap-20">
             <div>

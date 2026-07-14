@@ -4,8 +4,10 @@ import { useState } from "react";
 import { Check } from "lucide-react";
 import type { ServiceStep } from "./services-data";
 
+// h-11/w-11 = 44px. The connector offsets below are derived from this size —
+// change one and you must change the others.
 const NODE_BASE =
-  "relative z-10 flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border text-sm font-medium transition-colors";
+  "relative z-10 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border text-sm font-medium transition-colors";
 const NODE_DONE = "border-accent bg-accent text-accent-ink";
 const NODE_CURRENT = "border-accent bg-accent text-accent-ink";
 const NODE_UPCOMING =
@@ -36,10 +38,11 @@ export default function ProcessBar({ steps }: { steps: ServiceStep[] }) {
               {i > 0 && (
                 <span
                   aria-hidden
-                  className={`absolute top-[19px] h-0.5 rounded-full transition-colors duration-300 ${
+                  // top = node centre (22px) − half the 2px line
+                  className={`absolute top-[21px] h-0.5 rounded-full transition-colors duration-300 ${
                     i <= active ? "bg-accent" : "bg-line"
                   }`}
-                  style={{ left: "calc(-50% + 26px)", right: "calc(50% + 26px)" }}
+                  style={{ left: "calc(-50% + 28px)", right: "calc(50% + 28px)" }}
                 />
               )}
               <button
@@ -83,7 +86,8 @@ export default function ProcessBar({ steps }: { steps: ServiceStep[] }) {
             {i < steps.length - 1 && (
               <span
                 aria-hidden
-                className={`absolute bottom-0 left-[19px] top-11 w-0.5 rounded-full ${
+                // left = node centre (22px) − half the 2px line; top = node height
+                className={`absolute bottom-0 left-[21px] top-11 w-0.5 rounded-full ${
                   i < active ? "bg-accent" : "bg-line"
                 }`}
               />

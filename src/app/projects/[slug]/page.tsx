@@ -85,12 +85,12 @@ export default async function DomainPage({
       />
       <TenzokNav />
 
-      <section className="pt-36 pb-8 sm:pt-44">
+      <section className="pt-28 pb-8 sm:pt-44">
         <Container>
           <Reveal>
             <Link
               href="/projects"
-              className="inline-flex items-center gap-2 text-sm text-ink-subtle transition-colors hover:text-ink"
+              className="inline-flex min-h-11 items-center gap-2 text-sm text-ink-subtle transition-colors hover:text-ink"
             >
               <ArrowLeft size={14} />
               All projects

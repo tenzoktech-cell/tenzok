@@ -48,7 +48,7 @@ export default function ServicesIndexPage() {
       />
       <TenzokNav />
 
-      <section className="pt-36 pb-8 sm:pt-44">
+      <section className="pt-28 pb-8 sm:pt-44">
         <Container>
           <Reveal>
             <Eyebrow>Our Services</Eyebrow>

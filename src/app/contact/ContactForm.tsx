@@ -31,8 +31,11 @@ const ROLES = [
   "Other",
 ];
 
+// text-base (16px) is deliberate and must not be reduced: iOS Safari zooms the
+// entire page in when a focused input has a font-size below 16px, and the user
+// then has to pinch back out after every single field.
 const INPUT =
-  "w-full rounded-xl border border-line bg-surface-raised px-4 py-3 text-sm text-ink placeholder:text-ink-subtle transition-colors hover:border-line-strong focus:border-accent";
+  "w-full rounded-xl border border-line bg-surface-raised px-4 py-3 text-base text-ink placeholder:text-ink-subtle transition-colors hover:border-line-strong focus:border-accent";
 
 type Status = "idle" | "sending" | "success" | "error";
 

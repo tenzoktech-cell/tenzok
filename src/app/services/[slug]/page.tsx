@@ -67,7 +67,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
       <TenzokNav />
 
       {/* ------------------------------ Hero ------------------------------ */}
-      <section className="pt-36 pb-8 sm:pt-44">
+      <section className="pt-28 pb-8 sm:pt-44">
         <Container>
           <Reveal>
             <div className="flex flex-wrap items-center gap-3">

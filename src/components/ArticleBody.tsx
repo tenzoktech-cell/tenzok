@@ -85,15 +85,16 @@ function BlockView({ block }: { block: Block }) {
 
     case "code":
       return (
-        <div className="mt-8 overflow-hidden rounded-2xl border border-line bg-surface-raised">
+        // min-w-0 + max-w-full: without them a long code line propagates its
+        // intrinsic width up through every ancestor and widens the page itself.
+        // The code must scroll inside this box and nowhere else.
+        <div className="mt-8 min-w-0 max-w-full overflow-hidden rounded-2xl border border-line bg-surface-raised">
           <div className="border-b border-line px-4 py-2">
             <span className="text-xs uppercase tracking-[0.14em] text-ink-subtle">
               {block.lang}
             </span>
           </div>
-          {/* Wide code scrolls inside its own box — the page body must never
-              scroll horizontally. */}
-          <pre className="overflow-x-auto p-4">
+          <pre className="max-w-full overflow-x-auto p-4">
             <code className="font-mono text-sm leading-relaxed text-ink">
               {block.code}
             </code>
