@@ -2,11 +2,13 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
+import type { User } from "@supabase/supabase-js";
+import { createClient } from "@/utils/supabase/client";
 import { PROJECTS_MENU, SERVICES_MENU } from "./nav-links";
 import TenzokLogo from "./TenzokLogo";
-import { ButtonLink } from "./ui/Button";
+import { Button, ButtonLink } from "./ui/Button";
 
 /* The floating centre pill group. min-h-11 keeps every item at a 44px tap
    target — the old version was 32px, which fails at the md breakpoint (iPad). */
@@ -27,14 +29,27 @@ export default function TenzokNav() {
   const [openId, setOpenId] = useState<string | null>(null);
   const [mobileOpenId, setMobileOpenId] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [user, setUser] = useState<User | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const pathname = usePathname() ?? "/";
+  const router = useRouter();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    const supabase = createClient();
+    supabase.auth.getUser().then(({ data }) => setUser(data.user));
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+    });
+    return () => subscription.unsubscribe();
   }, []);
 
   // Close the open dropdown on Escape or on any press outside the nav.
@@ -59,6 +74,12 @@ export default function TenzokNav() {
     setOpenId(null);
     setMenuOpen(false);
     setMobileOpenId(null);
+  };
+
+  const signOut = async () => {
+    await createClient().auth.signOut();
+    closeAll();
+    router.refresh();
   };
 
   const isActive = (href: string) =>
@@ -193,7 +214,16 @@ export default function TenzokNav() {
             utilities of equal specificity are resolved by CSS source order, not
             by the order they appear in the class attribute — `inline-flex` won,
             so the button never hid on mobile and pushed the whole page sideways. */}
-        <div className="hidden md:block">
+        <div className="hidden items-center gap-2 md:flex">
+          {user ? (
+            <Button variant="inverse" onClick={signOut}>
+              Sign out
+            </Button>
+          ) : (
+            <ButtonLink href="/login" onClick={closeAll} variant="inverse">
+              Login
+            </ButtonLink>
+          )}
           <ButtonLink href="/contact" onClick={closeAll} variant="inverse">
             Book a Call
           </ButtonLink>
@@ -272,6 +302,21 @@ export default function TenzokNav() {
             Blogs
           </Link>
 
+          {user ? (
+            <Button variant="inverse" size="lg" className="mt-2 w-full" onClick={signOut}>
+              Sign out
+            </Button>
+          ) : (
+            <ButtonLink
+              href="/login"
+              onClick={closeAll}
+              variant="inverse"
+              size="lg"
+              className="mt-2 w-full"
+            >
+              Login
+            </ButtonLink>
+          )}
           <ButtonLink
             href="/contact"
             onClick={closeAll}
