@@ -13,6 +13,12 @@ const NOT_CONFIGURED: AuthState = {
     "Accounts aren't live just yet — we're finishing setup. Email hello@tenzok.com and we'll onboard you personally.",
 };
 
+/** Network failures surface as a bare "fetch failed" — translate it. */
+const friendly = (message: string) =>
+  /fetch failed/i.test(message)
+    ? "We couldn't reach the accounts server. Please try again in a few minutes — or email hello@tenzok.com."
+    : message;
+
 export async function login(_prev: AuthState, formData: FormData): Promise<AuthState> {
   if (!isSupabaseConfigured) return NOT_CONFIGURED;
 
@@ -23,7 +29,7 @@ export async function login(_prev: AuthState, formData: FormData): Promise<AuthS
 
   const supabase = createClient(await cookies());
   const { error } = await supabase.auth.signInWithPassword({ email, password });
-  if (error) return { error: error.message };
+  if (error) return { error: friendly(error.message) };
 
   revalidatePath("/", "layout");
   redirect("/");
@@ -55,7 +61,7 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
     // (supabase/profiles.sql) copies it into public.profiles.
     options: { data: { full_name: name, designation, country, address } },
   });
-  if (error) return { error: error.message };
+  if (error) return { error: friendly(error.message) };
 
   // No session means email confirmation is on — the account isn't live yet.
   if (!data.session) {
