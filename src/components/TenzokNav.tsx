@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
 import { createClient } from "@/utils/supabase/client";
+import { isSupabaseConfigured } from "@/utils/supabase/config";
 import { PROJECTS_MENU, SERVICES_MENU } from "./nav-links";
 import TenzokLogo from "./TenzokLogo";
 import { Button, ButtonLink } from "./ui/Button";
@@ -42,6 +43,7 @@ export default function TenzokNav() {
   }, []);
 
   useEffect(() => {
+    if (!isSupabaseConfigured) return;
     const supabase = createClient();
     supabase.auth.getUser().then(({ data }) => setUser(data.user));
     const {
@@ -77,7 +79,7 @@ export default function TenzokNav() {
   };
 
   const signOut = async () => {
-    await createClient().auth.signOut();
+    if (isSupabaseConfigured) await createClient().auth.signOut();
     closeAll();
     router.refresh();
   };

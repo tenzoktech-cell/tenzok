@@ -4,6 +4,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import TenzokNav from "@/components/TenzokNav";
 import { Container, Eyebrow } from "@/components/ui/Section";
+import { isSupabaseConfigured } from "@/utils/supabase/config";
 import { createClient } from "@/utils/supabase/server";
 import { url } from "@/lib/site";
 import SignupForm from "./SignupForm";
@@ -16,11 +17,13 @@ export const metadata: Metadata = {
 };
 
 export default async function SignupPage() {
-  const supabase = createClient(await cookies());
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (user) redirect("/");
+  if (isSupabaseConfigured) {
+    const supabase = createClient(await cookies());
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) redirect("/");
+  }
 
   return (
     <main id="main" tabIndex={-1} className="bg-surface">

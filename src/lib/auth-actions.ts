@@ -3,11 +3,19 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { isSupabaseConfigured } from "@/utils/supabase/config";
 import { createClient } from "@/utils/supabase/server";
 
 export type AuthState = { error?: string; notice?: string } | null;
 
+const NOT_CONFIGURED: AuthState = {
+  error:
+    "Accounts aren't live just yet — we're finishing setup. Email hello@tenzok.com and we'll onboard you personally.",
+};
+
 export async function login(_prev: AuthState, formData: FormData): Promise<AuthState> {
+  if (!isSupabaseConfigured) return NOT_CONFIGURED;
+
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
@@ -24,6 +32,8 @@ export async function login(_prev: AuthState, formData: FormData): Promise<AuthS
 const DESIGNATIONS = ["Student", "Company"];
 
 export async function signup(_prev: AuthState, formData: FormData): Promise<AuthState> {
+  if (!isSupabaseConfigured) return NOT_CONFIGURED;
+
   const name = String(formData.get("name") ?? "").trim();
   const designation = String(formData.get("designation") ?? "").trim();
   const country = String(formData.get("country") ?? "").trim();
