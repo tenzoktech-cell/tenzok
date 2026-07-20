@@ -87,6 +87,12 @@ export default function TenzokNav() {
   const isActive = (href: string) =>
     href === "/" ? pathname === "/" : pathname.startsWith(href);
 
+  const displayName = user
+    ? ((user.user_metadata?.full_name as string | undefined)?.split(" ")[0] ??
+      user.email?.split("@")[0] ??
+      "there")
+    : "";
+
   return (
     <nav
       ref={navRef}
@@ -218,17 +224,27 @@ export default function TenzokNav() {
             so the button never hid on mobile and pushed the whole page sideways. */}
         <div className="hidden items-center gap-2 md:flex">
           {user ? (
-            <Button variant="inverse" onClick={signOut}>
-              Sign out
-            </Button>
+            <>
+              <span className="hidden text-sm text-ink-muted lg:block">
+                Welcome, <span className="font-medium text-ink">{displayName}</span>
+              </span>
+              <ButtonLink href="/profile" onClick={closeAll} variant="inverse">
+                Profile
+              </ButtonLink>
+              <Button variant="ghost" onClick={signOut}>
+                Sign out
+              </Button>
+            </>
           ) : (
-            <ButtonLink href="/login" onClick={closeAll} variant="inverse">
-              Login
-            </ButtonLink>
+            <>
+              <ButtonLink href="/login" onClick={closeAll} variant="inverse">
+                Login
+              </ButtonLink>
+              <ButtonLink href="/contact" onClick={closeAll} variant="inverse">
+                Book a Call
+              </ButtonLink>
+            </>
           )}
-          <ButtonLink href="/contact" onClick={closeAll} variant="inverse">
-            Book a Call
-          </ButtonLink>
         </div>
 
         <button
@@ -305,29 +321,50 @@ export default function TenzokNav() {
           </Link>
 
           {user ? (
-            <Button variant="inverse" size="lg" className="mt-2 w-full" onClick={signOut}>
-              Sign out
-            </Button>
+            <>
+              <p className="mt-3 px-4 text-sm text-ink-muted">
+                Welcome, <span className="font-medium text-ink">{displayName}</span>
+              </p>
+              <ButtonLink
+                href="/profile"
+                onClick={closeAll}
+                variant="inverse"
+                size="lg"
+                className="mt-2 w-full"
+              >
+                Profile
+              </ButtonLink>
+              <Button
+                variant="secondary"
+                size="lg"
+                className="mt-2 w-full"
+                onClick={signOut}
+              >
+                Sign out
+              </Button>
+            </>
           ) : (
-            <ButtonLink
-              href="/login"
-              onClick={closeAll}
-              variant="inverse"
-              size="lg"
-              className="mt-2 w-full"
-            >
-              Login
-            </ButtonLink>
+            <>
+              <ButtonLink
+                href="/login"
+                onClick={closeAll}
+                variant="inverse"
+                size="lg"
+                className="mt-2 w-full"
+              >
+                Login
+              </ButtonLink>
+              <ButtonLink
+                href="/contact"
+                onClick={closeAll}
+                variant="inverse"
+                size="lg"
+                className="mt-2 w-full"
+              >
+                Book a Call
+              </ButtonLink>
+            </>
           )}
-          <ButtonLink
-            href="/contact"
-            onClick={closeAll}
-            variant="inverse"
-            size="lg"
-            className="mt-2 w-full"
-          >
-            Book a Call
-          </ButtonLink>
         </div>
       )}
     </nav>

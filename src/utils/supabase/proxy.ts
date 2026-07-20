@@ -27,7 +27,21 @@ export const updateSession = async (request: NextRequest) => {
   });
 
   // Not decorative: this call is what triggers the token refresh.
-  await supabase.auth.getUser();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  // Gate protected routes at the edge. Doing it here (rather than only in the
+  // page) gives a clean redirect before any streaming — so a signed-out visitor
+  // never sees a page's loading skeleton flash before bouncing to /login.
+  const path = request.nextUrl.pathname;
+  const isProtected = path.startsWith("/profile") || path.startsWith("/admin");
+  if (isProtected && !user) {
+    const loginUrl = request.nextUrl.clone();
+    loginUrl.pathname = "/login";
+    loginUrl.search = "";
+    return NextResponse.redirect(loginUrl);
+  }
 
   return supabaseResponse;
 };

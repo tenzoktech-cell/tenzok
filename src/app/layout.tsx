@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import ChatWidget from "@/components/chat/ChatWidget";
+import { ToastProvider } from "@/components/ui/Toast";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
@@ -57,7 +59,11 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        {children}
+        <ToastProvider>
+          {children}
+          {/* Floating messenger; renders nothing while signed out. */}
+          <ChatWidget />
+        </ToastProvider>
         {/* .reveal starts at opacity:0 until an IntersectionObserver fires, so
             without this the whole page is invisible to non-JS crawlers. */}
         <noscript>
