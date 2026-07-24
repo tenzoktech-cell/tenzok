@@ -19,11 +19,11 @@ export default function SectionHeading({
   return (
     <Reveal className={centered ? "flex flex-col items-center text-center" : ""}>
       <Eyebrow>{eyebrow}</Eyebrow>
-      <h2 className="mt-6 max-w-2xl text-3xl leading-[1.15] text-ink sm:text-4xl md:text-5xl">
+      <h2 className="text-balance mt-6 max-w-3xl text-3xl leading-[1.08] text-ink sm:text-4xl md:text-5xl lg:text-[3.5rem]">
         {title}
       </h2>
       {copy && (
-        <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-muted">
+        <p className="mt-6 max-w-2xl text-base leading-7 text-ink-muted sm:text-lg">
           {copy}
         </p>
       )}

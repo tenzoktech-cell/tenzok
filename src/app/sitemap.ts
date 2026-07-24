@@ -8,9 +8,12 @@ import { url } from "@/lib/site";
 export default function sitemap(): MetadataRoute.Sitemap {
   const pages: MetadataRoute.Sitemap = [
     { url: url("/"), priority: 1, changeFrequency: "monthly" },
+    { url: url("/about"), priority: 0.7, changeFrequency: "yearly" },
     { url: url("/projects"), priority: 0.9, changeFrequency: "monthly" },
+    { url: url("/portfolio"), priority: 0.8, changeFrequency: "monthly" },
     { url: url("/services"), priority: 0.9, changeFrequency: "monthly" },
     { url: url("/blogs"), priority: 0.8, changeFrequency: "weekly" },
+    { url: url("/faq"), priority: 0.6, changeFrequency: "yearly" },
     { url: url("/contact"), priority: 0.7, changeFrequency: "yearly" },
   ];
 

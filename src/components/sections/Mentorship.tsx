@@ -52,14 +52,14 @@ const TRACKS: Track[] = [
 function TrackCard({ track }: { track: Track }) {
   return (
     <article
-      className={`relative flex h-full flex-col rounded-2xl border p-6 ${
+      className={`premium-card premium-card-hover relative flex h-full flex-col rounded-3xl p-6 ${
         track.featured
-          ? "border-accent/40 bg-accent/[0.06]"
-          : "border-line bg-surface-raised"
+          ? "border-accent/40 bg-accent/[0.07]"
+          : ""
       }`}
     >
       {track.featured && (
-        <span className="absolute -top-3 left-6 rounded-md bg-accent px-2 py-1 text-xs font-medium text-accent-ink">
+        <span className="absolute -top-3 left-6 rounded-full bg-gradient-to-r from-cool to-accent px-3 py-1 text-xs font-semibold text-cool-ink">
           Most chosen
         </span>
       )}
@@ -102,7 +102,7 @@ export default function Mentorship() {
         title={
           <>
             Tracks that make you{" "}
-            <span className="font-display italic text-accent">industry-ready.</span>
+            <span className="gradient-text">industry-ready.</span>
           </>
         }
         copy="Code reviews, architecture, deployment, and the soft skills nobody teaches — on real work, not slide decks. Pick the track that matches where you actually are."

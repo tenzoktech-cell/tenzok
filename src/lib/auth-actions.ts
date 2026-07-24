@@ -10,13 +10,13 @@ export type AuthState = { error?: string; notice?: string } | null;
 
 const NOT_CONFIGURED: AuthState = {
   error:
-    "Accounts aren't live just yet — we're finishing setup. Email hello@tenzok.com and we'll onboard you personally.",
+    "Accounts aren't live just yet — we're finishing setup. Email info@tenzok.in and we'll onboard you personally.",
 };
 
 /** Network failures surface as a bare "fetch failed" — translate it. */
 const friendly = (message: string) =>
   /fetch failed/i.test(message)
-    ? "We couldn't reach the accounts server. Please try again in a few minutes — or email hello@tenzok.com."
+    ? "We couldn't reach the accounts server. Please try again in a few minutes — or email info@tenzok.in."
     : message;
 
 export async function login(_prev: AuthState, formData: FormData): Promise<AuthState> {

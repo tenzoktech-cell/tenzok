@@ -47,7 +47,7 @@ export default function GrowthLaunch() {
         title={
           <>
             Built. Marketed.{" "}
-            <span className="font-display italic text-accent">Launched.</span>
+            <span className="gradient-text">Launched.</span>
           </>
         }
         copy="Shipping is the midpoint, not the finish line. Tenzok carries products through the noisy part — being seen, tried, and adopted."
@@ -60,7 +60,7 @@ export default function GrowthLaunch() {
             <Reveal key={panel.id} delay={i * 100} className="h-full">
               <article
                 id={panel.id}
-                className="h-full scroll-mt-28 rounded-2xl border border-line bg-surface-raised p-8"
+                className="premium-card premium-card-hover h-full scroll-mt-28 rounded-3xl p-8"
               >
                 <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-overlay">
                   <Icon size={20} className="text-ink-muted" />

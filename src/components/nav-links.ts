@@ -9,10 +9,12 @@ export interface NavItem {
 
 /** Primary nav. Every entry points at a page with real content on it. */
 export const NAV_ITEMS: NavItem[] = [
-  { id: "home", label: "About Us", href: "/" },
-  { id: "projects", label: "Projects", href: "/projects" },
-  { id: "services", label: "Our Services", href: "/services" },
-  { id: "blogs", label: "Blogs", href: "/blogs" },
+  { id: "home", label: "Home", href: "/" },
+  { id: "services", label: "Services", href: "/services" },
+  { id: "projects", label: "Student Projects", href: "/projects" },
+  { id: "blogs", label: "Blog", href: "/blogs" },
+  { id: "about", label: "About", href: "/about" },
+  { id: "contact", label: "Contact", href: "/contact" },
 ];
 
 /** Derived from the data, so the menu can never drift from the pages. */

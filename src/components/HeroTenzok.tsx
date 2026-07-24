@@ -1,174 +1,193 @@
-import { ArrowRight, Building2, GraduationCap } from "lucide-react";
+import {
+  ArrowRight,
+  Braces,
+  CheckCircle2,
+  Cloud,
+  Cpu,
+  Layers3,
+  Smartphone,
+  Sparkles,
+} from "lucide-react";
 import StartJourneyButton from "./StartJourneyModal";
 import TenzokNav from "./TenzokNav";
 import { ButtonLink } from "./ui/Button";
 import { Container } from "./ui/Section";
-import { DOMAINS, TOTAL_PROJECTS } from "./projects-data";
 
-const PROOF = [
-  `${TOTAL_PROJECTS} project briefs`,
-  `${DOMAINS.length} engineering domains`,
-  "Deployed, documented, defensible",
+const CAPABILITIES = [
+  { icon: Braces, label: "Web apps" },
+  { icon: Smartphone, label: "Mobile" },
+  { icon: Cpu, label: "AI systems" },
+  { icon: Cloud, label: "Cloud" },
 ];
 
-/**
- * The hero is a normal flow column inside a full-height section: the page
- * scrolls, the hero doesn't grow. Nothing here is absolutely positioned, so
- * the blocks cannot collide at any width.
- */
 export default function HeroTenzok() {
   return (
     <>
       <TenzokNav />
 
-      <section className="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden pt-28 pb-20">
+      <section className="relative overflow-hidden pt-24 pb-14 sm:pt-28 sm:pb-20 lg:pt-30">
         <HeroBackdrop />
 
         <Container className="relative">
-          <div className="flex max-w-3xl flex-col items-start">
-            <p
-              className="fade-up font-display text-base italic text-ink-muted"
-              style={{ animationDelay: "0.05s" }}
-            >
-              Obsession. Purpose. Excellence.
-            </p>
+          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr] lg:gap-10 xl:gap-14">
+            <div className="max-w-3xl">
+              <p
+                className="fade-up inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-cool"
+                style={{ animationDelay: "0.05s" }}
+              >
+                <Sparkles size={14} />
+                Product engineering studio
+              </p>
 
-            <h1
-              className="fade-up mt-6 text-[clamp(2.25rem,1.5rem+3.2vw,4.5rem)] leading-[1.05] text-ink"
-              style={{ animationDelay: "0.15s" }}
-            >
-              We turn projects into careers.
-            </h1>
+              <h1
+                className="font-hero text-balance fade-up mt-6 text-[clamp(2.6rem,1.9rem+3vw,4.75rem)] font-semibold leading-[0.98] tracking-[-0.055em] text-ink"
+                style={{ animationDelay: "0.14s" }}
+              >
+                Build software.
+                <br />
+                Launch ideas.
+                <br />
+                <span className="gradient-text">Ship with confidence.</span>
+              </h1>
 
-            <p
-              className="fade-up mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted"
-              style={{ animationDelay: "0.25s" }}
-            >
-              Tenzok is an engineering studio that builds real systems — with
-              students, and for companies. Full-stack, AI and machine learning, data,
-              cloud, robotics, VLSI and power electronics. Scoped in writing, built in
-              the open, handed over with nothing hidden.
-            </p>
+              <p
+                className="fade-up mt-5 max-w-2xl text-sm leading-6 text-ink-muted sm:text-base sm:leading-7"
+                style={{ animationDelay: "0.22s" }}
+              >
+                Tenzok designs and engineers websites, web apps, mobile products,
+                AI solutions, and production-minded student projects—from first scope
+                to launch and complete handover.
+              </p>
 
-            <div
-              className="fade-up mt-8 flex flex-col gap-3 sm:flex-row"
-              style={{ animationDelay: "0.35s" }}
-            >
-              <StartJourneyButton size="lg" />
-              <ButtonLink href="/projects" variant="secondary" size="lg">
-                Browse {TOTAL_PROJECTS} project briefs
-                <ArrowRight size={16} />
-              </ButtonLink>
+              <div
+                className="fade-up mt-7 flex flex-col gap-3 sm:flex-row"
+                style={{ animationDelay: "0.3s" }}
+              >
+                <StartJourneyButton label="Start Your Project" size="lg" />
+                <ButtonLink href="/services" variant="secondary" size="lg">
+                  Explore services
+                  <ArrowRight size={16} />
+                </ButtonLink>
+              </div>
+
+              <div
+                className="fade-up mt-6 flex flex-wrap gap-2"
+                style={{ animationDelay: "0.38s" }}
+                aria-label="Core capabilities"
+              >
+                {CAPABILITIES.map(({ icon: Icon, label }) => (
+                  <span
+                    key={label}
+                    className="inline-flex items-center gap-2 rounded-full border border-line bg-white/[0.035] px-3 py-2 text-xs text-ink-muted"
+                  >
+                    <Icon size={13} className="text-cool" />
+                    {label}
+                  </span>
+                ))}
+              </div>
+
+              <p
+                className="fade-up mt-5 text-[11px] font-semibold uppercase tracking-[0.24em] text-ink-subtle"
+                style={{ animationDelay: "0.44s" }}
+              >
+                Obsession <span className="px-2 text-accent">·</span> Purpose{" "}
+                <span className="px-2 text-cool">·</span> Excellence
+              </p>
             </div>
 
-            <ul
-              className="fade-up mt-10 flex flex-wrap gap-x-6 gap-y-2 text-sm text-ink-subtle"
-              style={{ animationDelay: "0.45s" }}
+            <div
+              className="fade-up relative mx-auto w-full max-w-lg lg:mx-0"
+              style={{ animationDelay: "0.28s" }}
             >
-              {PROOF.map((item) => (
-                <li key={item} className="flex items-center gap-2">
-                  <span aria-hidden className="h-1 w-1 rounded-full bg-accent" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+              <ProductVisual />
+            </div>
           </div>
 
-          {/* Two buyers, two doors. Everything else on the site forks from here. */}
-          <div
-            className="fade-up mt-16 grid gap-4 sm:grid-cols-2 lg:max-w-4xl"
-            style={{ animationDelay: "0.55s" }}
-          >
-            <AudienceCard
-              href="/projects"
-              icon={GraduationCap}
-              title="I'm a student"
-              copy="Mini and major projects, built with you and defended by you — plus mentorship that ends in a job, not a certificate."
-            />
-            <AudienceCard
-              href="/services/company-services"
-              icon={Building2}
-              title="I'm a company"
-              copy="Senior delivery without the agency drag. NDA first, a named lead, weekly demos, and full handover of source and docs."
-            />
-          </div>
         </Container>
       </section>
     </>
   );
 }
 
-function AudienceCard({
-  href,
-  icon: Icon,
-  title,
-  copy,
-}: {
-  href: string;
-  icon: typeof GraduationCap;
-  title: string;
-  copy: string;
-}) {
+function ProductVisual() {
   return (
-    <a
-      href={href}
-      className="group flex items-start gap-4 rounded-2xl border border-line bg-surface-raised/70 p-5 backdrop-blur-sm transition-colors hover:border-line-strong hover:bg-surface-overlay"
-    >
-      <span className="mt-0.5 flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-line bg-surface-overlay">
-        <Icon size={18} className="text-ink-muted transition-colors group-hover:text-accent" />
-      </span>
-      <span className="min-w-0">
-        <span className="flex items-center gap-2 text-base font-medium text-ink">
-          {title}
-          <ArrowRight
-            size={15}
-            className="text-ink-subtle transition-transform group-hover:translate-x-1"
-          />
-        </span>
-        <span className="mt-1 block text-sm leading-relaxed text-ink-muted">{copy}</span>
-      </span>
-    </a>
+    <div className="gradient-border premium-card relative overflow-hidden rounded-[1.75rem] p-2.5 sm:p-3">
+      <div className="rounded-[1.3rem] border border-white/10 bg-[#0b0d14]/95 p-5 shadow-2xl shadow-black/40">
+        <div className="flex items-center justify-between border-b border-line pb-4">
+          <div className="flex items-center gap-2">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ff6b7a]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#ffd166]" />
+            <span className="h-2.5 w-2.5 rounded-full bg-[#55d6a7]" />
+          </div>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-ink-subtle">
+            Delivery system
+          </span>
+        </div>
+
+        <div className="py-5">
+          <span className="inline-flex items-center gap-2 rounded-full bg-cool/10 px-3 py-1.5 text-xs font-medium text-cool">
+            <span className="h-1.5 w-1.5 rounded-full bg-cool" />
+            Build in progress
+          </span>
+          <h2 className="mt-4 max-w-sm text-xl leading-tight text-ink sm:text-2xl">
+            From product brief to a system ready to scale.
+          </h2>
+          <p className="mt-3 max-w-md text-xs leading-5 text-ink-muted sm:text-sm">
+            Strategy, interface, engineering, QA, deployment, and knowledge transfer
+            in one visible workflow.
+          </p>
+        </div>
+
+        <div className="grid gap-3 sm:grid-cols-3">
+          {[
+            { step: "01", title: "Scope", copy: "Goals aligned", active: true },
+            { step: "02", title: "Build", copy: "Weekly demos", active: true },
+            { step: "03", title: "Launch", copy: "Full handover", active: false },
+          ].map((item) => (
+            <div
+              key={item.step}
+              className={`rounded-2xl border p-3 ${
+                item.active
+                  ? "border-accent/30 bg-accent/[0.08]"
+                  : "border-line bg-white/[0.025]"
+              }`}
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-semibold text-ink-subtle">{item.step}</span>
+                {item.active && <CheckCircle2 size={14} className="text-cool" />}
+              </div>
+              <p className="mt-3 text-sm font-semibold text-ink">{item.title}</p>
+              <p className="mt-1 text-xs text-ink-subtle">{item.copy}</p>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-3 flex items-center justify-between rounded-2xl border border-line bg-white/[0.025] p-3">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-cool/25 to-accent/25">
+              <Layers3 size={18} className="text-ink" />
+            </span>
+            <div>
+              <p className="text-sm font-medium text-ink">Transparent by default</p>
+              <p className="mt-0.5 text-xs text-ink-subtle">
+                Source, decisions, and progress stay visible
+              </p>
+            </div>
+          </div>
+          <span className="hidden h-2 w-2 rounded-full bg-[#55d6a7] shadow-[0_0_18px_#55d6a7] sm:block" />
+        </div>
+      </div>
+    </div>
   );
 }
 
-/**
- * CSS-only backdrop. Replaces two hot-linked AI images from a third-party CDN
- * (~270KB, invisible to the preload scanner, and not ours to depend on).
- */
 function HeroBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
-      {/* Engineering grid */}
-      <div
-        className="absolute inset-0 opacity-[0.18]"
-        style={{
-          backgroundImage:
-            "linear-gradient(to right, #ffffff0f 1px, transparent 1px), linear-gradient(to bottom, #ffffff0f 1px, transparent 1px)",
-          backgroundSize: "64px 64px",
-          maskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%)",
-          WebkitMaskImage:
-            "radial-gradient(ellipse 80% 60% at 50% 40%, #000 40%, transparent 100%)",
-        }}
-      />
-      {/* Warm key light, upper left — where the headline sits */}
-      <div
-        className="absolute -left-40 -top-40 h-[560px] w-[560px] rounded-full opacity-60"
-        style={{
-          background:
-            "radial-gradient(circle, color-mix(in srgb, var(--color-accent) 22%, transparent) 0%, transparent 65%)",
-        }}
-      />
-      {/* Cool fill, lower right — keeps the frame from reading as one flat orange wash */}
-      <div
-        className="absolute -bottom-52 -right-32 h-[620px] w-[620px] rounded-full opacity-40"
-        style={{
-          background:
-            "radial-gradient(circle, color-mix(in srgb, var(--color-cool) 18%, transparent) 0%, transparent 65%)",
-        }}
-      />
-      {/* Vignette back to the page surface, so sections below join seamlessly */}
-      <div className="absolute inset-x-0 bottom-0 h-64 bg-gradient-to-b from-transparent to-surface" />
+      <div className="page-grid absolute inset-x-0 top-0 h-[52rem] opacity-70" />
+      <div className="absolute -left-40 top-10 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-[120px]" />
+      <div className="absolute -right-52 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-[140px]" />
+      <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent to-surface" />
     </div>
   );
 }

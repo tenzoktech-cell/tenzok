@@ -25,22 +25,23 @@ export default async function Image({ params }: { params: Promise<{ slug: string
           display: "flex",
           flexDirection: "column",
           justifyContent: "space-between",
-          background: "#0b0c0e",
+          background:
+            "radial-gradient(circle at 84% 20%, #342780 0%, #08090d 46%, #08090d 100%)",
           padding: 72,
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <svg width="32" height="32" viewBox="0 0 256 256" fill="#e8702a">
+          <svg width="32" height="32" viewBox="0 0 256 256" fill="#8b6cff">
             <path d="M 256 256 L 128 256 L 0 128 L 128 128 Z M 256 128 L 128 128 L 0 0 L 128 0 Z" />
           </svg>
-          <span style={{ fontSize: 30, color: "#f2f3f5" }}>Tenzok</span>
+          <span style={{ fontSize: 30, color: "#f7f8fc" }}>Tenzok</span>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column" }}>
           <span
             style={{
               fontSize: title.length > 60 ? 56 : 68,
-              color: "#f2f3f5",
+              color: "#f7f8fc",
               letterSpacing: "-0.03em",
               lineHeight: 1.1,
             }}
@@ -50,8 +51,8 @@ export default async function Image({ params }: { params: Promise<{ slug: string
         </div>
 
         <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
-          <span style={{ height: 4, width: 48, background: "#e8702a" }} />
-          <span style={{ fontSize: 24, color: "#7e838c" }}>{tags}</span>
+          <span style={{ height: 4, width: 48, background: "#8b6cff" }} />
+          <span style={{ fontSize: 24, color: "#747b90" }}>{tags}</span>
         </div>
       </div>
     ),

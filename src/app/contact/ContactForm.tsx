@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { CheckCircle2, Mail } from "lucide-react";
 import { SITE } from "@/lib/site";
-import { SERVICES } from "@/components/services-data";
+import { getService, SERVICES } from "@/components/services-data";
 import { Button } from "@/components/ui/Button";
 import { MIN_FILL_MS, validateEnquiry, type FieldErrors } from "./validate";
 
@@ -35,11 +37,14 @@ const ROLES = [
 // entire page in when a focused input has a font-size below 16px, and the user
 // then has to pinch back out after every single field.
 const INPUT =
-  "w-full rounded-xl border border-line bg-surface-raised px-4 py-3 text-base text-ink placeholder:text-ink-subtle transition-colors hover:border-line-strong focus:border-accent";
+  "min-h-12 w-full rounded-xl border border-line bg-surface-overlay px-4 py-3 text-base text-ink outline-none placeholder:text-ink-subtle transition-[border-color,background-color,box-shadow] hover:border-line-strong focus:border-accent focus:bg-surface";
 
 type Status = "idle" | "sending" | "success" | "error";
 
-export default function ContactForm({ defaultService }: { defaultService?: string }) {
+export default function ContactForm() {
+  const searchParams = useSearchParams();
+  const serviceSlug = searchParams.get("service");
+  const defaultService = serviceSlug ? getService(serviceSlug)?.name : undefined;
   const [status, setStatus] = useState<Status>("idle");
   const [errors, setErrors] = useState<FieldErrors>({});
   const [message, setMessage] = useState("");
@@ -142,11 +147,23 @@ export default function ContactForm({ defaultService }: { defaultService?: strin
       <div
         ref={successRef}
         tabIndex={-1}
-        className="rounded-2xl border border-accent/40 bg-accent/[0.06] p-8"
+        className="relative overflow-hidden rounded-3xl border border-accent/30 bg-accent/[0.07] p-8"
       >
-        <CheckCircle2 size={24} className="text-accent" />
-        <h2 className="mt-4 text-xl text-ink">Message sent</h2>
-        <p className="mt-2 text-sm leading-relaxed text-ink-muted">{message}</p>
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cool/15 blur-3xl"
+        />
+        <span className="relative flex h-12 w-12 items-center justify-center rounded-full border border-accent/30 bg-accent/10">
+          <CheckCircle2 size={23} className="text-accent" />
+        </span>
+        <h2 className="relative mt-5 text-2xl text-ink">Message sent</h2>
+        <p className="relative mt-3 text-base leading-relaxed text-ink-muted">{message}</p>
+        <Link
+          href="/"
+          className="relative mt-7 inline-flex min-h-11 items-center rounded-full border border-line-strong bg-surface-overlay px-5 text-sm font-medium text-ink transition-colors hover:bg-surface"
+        >
+          Back to Tenzok
+        </Link>
       </div>
     );
   }
@@ -171,6 +188,8 @@ export default function ContactForm({ defaultService }: { defaultService?: strin
           required
           placeholder="Ada Lovelace"
           className={INPUT}
+          aria-invalid={errors.name ? true : undefined}
+          aria-describedby={errors.name ? "name-error" : undefined}
         />
       </Field>
 
@@ -183,6 +202,8 @@ export default function ContactForm({ defaultService }: { defaultService?: strin
           required
           placeholder="you@example.com"
           className={INPUT}
+          aria-invalid={errors.email ? true : undefined}
+          aria-describedby={errors.email ? "email-error" : undefined}
         />
       </Field>
 
@@ -205,6 +226,8 @@ export default function ContactForm({ defaultService }: { defaultService?: strin
           required
           placeholder="A sentence or two is plenty. Your problem statement, your product, or just where you're stuck."
           className={`${INPUT} resize-y`}
+          aria-invalid={errors.message ? true : undefined}
+          aria-describedby={errors.message ? "message-error" : undefined}
         />
       </Field>
 
@@ -245,7 +268,7 @@ export default function ContactForm({ defaultService }: { defaultService?: strin
         type="submit"
         size="lg"
         disabled={status === "sending"}
-        className="w-full sm:w-auto"
+        className="w-full"
       >
         {status === "sending" ? "Sending…" : "Send enquiry"}
       </Button>
@@ -267,14 +290,14 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-2.5">
       <label htmlFor={name} className="flex items-center gap-2 text-sm font-medium text-ink">
         {label}
         {optional && <span className="text-xs font-normal text-ink-subtle">Optional</span>}
       </label>
       {children}
       {error && (
-        <p className="text-sm text-red-400" role="alert">
+        <p id={`${name}-error`} className="text-sm text-red-400" role="alert">
           {error}
         </p>
       )}

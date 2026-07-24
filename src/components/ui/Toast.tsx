@@ -39,19 +39,27 @@ export function ToastProvider({ children }: { children: ReactNode }) {
       {children}
       <div
         aria-live="polite"
-        className="pointer-events-none fixed inset-x-0 bottom-6 z-[110] flex flex-col items-center gap-2 px-4"
+        className="pointer-events-none fixed inset-x-0 bottom-6 z-[110] flex flex-col items-center gap-3 px-4"
       >
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className="fade-up pointer-events-auto flex items-center gap-2.5 rounded-full border border-line bg-surface-overlay py-2.5 pl-4 pr-5 text-sm text-ink shadow-2xl shadow-black/60"
+            className={`fade-up pointer-events-auto flex max-w-md items-center gap-3 rounded-2xl border px-4 py-3 text-sm text-ink shadow-2xl shadow-black/50 backdrop-blur-xl ${
+              toast.kind === "success"
+                ? "border-cool/30 bg-surface-overlay/95"
+                : "border-red-400/30 bg-surface-overlay/95"
+            }`}
           >
             {toast.kind === "success" ? (
-              <CircleCheck size={16} className="shrink-0 text-accent" />
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-cool/10 text-cool">
+                <CircleCheck size={16} />
+              </span>
             ) : (
-              <CircleX size={16} className="shrink-0 text-red-400" />
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-red-500/10 text-red-400">
+                <CircleX size={16} />
+              </span>
             )}
-            {toast.text}
+            <span className="leading-5">{toast.text}</span>
           </div>
         ))}
       </div>

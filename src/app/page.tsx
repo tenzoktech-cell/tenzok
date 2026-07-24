@@ -1,18 +1,22 @@
 import type { Metadata } from "next";
 import HeroTenzok from "@/components/HeroTenzok";
 import JsonLd from "@/components/JsonLd";
-import Commitments from "@/components/sections/Commitments";
-import CompanyServices from "@/components/sections/CompanyServices";
+import AgencyServices from "@/components/sections/AgencyServices";
+import CapabilityMarquee from "@/components/sections/CapabilityMarquee";
+import ConceptProducts from "@/components/sections/ConceptProducts";
 import CtaFooter from "@/components/sections/CtaFooter";
-import GrowthLaunch from "@/components/sections/GrowthLaunch";
-import Mentorship from "@/components/sections/Mentorship";
-import ProjectDomains from "@/components/sections/ProjectDomains";
+import DeliveryProcess from "@/components/sections/DeliveryProcess";
+import InsightsFaq from "@/components/sections/InsightsFaq";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
-import { url } from "@/lib/site";
+import { SITE, socialMetadata, url } from "@/lib/site";
 
 export const metadata: Metadata = {
   alternates: { canonical: url("/") },
-  openGraph: { url: url("/") },
+  ...socialMetadata({
+    title: `${SITE.name} — Software Products, AI Solutions & Student Projects`,
+    description: SITE.description,
+    path: "/",
+  }),
 };
 
 export default function Home() {
@@ -20,11 +24,11 @@ export default function Home() {
     <main id="main" tabIndex={-1} className="bg-surface">
       <JsonLd schema={[organizationSchema(), websiteSchema()]} />
       <HeroTenzok />
-      <ProjectDomains />
-      <Mentorship />
-      <CompanyServices />
-      <GrowthLaunch />
-      <Commitments />
+      <CapabilityMarquee />
+      <AgencyServices />
+      <ConceptProducts />
+      <DeliveryProcess />
+      <InsightsFaq />
       <CtaFooter />
     </main>
   );

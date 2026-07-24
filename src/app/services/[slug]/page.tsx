@@ -1,7 +1,13 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, ArrowUpRight, Check } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  Check,
+  Sparkles,
+} from "lucide-react";
 import JsonLd from "@/components/JsonLd";
 import ProcessBar from "@/components/ProcessBar";
 import StartJourneyButton from "@/components/StartJourneyModal";
@@ -13,7 +19,7 @@ import { SERVICES, getService } from "@/components/services-data";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container, Eyebrow, Section } from "@/components/ui/Section";
 import { breadcrumbSchema, serviceSchema } from "@/lib/seo";
-import { url } from "@/lib/site";
+import { socialMetadata, url } from "@/lib/site";
 
 interface ServicePageProps {
   params: Promise<{ slug: string }>;
@@ -27,15 +33,16 @@ export async function generateMetadata({ params }: ServicePageProps): Promise<Me
   const { slug } = await params;
   const service = getService(slug);
   if (!service) return {};
+
   return {
     title: service.name,
     description: service.intro,
     alternates: { canonical: url(`/services/${slug}`) },
-    openGraph: {
+    ...socialMetadata({
       title: `${service.name} — Tenzok`,
       description: service.intro,
-      url: url(`/services/${slug}`),
-    },
+      path: `/services/${slug}`,
+    }),
   };
 }
 
@@ -45,10 +52,10 @@ export default async function ServicePage({ params }: ServicePageProps) {
   if (!service) notFound();
 
   const Icon = service.icon;
-  const otherServices = SERVICES.filter((s) => s.slug !== service.slug);
+  const otherServices = SERVICES.filter((item) => item.slug !== service.slug);
 
   return (
-    <main id="main" tabIndex={-1} className="bg-surface">
+    <main id="main" tabIndex={-1} className="overflow-hidden bg-surface">
       <JsonLd
         schema={[
           serviceSchema({
@@ -66,98 +73,138 @@ export default async function ServicePage({ params }: ServicePageProps) {
       />
       <TenzokNav />
 
-      {/* ------------------------------ Hero ------------------------------ */}
-      <section className="pt-28 pb-8 sm:pt-44">
-        <Container>
-          <Reveal>
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2 rounded-md border border-line bg-surface-raised px-3 py-1.5 text-xs font-medium text-ink-muted">
-                <Icon size={14} className="text-accent" />
-                {service.name}
-              </span>
-              <span className="rounded-md border border-line px-3 py-1.5 text-xs text-ink-subtle">
-                {service.audience}
-              </span>
-            </div>
+      <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-3xl"
+        />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-3xl"
+        />
 
-            <h1 className="mt-8 max-w-3xl text-[clamp(2rem,1.5rem+2.4vw,3.5rem)] leading-[1.08] text-ink">
-              {service.headline.plain}{" "}
-              <span className="font-display italic text-accent">
-                {service.headline.accent}
-              </span>
-            </h1>
-            <p className="mt-6 max-w-2xl text-lg leading-relaxed text-ink-muted">
-              {service.intro}
-            </p>
-          </Reveal>
+        <Container className="relative">
+          <Link
+            href="/services"
+            className="inline-flex min-h-11 items-center gap-2 text-sm text-ink-subtle transition-colors hover:text-ink"
+          >
+            <ArrowLeft size={14} />
+            All services
+          </Link>
 
-          <Reveal delay={100}>
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row">
-              <StartJourneyButton defaultService={service.slug} size="lg" />
-              <a
-                href="#process"
-                className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-line-strong bg-surface-raised px-7 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay sm:text-base"
-              >
-                See how we work
-                <ArrowRight size={15} />
-              </a>
-            </div>
-          </Reveal>
+          <div className="mt-9 grid items-end gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(19rem,0.75fr)] lg:gap-16">
+            <Reveal>
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="inline-flex items-center gap-2 rounded-full border border-accent/30 bg-accent/10 px-3 py-1.5 text-xs font-medium text-accent">
+                  <Icon size={14} />
+                  {service.name}
+                </span>
+                <span className="rounded-full border border-line bg-surface-raised px-3 py-1.5 text-xs text-ink-muted">
+                  {service.audience}
+                </span>
+              </div>
 
-          <Reveal delay={180}>
-            <dl className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-3">
-              {service.stats.map((stat) => (
-                <div key={stat.label} className="flex flex-col gap-2 bg-surface-raised p-6">
-                  <dd className="text-3xl font-medium tracking-tight text-ink sm:text-4xl">
-                    {stat.value}
-                  </dd>
-                  <dt className="text-sm text-ink-muted">{stat.label}</dt>
+              <h1 className="mt-7 max-w-4xl text-[clamp(2.75rem,1.8rem+3.5vw,5.25rem)] leading-[0.98] text-ink">
+                {service.headline.plain}{" "}
+                <span className="bg-gradient-to-r from-accent to-cool bg-clip-text text-transparent">
+                  {service.headline.accent}
+                </span>
+              </h1>
+              <p className="mt-7 max-w-3xl text-lg leading-relaxed text-ink-muted sm:text-xl">
+                {service.intro}
+              </p>
+              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+                <StartJourneyButton
+                  defaultService={service.slug}
+                  label="Start your project"
+                  size="lg"
+                />
+                <a
+                  href="#process"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-line-strong bg-surface-raised px-7 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay sm:text-base"
+                >
+                  See how it works
+                  <ArrowRight size={16} />
+                </a>
+              </div>
+            </Reveal>
+
+            <Reveal delay={120}>
+              <aside className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 shadow-2xl shadow-black/25">
+                <div
+                  aria-hidden
+                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cool/15 blur-3xl"
+                />
+                <div className="relative flex items-center gap-3">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-cool/30 bg-cool/10">
+                    <Sparkles size={18} className="text-cool" />
+                  </span>
+                  <div>
+                    <p className="text-sm font-medium text-ink">Clear from day one</p>
+                    <p className="mt-0.5 text-xs text-ink-subtle">
+                      Scope, ownership, progress, handover.
+                    </p>
+                  </div>
                 </div>
-              ))}
-            </dl>
-          </Reveal>
+
+                <dl className="relative mt-7 space-y-1">
+                  {service.stats.map((stat) => (
+                    <div
+                      key={stat.label}
+                      className="flex items-center justify-between gap-5 border-t border-line py-4 first:border-t-0"
+                    >
+                      <dt className="text-sm leading-snug text-ink-muted">{stat.label}</dt>
+                      <dd className="shrink-0 text-xl font-medium tracking-tight text-ink">
+                        {stat.value}
+                      </dd>
+                    </div>
+                  ))}
+                </dl>
+              </aside>
+            </Reveal>
+          </div>
         </Container>
       </section>
 
-      {/* --------------------- Client journey / process ------------------- */}
-      <Section id="process">
+      <Section id="process" bordered>
         <SectionHeading
           align="center"
-          eyebrow="The Tenzok Way"
+          eyebrow="The Tenzok way"
           title={
             <>
-              Every step,{" "}
-              <span className="font-display italic text-accent">in the open.</span>
+              Every milestone,{" "}
+              <span className="gradient-text">visible.</span>
             </>
           }
-          copy={`Every ${service.name} engagement follows the same transparent path. Here is exactly what happens after you say hello — no surprises, no black boxes.`}
+          copy={`Every ${service.name} engagement follows the same transparent path. You know what is happening, what is next, and what exists at the end.`}
         />
-        <Reveal delay={120} className="mt-16">
+        <Reveal delay={120} className="mt-12">
           <ProcessBar steps={service.steps} />
         </Reveal>
       </Section>
 
-      {/* ---------------------------- Big pitch --------------------------- */}
       <Section bordered>
-        <div className="grid items-center gap-12 lg:grid-cols-[1.2fr_1fr] lg:gap-16">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <Reveal>
             <Eyebrow>{service.big.eyebrow}</Eyebrow>
-            <h2 className="mt-6 text-3xl leading-[1.15] text-ink sm:text-4xl md:text-5xl">
+            <h2 className="mt-7 text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">
               {service.big.headline.plain}{" "}
-              <span className="font-display italic text-accent">
+              <span className="gradient-text">
                 {service.big.headline.accent}
               </span>
             </h2>
-            <p className="mt-6 max-w-xl text-base leading-relaxed text-ink-muted">
+            <p className="mt-6 max-w-2xl text-base leading-relaxed text-ink-muted">
               {service.big.copy}
             </p>
-            <ul className="mt-8 flex flex-col gap-3">
+            <ul className="mt-8 grid gap-3 sm:grid-cols-2">
               {service.big.points.map((point) => (
                 <li
                   key={point}
-                  className="flex items-start gap-3 text-sm leading-relaxed text-ink-muted"
+                  className="flex items-start gap-3 rounded-xl border border-line bg-surface-raised p-4 text-sm leading-relaxed text-ink-muted"
                 >
-                  <Check size={15} className="mt-1 shrink-0 text-accent" />
+                  <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10">
+                    <Check size={11} className="text-accent" />
+                  </span>
                   {point}
                 </li>
               ))}
@@ -165,11 +212,15 @@ export default async function ServicePage({ params }: ServicePageProps) {
           </Reveal>
 
           <Reveal delay={120}>
-            <div className="rounded-2xl border border-line bg-surface-raised p-10">
-              <p className="font-display text-6xl italic text-accent sm:text-7xl">
+            <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-accent/[0.06] p-8 shadow-2xl shadow-black/20 sm:p-10">
+              <div
+                aria-hidden
+                className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cool/15 blur-3xl"
+              />
+              <p className="relative bg-gradient-to-r from-accent to-cool bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl">
                 {service.big.stat.value}
               </p>
-              <p className="mt-6 max-w-xs text-base leading-relaxed text-ink-muted">
+              <p className="relative mt-6 max-w-sm text-base leading-relaxed text-ink-muted">
                 {service.big.stat.label}
               </p>
             </div>
@@ -177,30 +228,40 @@ export default async function ServicePage({ params }: ServicePageProps) {
         </div>
       </Section>
 
-      {/* --------------------------- Deliverables ------------------------- */}
       <Section bordered>
         <SectionHeading
           align="center"
           eyebrow="What you get"
           title={
             <>
-              Deliverables,{" "}
-              <span className="font-display italic text-accent">not promises.</span>
+              Tangible outputs.{" "}
+              <span className="gradient-text">No black boxes.</span>
             </>
           }
+          copy="The work is only complete when you have the assets, context, and confidence to own what comes next."
         />
 
-        <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {service.deliverables.map((item, i) => {
+        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {service.deliverables.map((item, index) => {
             const ItemIcon = item.icon;
             return (
-              <Reveal key={item.title} delay={(i % 3) * 60} className="h-full">
-                <article className="h-full rounded-2xl border border-line bg-surface-raised p-6">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-overlay">
-                    <ItemIcon size={19} className="text-ink-muted" />
+              <Reveal key={item.title} delay={(index % 3) * 60} className="h-full">
+                <article className="group relative h-full overflow-hidden rounded-2xl border border-line bg-surface-raised p-6 transition-[border-color,background-color,transform] duration-300 hover:-translate-y-1 hover:border-line-strong hover:bg-surface-overlay">
+                  <div
+                    aria-hidden
+                    className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cool to-transparent opacity-0 transition-opacity group-hover:opacity-60"
+                  />
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-line bg-surface-overlay transition-colors group-hover:border-cool/30 group-hover:bg-cool/10">
+                    <ItemIcon
+                      size={19}
+                      className="text-ink-muted transition-colors group-hover:text-cool"
+                    />
                   </span>
-                  <h3 className="mt-6 text-base text-ink">{item.title}</h3>
-                  <p className="mt-2 text-sm leading-relaxed text-ink-muted">{item.desc}</p>
+                  <p className="mt-6 text-xs font-medium uppercase tracking-[0.14em] text-ink-subtle">
+                    0{index + 1}
+                  </p>
+                  <h3 className="mt-3 text-lg text-ink">{item.title}</h3>
+                  <p className="mt-3 text-sm leading-relaxed text-ink-muted">{item.desc}</p>
                 </article>
               </Reveal>
             );
@@ -208,38 +269,55 @@ export default async function ServicePage({ params }: ServicePageProps) {
         </div>
 
         <Reveal delay={120}>
-          <div className="mt-16 flex flex-col items-center justify-between gap-6 rounded-2xl border border-accent/30 bg-accent/[0.06] p-8 text-center sm:flex-row sm:text-left">
-            <p className="max-w-xl text-base text-ink">{service.ctaLine}</p>
+          <div className="relative mt-12 flex flex-col items-center justify-between gap-6 overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-8 text-center sm:flex-row sm:text-left">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 blur-3xl"
+            />
+            <p className="relative max-w-xl text-base text-ink">{service.ctaLine}</p>
             <ButtonLink
               href={`/contact?service=${service.slug}`}
               size="lg"
-              className="shrink-0"
+              className="relative shrink-0"
             >
               Talk to Tenzok
+              <ArrowRight size={16} />
             </ButtonLink>
           </div>
         </Reveal>
       </Section>
 
-      {/* -------------------------- Other services ------------------------ */}
       <Section bordered>
-        <Eyebrow>Explore more from Tenzok</Eyebrow>
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
+          <div>
+            <Eyebrow>Explore more from Tenzok</Eyebrow>
+            <h2 className="mt-6 text-3xl leading-tight text-ink sm:text-4xl">
+              The rest of the studio
+            </h2>
+          </div>
+          <ButtonLink href="/services" variant="secondary">
+            View all services
+            <ArrowRight size={15} />
+          </ButtonLink>
+        </div>
+        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {otherServices.map((other) => {
             const OtherIcon = other.icon;
             return (
               <Link
                 key={other.slug}
                 href={`/services/${other.slug}`}
-                className="group flex min-h-14 items-center justify-between gap-3 rounded-2xl border border-line bg-surface-raised px-5 transition-colors hover:border-line-strong hover:bg-surface-overlay"
+                className="group flex min-h-20 items-center justify-between gap-3 rounded-2xl border border-line bg-surface-raised px-5 transition-[border-color,background-color] hover:border-line-strong hover:bg-surface-overlay"
               >
-                <span className="flex items-center gap-3 text-sm font-medium text-ink-muted group-hover:text-ink">
-                  <OtherIcon size={16} className="shrink-0 text-ink-subtle" />
+                <span className="flex items-center gap-3 text-sm font-medium text-ink-muted transition-colors group-hover:text-ink">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-line bg-surface-overlay">
+                    <OtherIcon size={16} className="text-ink-subtle" />
+                  </span>
                   {other.name}
                 </span>
                 <ArrowUpRight
                   size={15}
-                  className="shrink-0 text-ink-subtle transition-colors group-hover:text-accent"
+                  className="shrink-0 text-ink-subtle transition-[color,transform] group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent"
                 />
               </Link>
             );

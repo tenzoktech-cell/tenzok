@@ -51,18 +51,18 @@ export default function Commitments() {
         title={
           <>
             Six promises.{" "}
-            <span className="font-display italic text-accent">All falsifiable.</span>
+            <span className="gradient-text">All falsifiable.</span>
           </>
         }
         copy="We are young enough that we cannot yet show you a wall of client logos. So instead of asking you to take our word for it, here is what you can hold us to — in writing, on every single engagement."
       />
 
-      <div className="mt-16 grid gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
         {COMMITMENTS.map((item, i) => {
           const Icon = item.icon;
           return (
             <Reveal key={item.title} delay={(i % 3) * 80} className="h-full">
-              <div className="flex h-full flex-col bg-surface-raised p-6">
+              <div className="flex h-full flex-col bg-surface-raised p-7 transition-colors hover:bg-surface-overlay">
                 <Icon size={20} className="text-accent" />
                 <h3 className="mt-6 text-base text-ink">{item.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-muted">{item.copy}</p>

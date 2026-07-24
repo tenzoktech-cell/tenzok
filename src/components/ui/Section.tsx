@@ -9,7 +9,7 @@ export function Container({
   children: ReactNode;
 }) {
   return (
-    <div className={`mx-auto w-full max-w-6xl px-5 sm:px-8 ${className}`.trim()}>
+    <div className={`mx-auto w-full max-w-7xl px-5 sm:px-8 lg:px-10 ${className}`.trim()}>
       {children}
     </div>
   );
@@ -22,7 +22,7 @@ interface SectionProps {
   children: ReactNode;
 }
 
-/** One vertical rhythm for the whole site: py-24 md:py-32. No exceptions. */
+/** Shared vertical rhythm for public sections. */
 export function Section({
   id,
   bordered = false,
@@ -32,7 +32,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`scroll-mt-24 py-24 md:py-32 ${
+      className={`relative scroll-mt-24 overflow-hidden py-24 md:py-32 ${
         bordered ? "border-t border-line" : ""
       } ${className}`.trim()}
     >
@@ -41,7 +41,7 @@ export function Section({
   );
 }
 
-/** Small uppercase label above a heading. Never accent-coloured — see the accent rule. */
+/** Compact product-studio label used above section headings. */
 export function Eyebrow({
   children,
   className = "",
@@ -51,9 +51,9 @@ export function Eyebrow({
 }) {
   return (
     <p
-      className={`flex items-center gap-3 text-xs font-medium uppercase tracking-[0.14em] text-ink-subtle ${className}`.trim()}
+      className={`flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-cool ${className}`.trim()}
     >
-      <span aria-hidden className="h-px w-6 bg-line-strong" />
+      <span aria-hidden className="h-px w-7 bg-gradient-to-r from-cool to-accent" />
       {children}
     </p>
   );

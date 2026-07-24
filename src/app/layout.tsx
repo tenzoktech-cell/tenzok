@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Playfair_Display } from "next/font/google";
+import { Inter, Manrope, Space_Grotesk } from "next/font/google";
 import ChatWidget from "@/components/chat/ChatWidget";
 import { ToastProvider } from "@/components/ui/Toast";
 import { SITE } from "@/lib/site";
@@ -12,23 +12,27 @@ const inter = Inter({
   display: "swap",
 });
 
-const playfair = Playfair_Display({
+const manrope = Manrope({
   subsets: ["latin"],
-  style: ["normal", "italic"],
-  variable: "--font-playfair",
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} — Final Year Projects, Mentorship & Software Delivery`,
+    default: `${SITE.name} — Software Products, AI Solutions & Student Projects`,
     template: `%s — ${SITE.name}`,
   },
   description: SITE.description,
-  // Root OG deliberately carries only type/siteName/locale. Children inherit this
-  // object wholesale, so a title or url here would stamp the homepage's identity
-  // onto every service, project and blog page.
+  // Root OG stays generic. Pages that override this nested object use
+  // socialMetadata(), because Next replaces nested metadata instead of merging it.
   openGraph: {
     type: "website",
     siteName: SITE.name,
@@ -53,7 +57,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${playfair.variable} h-full scroll-smooth antialiased`}
+      className={`${inter.variable} ${manrope.variable} ${spaceGrotesk.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full bg-surface text-ink">
         <a href="#main" className="skip-link">

@@ -1,4 +1,4 @@
-import { Info, TriangleAlert } from "lucide-react";
+import { Check, Info, TriangleAlert } from "lucide-react";
 import type { Block } from "./blog-types";
 
 /** Slug for an h2, so every section is deep-linkable. Google uses these for
@@ -13,7 +13,7 @@ export function headingId(text: string) {
 
 export default function ArticleBody({ body }: { body: Block[] }) {
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col text-pretty">
       {body.map((block, i) => (
         <BlockView key={i} block={block} />
       ))}
@@ -27,7 +27,7 @@ function BlockView({ block }: { block: Block }) {
       return (
         <h2
           id={headingId(block.text)}
-          className="mt-16 scroll-mt-28 text-2xl leading-snug text-ink sm:text-3xl"
+          className="mt-20 scroll-mt-28 border-t border-line pt-10 text-2xl leading-tight text-ink sm:text-3xl"
         >
           {block.text}
         </h2>
@@ -37,7 +37,7 @@ function BlockView({ block }: { block: Block }) {
       return (
         <h3
           id={headingId(block.text)}
-          className="mt-10 scroll-mt-28 text-lg text-ink sm:text-xl"
+          className="mt-12 scroll-mt-28 text-xl leading-snug text-ink sm:text-2xl"
         >
           {block.text}
         </h3>
@@ -45,18 +45,22 @@ function BlockView({ block }: { block: Block }) {
 
     case "p":
       return (
-        <p className="mt-6 text-base leading-[1.75] text-ink-muted">{block.text}</p>
+        <p className="mt-6 text-[1.0625rem] leading-[1.85] text-ink-muted">
+          {block.text}
+        </p>
       );
 
     case "ul":
       return (
-        <ul className="mt-6 flex flex-col gap-3">
+        <ul className="mt-7 flex flex-col gap-3 rounded-2xl border border-line bg-surface-raised/60 p-5 sm:p-6">
           {block.items.map((item) => (
             <li
               key={item}
-              className="flex items-start gap-3 text-base leading-[1.7] text-ink-muted"
+              className="flex items-start gap-3 text-base leading-[1.75] text-ink-muted"
             >
-              <span aria-hidden className="mt-3 h-1 w-1 shrink-0 rounded-full bg-accent" />
+              <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border border-accent/30 bg-accent/10">
+                <Check aria-hidden size={11} className="text-accent" />
+              </span>
               {item}
             </li>
           ))}
@@ -65,15 +69,15 @@ function BlockView({ block }: { block: Block }) {
 
     case "ol":
       return (
-        <ol className="mt-6 flex flex-col gap-3">
+        <ol className="mt-7 flex flex-col gap-4 rounded-2xl border border-line bg-surface-raised/60 p-5 sm:p-6">
           {block.items.map((item, i) => (
             <li
               key={item}
-              className="flex items-start gap-3 text-base leading-[1.7] text-ink-muted"
+              className="flex items-start gap-3 text-base leading-[1.75] text-ink-muted"
             >
               <span
                 aria-hidden
-                className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-md border border-line text-xs text-ink-subtle"
+                className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-lg border border-accent/30 bg-accent/10 text-xs font-medium text-accent"
               >
                 {i + 1}
               </span>
@@ -88,13 +92,18 @@ function BlockView({ block }: { block: Block }) {
         // min-w-0 + max-w-full: without them a long code line propagates its
         // intrinsic width up through every ancestor and widens the page itself.
         // The code must scroll inside this box and nowhere else.
-        <div className="mt-8 min-w-0 max-w-full overflow-hidden rounded-2xl border border-line bg-surface-raised">
-          <div className="border-b border-line px-4 py-2">
+        <div className="mt-9 min-w-0 max-w-full overflow-hidden rounded-2xl border border-line bg-surface-overlay shadow-2xl shadow-black/20">
+          <div className="flex items-center justify-between border-b border-line bg-surface-raised px-4 py-3">
             <span className="text-xs uppercase tracking-[0.14em] text-ink-subtle">
               {block.lang}
             </span>
+            <span aria-hidden className="flex gap-1.5">
+              <span className="h-2 w-2 rounded-full bg-accent/70" />
+              <span className="h-2 w-2 rounded-full bg-cool/70" />
+              <span className="h-2 w-2 rounded-full bg-line-strong" />
+            </span>
           </div>
-          <pre className="max-w-full overflow-x-auto p-4">
+          <pre className="max-w-full overflow-x-auto p-5">
             <code className="font-mono text-sm leading-relaxed text-ink">
               {block.code}
             </code>
@@ -107,13 +116,15 @@ function BlockView({ block }: { block: Block }) {
       const Icon = warn ? TriangleAlert : Info;
       return (
         <aside
-          className={`mt-8 flex gap-4 rounded-2xl border p-5 ${
-            warn ? "border-accent/30 bg-accent/[0.06]" : "border-line bg-surface-raised"
+          className={`mt-9 flex gap-4 rounded-2xl border p-5 sm:p-6 ${
+            warn
+              ? "border-accent/30 bg-accent/[0.07]"
+              : "border-cool/25 bg-cool/[0.06]"
           }`}
         >
           <Icon
             size={18}
-            className={`mt-0.5 shrink-0 ${warn ? "text-accent" : "text-ink-subtle"}`}
+            className={`mt-0.5 shrink-0 ${warn ? "text-accent" : "text-cool"}`}
           />
           <p className="text-sm leading-relaxed text-ink-muted">{block.text}</p>
         </aside>
@@ -122,7 +133,11 @@ function BlockView({ block }: { block: Block }) {
 
     case "quote":
       return (
-        <blockquote className="mt-10 border-l-2 border-accent pl-6">
+        <blockquote className="relative mt-12 overflow-hidden rounded-2xl border border-line bg-surface-raised p-7 sm:p-8">
+          <span
+            aria-hidden
+            className="absolute inset-y-0 left-0 w-1 bg-gradient-to-b from-accent to-cool"
+          />
           <p className="font-display text-xl italic leading-relaxed text-ink sm:text-2xl">
             {block.text}
           </p>

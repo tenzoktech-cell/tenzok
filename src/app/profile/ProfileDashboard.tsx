@@ -9,6 +9,7 @@ import {
 } from "react";
 import { useRouter } from "next/navigation";
 import {
+  ArrowUpRight,
   Briefcase,
   Building2,
   Calendar,
@@ -20,6 +21,7 @@ import {
   FolderKanban,
   GraduationCap,
   Mail,
+  LayoutDashboard,
   Pencil,
   Plus,
   Shield,
@@ -66,8 +68,9 @@ const fmtDate = (iso: string | null) =>
     : "—";
 
 const INPUT =
-  "w-full rounded-xl border border-line bg-surface px-4 py-3 text-sm text-ink placeholder:text-ink-subtle focus:border-line-strong focus:outline-none";
-const LABEL = "mb-1.5 block text-xs font-medium text-ink-muted";
+  "w-full rounded-2xl border border-line bg-surface/70 px-4 py-3.5 text-base text-ink placeholder:text-ink-subtle transition-all hover:border-line-strong focus:border-cool focus:bg-surface focus:outline-none";
+const LABEL =
+  "mb-2 block text-[0.68rem] font-medium uppercase tracking-[0.13em] text-ink-muted";
 
 function Field({
   label,
@@ -79,7 +82,7 @@ function Field({
   className?: string;
 }) {
   return (
-    <label className={`block ${className}`.trim()}>
+    <label className={`group block ${className}`.trim()}>
       <span className={LABEL}>{label}</span>
       {children}
     </label>
@@ -105,10 +108,10 @@ function ActionForm({
   }, [state, toast]);
 
   return (
-    <form action={formAction} className="grid gap-4 sm:grid-cols-2">
+    <form action={formAction} className="grid gap-5 sm:grid-cols-2">
       {children}
-      <div className="sm:col-span-2">
-        <Button type="submit" disabled={pending}>
+      <div className="mt-1 border-t border-line pt-5 sm:col-span-2">
+        <Button type="submit" disabled={pending} className="min-w-36 shadow-lg shadow-black/15">
           {pending ? "Saving…" : submitLabel}
         </Button>
       </div>
@@ -126,12 +129,18 @@ function Card({
   children: ReactNode;
 }) {
   return (
-    <section className="rounded-2xl border border-line bg-surface-raised p-6 sm:p-8">
-      <h2 className="flex items-center gap-2.5 text-lg font-medium text-ink">
-        <Icon size={18} className="text-accent" />
+    <section className="relative overflow-hidden rounded-[2rem] border border-line bg-surface-raised/80 p-6 shadow-xl shadow-black/10 backdrop-blur sm:p-8">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-0 top-0 h-28 w-28 rounded-full bg-cool/5 blur-3xl"
+      />
+      <h2 className="relative flex items-center gap-3 text-lg font-semibold tracking-tight text-ink">
+        <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cool/25 bg-cool/10 text-cool">
+          <Icon size={17} />
+        </span>
         {title}
       </h2>
-      <div className="mt-6">{children}</div>
+      <div className="relative mt-7">{children}</div>
     </section>
   );
 }
@@ -174,25 +183,48 @@ export default function ProfileDashboard({
   ];
 
   return (
-    <div className="pb-24 pt-28 sm:pt-36">
-      <Container>
+    <div className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-36">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute right-[-10rem] top-12 -z-10 h-[34rem] w-[34rem] rounded-full bg-cool/10 blur-[150px]"
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute left-[-14rem] top-[38rem] -z-10 h-[30rem] w-[30rem] rounded-full bg-accent/[0.08] blur-[140px]"
+      />
+      <Container className="max-w-7xl">
+        <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
+          <div>
+            <p className="flex items-center gap-2 text-xs font-medium uppercase tracking-[0.18em] text-cool">
+              <LayoutDashboard size={14} />
+              Personal workspace
+            </p>
+            <p className="mt-2 max-w-xl text-sm leading-6 text-ink-muted">
+              Projects, profile details, and account controls in one place.
+            </p>
+          </div>
+          <span className="rounded-full border border-line bg-surface-raised/70 px-4 py-2 text-xs text-ink-muted backdrop-blur">
+            {ROLE_LABELS[profile.role]} account
+          </span>
+        </div>
+
         <IdentityCard profile={profile} lastLogin={lastLogin} />
 
         <div
-          role="tablist"
+          role="group"
           aria-label="Profile sections"
-          className="mt-8 flex flex-wrap gap-2 border-b border-line pb-px"
+          className="mt-8 flex w-full flex-wrap gap-1.5 rounded-2xl border border-line bg-surface-raised/70 p-1.5 shadow-lg shadow-black/10 backdrop-blur sm:w-fit"
         >
           {TABS.map((t) => (
             <button
               key={t.id}
-              role="tab"
-              aria-selected={tab === t.id}
+              type="button"
+              aria-pressed={tab === t.id}
               onClick={() => setTab(t.id)}
-              className={`min-h-11 cursor-pointer rounded-t-xl border-b-2 px-4 text-sm font-medium transition-colors ${
+              className={`min-h-11 flex-1 cursor-pointer rounded-xl border px-4 text-sm font-medium transition-all sm:flex-none ${
                 tab === t.id
-                  ? "border-accent text-ink"
-                  : "border-transparent text-ink-subtle hover:text-ink"
+                  ? "border-cool/35 bg-cool/10 text-ink shadow-sm"
+                  : "border-transparent text-ink-subtle hover:bg-surface-overlay hover:text-ink"
               }`}
             >
               {t.label}
@@ -281,19 +313,23 @@ function IdentityCard({
   ];
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-line bg-surface-raised">
+    <section className="overflow-hidden rounded-[2rem] border border-line bg-surface-raised/90 shadow-2xl shadow-black/20">
       {/* Cover */}
       <div
-        className="relative h-36 bg-gradient-to-r from-accent/25 via-surface-overlay to-surface-raised bg-cover bg-center sm:h-44"
+        className="relative h-40 bg-gradient-to-br from-cool/25 via-surface-overlay to-accent/20 bg-cover bg-center sm:h-52"
         style={
           profile.cover_url ? { backgroundImage: `url(${profile.cover_url})` } : undefined
         }
       >
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-gradient-to-t from-surface-raised/80 via-transparent to-transparent"
+        />
         <button
           type="button"
           onClick={() => coverInput.current?.click()}
           disabled={uploading}
-          className="absolute right-4 top-4 flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-line bg-surface/80 px-4 text-xs font-medium text-ink backdrop-blur transition-colors hover:bg-surface-overlay"
+          className="absolute right-4 top-4 flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-white/15 bg-surface/70 px-4 text-xs font-medium text-ink shadow-lg shadow-black/20 backdrop-blur-xl transition-all hover:border-white/25 hover:bg-surface-overlay"
         >
           <Camera size={14} />
           Change cover
@@ -307,11 +343,11 @@ function IdentityCard({
         />
       </div>
 
-      <div className="p-6 sm:p-8">
+      <div className="p-6 sm:p-9">
         <div className="flex flex-wrap items-end gap-5">
           {/* Avatar */}
-          <div className="relative -mt-16 sm:-mt-20">
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-2xl border-4 border-surface-raised bg-surface-overlay sm:h-28 sm:w-28">
+          <div className="relative -mt-20 sm:-mt-24">
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-3xl border-4 border-surface-raised bg-surface-overlay shadow-xl shadow-black/30 sm:h-28 sm:w-28">
               {profile.avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -328,7 +364,7 @@ function IdentityCard({
               onClick={() => avatarInput.current?.click()}
               disabled={uploading}
               aria-label="Change profile picture"
-              className="absolute -bottom-2 -right-2 flex h-9 w-9 cursor-pointer items-center justify-center rounded-full border border-line bg-surface-overlay text-ink transition-colors hover:bg-surface"
+              className="absolute -bottom-2 -right-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-2xl border border-cool/30 bg-cool text-cool-ink shadow-lg shadow-black/30 transition-transform hover:scale-105"
             >
               <Camera size={14} />
             </button>
@@ -342,12 +378,12 @@ function IdentityCard({
           </div>
 
           <div className="min-w-0 flex-1">
-            <h1 className="text-2xl font-medium text-ink sm:text-3xl">
+            <h1 className="text-2xl font-semibold tracking-tight text-ink sm:text-4xl">
               {profile.full_name ?? "Unnamed"}
             </h1>
-            <p className="mt-1 text-sm text-ink-subtle">
-              @{profile.username ?? "user"}
-              <span className="ml-3 rounded-full border border-line px-2.5 py-0.5 text-xs text-ink-muted">
+            <p className="mt-2 flex flex-wrap items-center gap-2 text-sm text-ink-subtle">
+              <span>@{profile.username ?? "user"}</span>
+              <span className="rounded-full border border-cool/25 bg-cool/10 px-3 py-1 text-xs font-medium text-cool">
                 {ROLE_LABELS[profile.role]}
               </span>
             </p>
@@ -355,29 +391,36 @@ function IdentityCard({
         </div>
 
         {profile.bio && (
-          <p className="mt-5 max-w-2xl text-sm leading-relaxed text-ink-muted">
+          <p className="mt-6 max-w-3xl text-sm leading-7 text-ink-muted sm:text-base">
             {profile.bio}
           </p>
         )}
 
-        <dl className="mt-6 grid gap-x-8 gap-y-4 sm:grid-cols-2 lg:grid-cols-3">
+        <dl className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {meta.map(({ icon: Icon, label, value }) => (
-            <div key={label} className="flex items-start gap-3">
-              <Icon size={15} className="mt-0.5 shrink-0 text-ink-subtle" />
+            <div
+              key={label}
+              className="flex items-start gap-3 rounded-2xl border border-line bg-surface/60 p-4"
+            >
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-surface-overlay text-cool">
+                <Icon size={14} />
+              </span>
               <div className="min-w-0">
-                <dt className="text-xs text-ink-subtle">{label}</dt>
-                <dd className="truncate text-sm text-ink">{value}</dd>
+                <dt className="text-[0.68rem] uppercase tracking-[0.1em] text-ink-subtle">
+                  {label}
+                </dt>
+                <dd className="mt-1 truncate text-sm font-medium text-ink">{value}</dd>
               </div>
             </div>
           ))}
         </dl>
 
         {profile.skills.length > 0 && (
-          <div className="mt-5 flex flex-wrap gap-1.5">
+          <div className="mt-6 flex flex-wrap gap-2">
             {profile.skills.map((skill) => (
               <span
                 key={skill}
-                className="rounded-full border border-line bg-surface px-3 py-1 text-xs text-ink-muted"
+                className="rounded-full border border-line bg-surface px-3.5 py-1.5 text-xs font-medium text-ink-muted"
               >
                 {skill}
               </span>
@@ -412,26 +455,30 @@ function ProjectsSection({ projects }: { projects: Project[] }) {
       ) : (
         <>
           <div className="mb-6">
-            <Button onClick={() => setEditing("new")}>
+            <Button onClick={() => setEditing("new")} className="shadow-lg shadow-black/15">
               <Plus size={15} />
               New project
             </Button>
           </div>
 
           {projects.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-line-strong px-6 py-14 text-center">
-              <FolderKanban size={28} className="mx-auto text-ink-subtle" />
-              <p className="mt-4 text-base font-medium text-ink">No Projects Yet</p>
-              <p className="mt-1 text-sm text-ink-muted">
+            <div className="rounded-[1.75rem] border border-dashed border-line-strong bg-gradient-to-br from-cool/[0.06] to-transparent px-6 py-16 text-center">
+              <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-cool/25 bg-cool/10 text-cool">
+                <FolderKanban size={24} />
+              </span>
+              <p className="mt-5 text-lg font-semibold tracking-tight text-ink">
+                No projects yet
+              </p>
+              <p className="mt-2 text-sm text-ink-muted">
                 Create your first project to get started.
               </p>
             </div>
           ) : (
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {projects.map((project) => (
                 <article
                   key={project.id}
-                  className="flex flex-col rounded-2xl border border-line bg-surface p-5"
+                  className="group flex min-h-56 flex-col rounded-[1.6rem] border border-line bg-surface/70 p-5 transition-all hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-base font-medium text-ink">{project.title}</h3>
@@ -442,11 +489,11 @@ function ProjectsSection({ projects }: { projects: Project[] }) {
                     </span>
                   </div>
                   {project.description && (
-                    <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-ink-muted">
+                    <p className="mt-3 line-clamp-3 text-sm leading-6 text-ink-muted">
                       {project.description}
                     </p>
                   )}
-                  <div className="mt-4 flex items-center justify-between border-t border-line pt-3 text-xs text-ink-subtle">
+                  <div className="mt-auto flex items-center justify-between border-t border-line pt-4 text-xs leading-5 text-ink-subtle">
                     <span>
                       Created {fmtDate(project.created_at)} · Updated{" "}
                       {fmtDate(project.updated_at)}
@@ -455,7 +502,7 @@ function ProjectsSection({ projects }: { projects: Project[] }) {
                       type="button"
                       onClick={() => setEditing(project)}
                       aria-label={`Edit ${project.title}`}
-                      className="flex h-9 w-9 cursor-pointer items-center justify-center rounded-full text-ink-subtle transition-colors hover:bg-surface-overlay hover:text-ink"
+                      className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-xl border border-transparent text-ink-subtle transition-all hover:border-cool/25 hover:bg-cool/10 hover:text-cool"
                     >
                       <Pencil size={14} />
                     </button>
@@ -492,8 +539,16 @@ function ProjectForm({
   }, [saveState, deleteState]);
 
   return (
-    <div className="grid gap-4">
-      <form action={saveAction} className="grid gap-4 sm:grid-cols-2">
+    <div className="grid gap-5 rounded-[1.75rem] border border-line bg-surface/50 p-5 sm:p-6">
+      <div>
+        <p className="text-xs font-medium uppercase tracking-[0.14em] text-cool">
+          {project ? "Edit project" : "New project"}
+        </p>
+        <p className="mt-2 text-sm text-ink-muted">
+          Keep the essentials clear so every next step stays visible.
+        </p>
+      </div>
+      <form action={saveAction} className="grid gap-5 sm:grid-cols-2">
         {project && <input type="hidden" name="id" value={project.id} />}
         <Field label="Project name" className="sm:col-span-2">
           <input
@@ -520,7 +575,7 @@ function ProjectForm({
             <option value="completed">Completed</option>
           </select>
         </Field>
-        <div className="flex items-end gap-2">
+        <div className="flex flex-wrap items-end gap-2">
           <Button type="submit" disabled={saving}>
             {saving ? "Saving…" : project ? "Save changes" : "Create project"}
           </Button>
@@ -531,12 +586,23 @@ function ProjectForm({
       </form>
 
       {project && (
-        <form action={deleteAction}>
+        <form
+          action={deleteAction}
+          onSubmit={(event) => {
+            if (
+              !window.confirm(
+                `Delete "${project.title}" permanently? This cannot be undone.`,
+              )
+            ) {
+              event.preventDefault();
+            }
+          }}
+        >
           <input type="hidden" name="id" value={project.id} />
           <button
             type="submit"
             disabled={deleting}
-            className="flex min-h-11 cursor-pointer items-center gap-2 text-sm text-red-400 transition-colors hover:text-red-300"
+            className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-3 text-sm text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300"
           >
             <Trash2 size={14} />
             {deleting ? "Deleting…" : "Delete this project"}
@@ -660,12 +726,12 @@ function StudentSection({
         </Field>
       </ActionForm>
 
-      <div className="mt-8 flex flex-wrap items-center gap-4 border-t border-line pt-6">
+      <div className="mt-8 flex flex-wrap items-center gap-4 rounded-2xl border border-line bg-surface/60 p-5">
         <button
           type="button"
           onClick={() => resumeInput.current?.click()}
           disabled={uploading}
-          className={buttonClass("secondary")}
+          className={buttonClass("secondary", "md", "shadow-lg shadow-black/10")}
         >
           <Upload size={15} />
           {uploading ? "Uploading…" : student?.resume_url ? "Replace resume" : "Upload resume"}
@@ -679,6 +745,7 @@ function StudentSection({
           >
             <FileText size={14} />
             View current resume
+            <ArrowUpRight size={13} />
           </a>
         )}
         <input
@@ -730,9 +797,11 @@ function CompanySection({ company }: { company: CompanyProfile | null }) {
         </Field>
       </ActionForm>
 
-      <div className="mt-8 rounded-2xl border border-line bg-surface p-5 text-sm leading-relaxed text-ink-muted">
+      <div className="mt-8 rounded-[1.5rem] border border-cool/20 bg-gradient-to-br from-cool/[0.08] to-transparent p-5 text-sm leading-relaxed text-ink-muted">
         <p className="flex items-center gap-2 font-medium text-ink">
-          <Briefcase size={15} className="text-accent" />
+          <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-cool/10 text-cool">
+            <Briefcase size={15} />
+          </span>
           Need help completing your organization profile?
         </p>
         <p className="mt-2">
@@ -808,12 +877,12 @@ function Pref({
   defaultChecked: boolean;
 }) {
   return (
-    <label className="flex cursor-pointer items-start gap-3 rounded-xl border border-line bg-surface p-4">
+    <label className="group flex cursor-pointer items-start gap-4 rounded-2xl border border-line bg-surface/70 p-4 transition-all hover:border-line-strong hover:bg-surface">
       <input
         type="checkbox"
         name={name}
         defaultChecked={defaultChecked}
-        className="mt-0.5 h-4 w-4 accent-[var(--color-accent)]"
+        className="mt-0.5 h-5 w-5 rounded accent-[var(--color-cool)]"
       />
       <span>
         <span className="block text-sm font-medium text-ink">{label}</span>

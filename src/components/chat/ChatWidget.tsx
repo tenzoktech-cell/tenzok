@@ -110,6 +110,9 @@ function ChatPanel({
 
   const activeIdRef = useRef<string | null>(null);
   const openRef = useRef(false);
+  const launcherRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const wasOpenRef = useRef(false);
   useEffect(() => {
     activeIdRef.current = activeId;
     openRef.current = open;
@@ -122,6 +125,27 @@ function ChatPanel({
   const totalUnread =
     conversations?.reduce((sum, c) => sum + Number(c.unread), 0) ?? 0;
   const peerTyping = typingConv !== null && typingConv === activeId;
+
+  useEffect(() => {
+    if (open) {
+      const frame = window.requestAnimationFrame(() => panelRef.current?.focus());
+      wasOpenRef.current = true;
+      return () => window.cancelAnimationFrame(frame);
+    }
+    if (wasOpenRef.current) launcherRef.current?.focus();
+    wasOpenRef.current = false;
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return;
+      event.preventDefault();
+      setOpen(false);
+    };
+    document.addEventListener("keydown", closeOnEscape);
+    return () => document.removeEventListener("keydown", closeOnEscape);
+  }, [open]);
 
   const loadConversations = useCallback(async () => {
     const { data } = await supabase.rpc("my_conversations");
@@ -208,6 +232,8 @@ function ChatPanel({
       .subscribe();
     typingChannel.current = channel;
     return () => {
+      if (typingTimer.current) window.clearTimeout(typingTimer.current);
+      typingTimer.current = null;
       typingChannel.current = null;
       supabase.removeChannel(channel);
     };
@@ -294,14 +320,17 @@ function ChatPanel({
     <>
       {/* Floating launcher */}
       <button
+        ref={launcherRef}
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-label={open ? "Minimise chat" : "Open chat"}
-        className="fixed bottom-5 right-5 z-[90] flex h-14 w-14 cursor-pointer items-center justify-center rounded-full bg-accent text-accent-ink shadow-2xl shadow-black/50 transition-transform hover:scale-105"
+        aria-expanded={open}
+        aria-controls="tenzok-chat-panel"
+        className="fixed bottom-5 right-4 z-[90] flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl border border-white/15 bg-gradient-to-br from-[#3566dc] to-[#7134c9] text-white shadow-2xl shadow-black/50 transition-all hover:-translate-y-0.5 hover:shadow-cool/20 sm:right-6"
       >
         {open ? <Minus size={22} /> : <MessageCircle size={22} />}
         {!open && totalUnread > 0 && (
-          <span className="absolute -right-1 -top-1 flex h-6 min-w-6 items-center justify-center rounded-full border-2 border-surface bg-red-500 px-1.5 text-xs font-semibold text-white">
+          <span className="absolute -right-2 -top-2 flex h-6 min-w-6 items-center justify-center rounded-full border-2 border-surface bg-red-500 px-1.5 text-xs font-semibold text-white shadow-lg">
             {totalUnread > 99 ? "99+" : totalUnread}
           </span>
         )}
@@ -309,19 +338,27 @@ function ChatPanel({
 
       {open && (
         <div
+          ref={panelRef}
+          id="tenzok-chat-panel"
           role="dialog"
+          aria-modal="false"
           aria-label="Messages"
-          className="fade-up fixed bottom-24 right-5 z-[90] flex h-[520px] w-[calc(100vw-2.5rem)] max-w-sm flex-col overflow-hidden rounded-2xl border border-line bg-surface-raised shadow-2xl shadow-black/60"
+          tabIndex={-1}
+          className="fade-up fixed bottom-24 right-3 z-[90] flex h-[min(620px,calc(100dvh-7.5rem))] w-[calc(100vw-1.5rem)] max-w-md flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface-raised/95 shadow-2xl shadow-black/70 backdrop-blur-xl sm:right-6"
         >
           {/* Header */}
-          <header className="flex items-center gap-3 border-b border-line bg-surface-overlay px-4 py-3">
+          <header className="relative flex min-h-16 items-center gap-3 overflow-hidden border-b border-line bg-gradient-to-r from-cool/10 via-surface-overlay to-accent/10 px-4 py-3.5">
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-x-10 top-0 h-px bg-gradient-to-r from-transparent via-cool/80 to-transparent"
+            />
             {active ? (
               <>
                 <button
                   type="button"
                   onClick={() => setActiveId(null)}
                   aria-label="Back to conversations"
-                  className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface hover:text-ink"
+                  className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-transparent text-ink-muted transition-colors hover:border-line hover:bg-surface hover:text-ink"
                 >
                   <ArrowLeft size={16} />
                 </button>
@@ -344,13 +381,16 @@ function ChatPanel({
                 </div>
               </>
             ) : (
-              <p className="flex-1 text-sm font-medium text-ink">Messages</p>
+              <div className="flex-1">
+                <p className="text-sm font-semibold tracking-tight text-ink">Tenzok messages</p>
+                <p className="mt-0.5 text-xs text-ink-subtle">Your project conversations</p>
+              </div>
             )}
             <button
               type="button"
               onClick={() => setOpen(false)}
               aria-label="Close chat"
-              className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-ink-muted transition-colors hover:bg-surface hover:text-ink"
+              className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-xl border border-transparent text-ink-muted transition-colors hover:border-line hover:bg-surface hover:text-ink"
             >
               <X size={16} />
             </button>
@@ -359,28 +399,36 @@ function ChatPanel({
           {/* Body */}
           {active ? (
             <>
-              <div ref={listRef} className="flex-1 overflow-y-auto p-4">
+              <div
+                ref={listRef}
+                className="flex-1 overflow-y-auto bg-gradient-to-b from-surface/40 to-surface-raised p-4"
+              >
                 {messages.length === 0 ? (
-                  <p className="p-4 text-center text-sm text-ink-subtle">
-                    Say hello — this is the start of your conversation.
-                  </p>
+                  <div className="mx-auto mt-8 max-w-xs rounded-2xl border border-dashed border-line-strong bg-surface-raised/60 p-5 text-center">
+                    <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-2xl bg-cool/10 text-cool">
+                      <MessageCircle size={17} />
+                    </span>
+                    <p className="mt-3 text-sm leading-6 text-ink-subtle">
+                      Say hello — this is the start of your conversation.
+                    </p>
+                  </div>
                 ) : (
-                  <ul className="grid gap-2">
+                  <ul className="grid gap-2.5">
                     {messages.map((m) => {
                       const mine = m.sender_id === user.id;
                       return (
                         <li key={m.id} className={mine ? "flex justify-end" : "flex"}>
                           <div
-                            className={`max-w-[80%] rounded-2xl px-3.5 py-2 text-sm leading-relaxed ${
+                            className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm ${
                               mine
-                                ? "rounded-br-md bg-accent text-accent-ink"
-                                : "rounded-bl-md border border-line bg-surface text-ink"
+                                ? "rounded-br-md bg-gradient-to-br from-cool to-accent text-cool-ink"
+                                : "rounded-bl-md border border-line bg-surface-overlay text-ink"
                             }`}
                           >
                             <p className="whitespace-pre-wrap break-words">{m.message}</p>
                             <p
                               className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${
-                                mine ? "text-accent-ink/70" : "text-ink-subtle"
+                                mine ? "text-cool-ink/70" : "text-ink-subtle"
                               }`}
                             >
                               {fmtTime(m.created_at)}
@@ -398,12 +446,15 @@ function ChatPanel({
                   </ul>
                 )}
                 {peerTyping && (
-                  <p className="mt-2 text-xs text-ink-subtle">typing…</p>
+                  <p className="mt-3 inline-flex rounded-full border border-line bg-surface-overlay px-3 py-1.5 text-xs text-ink-subtle">
+                    typing…
+                  </p>
                 )}
               </div>
 
-              <footer className="flex items-end gap-2 border-t border-line p-3">
+              <footer className="flex items-end gap-2 border-t border-line bg-surface-raised/95 p-3">
                 <textarea
+                  aria-label="Message"
                   value={draft}
                   onChange={(e) => {
                     setDraft(e.target.value);
@@ -417,28 +468,28 @@ function ChatPanel({
                   }}
                   rows={1}
                   placeholder="Write a message…"
-                  className="max-h-28 flex-1 resize-none rounded-xl border border-line bg-surface px-3.5 py-2.5 text-sm text-ink placeholder:text-ink-subtle focus:border-line-strong focus:outline-none"
+                  className="max-h-28 min-h-11 flex-1 resize-none rounded-2xl border border-line bg-surface px-4 py-2.5 text-base text-ink placeholder:text-ink-subtle transition-colors hover:border-line-strong focus:border-cool focus:outline-none"
                 />
                 <button
                   type="button"
                   onClick={send}
                   disabled={!draft.trim()}
                   aria-label="Send"
-                  className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full bg-accent text-accent-ink transition-opacity disabled:opacity-40"
+                  className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-2xl bg-gradient-to-br from-[#3566dc] to-[#7134c9] text-white shadow-lg shadow-black/20 transition-all hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-40"
                 >
                   <Send size={16} />
                 </button>
               </footer>
             </>
           ) : (
-            <div className="flex-1 overflow-y-auto">
+            <div className="flex-1 overflow-y-auto bg-gradient-to-b from-surface/30 to-surface-raised">
               {/* Students and freelancers talk to Tenzok; others can search. */}
               {role === "student" || role === "freelancer" ? (
                 <div className="border-b border-line p-4">
                   <button
                     type="button"
                     onClick={() => startWith(null)}
-                    className="w-full cursor-pointer rounded-xl bg-accent px-4 py-3 text-sm font-medium text-accent-ink transition-colors hover:bg-accent-strong"
+                    className="w-full cursor-pointer rounded-2xl bg-gradient-to-r from-[#3566dc] to-[#7134c9] px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/20 transition-transform hover:-translate-y-0.5"
                   >
                     Message Tenzok support
                   </button>
@@ -447,30 +498,31 @@ function ChatPanel({
                   </p>
                 </div>
               ) : (
-                <div className="border-b border-line p-3">
+                <div className="border-b border-line p-4">
                   <label className="relative block">
                     <Search
                       size={14}
                       className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle"
                     />
                     <input
+                      aria-label="Search people"
                       value={query}
                       onChange={(e) => {
                         setQuery(e.target.value);
                         if (!e.target.value.trim()) setContacts([]);
                       }}
                       placeholder="Search people…"
-                      className="w-full rounded-xl border border-line bg-surface py-2.5 pl-9 pr-3 text-sm text-ink placeholder:text-ink-subtle focus:border-line-strong focus:outline-none"
+                      className="w-full rounded-2xl border border-line bg-surface py-3 pl-10 pr-3 text-base text-ink placeholder:text-ink-subtle transition-colors hover:border-line-strong focus:border-cool focus:outline-none"
                     />
                   </label>
                   {contacts.length > 0 && (
-                    <ul className="mt-2 grid gap-1">
+                    <ul className="mt-3 grid gap-1 rounded-2xl border border-line bg-surface-raised/80 p-1.5">
                       {contacts.map((c) => (
                         <li key={c.id}>
                           <button
                             type="button"
                             onClick={() => startWith(c.id)}
-                            className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2 text-left transition-colors hover:bg-surface"
+                            className="flex w-full cursor-pointer items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors hover:bg-surface"
                           >
                             <Avatar name={c.full_name} url={c.avatar_url} online={online.has(c.id)} />
                             <span className="min-w-0">
@@ -491,23 +543,26 @@ function ChatPanel({
 
               {/* Recent conversations */}
               {conversations === null ? (
-                <div className="grid gap-2 p-4">
+                <div className="grid gap-2.5 p-4">
                   {Array.from({ length: 4 }).map((_, i) => (
-                    <div key={i} className="h-14 animate-pulse rounded-xl bg-surface-overlay" />
+                    <div key={i} className="h-16 animate-pulse rounded-2xl bg-surface-overlay" />
                   ))}
                 </div>
               ) : conversations.length === 0 ? (
-                <p className="p-6 text-center text-sm text-ink-subtle">
-                  No conversations yet.
-                </p>
+                <div className="p-8 text-center">
+                  <span className="mx-auto flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-surface-overlay text-ink-subtle">
+                    <MessageCircle size={18} />
+                  </span>
+                  <p className="mt-3 text-sm text-ink-subtle">No conversations yet.</p>
+                </div>
               ) : (
-                <ul>
+                <ul className="p-2">
                   {conversations.map((c) => (
-                    <li key={c.conversation_id}>
+                    <li key={c.conversation_id} className="mb-1 last:mb-0">
                       <button
                         type="button"
                         onClick={() => openConversation(c.conversation_id)}
-                        className="flex w-full cursor-pointer items-center gap-3 border-b border-line px-4 py-3 text-left transition-colors last:border-0 hover:bg-surface"
+                        className="flex w-full cursor-pointer items-center gap-3 rounded-2xl border border-transparent px-3 py-3 text-left transition-all hover:border-line hover:bg-surface"
                       >
                         <Avatar
                           name={c.other_name}
@@ -530,7 +585,7 @@ function ChatPanel({
                               {c.last_message ?? "No messages yet"}
                             </span>
                             {Number(c.unread) > 0 && (
-                              <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-accent px-1.5 text-[10px] font-semibold text-accent-ink">
+                              <span className="flex h-5 min-w-5 shrink-0 items-center justify-center rounded-full bg-accent-strong px-1.5 text-[10px] font-semibold text-accent-ink">
                                 {c.unread}
                               </span>
                             )}
@@ -560,7 +615,7 @@ function Avatar({
 }) {
   return (
     <span className="relative shrink-0">
-      <span className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full border border-line bg-surface-overlay">
+      <span className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-2xl border border-line bg-surface-overlay shadow-sm">
         {url ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={url} alt={name ?? ""} className="h-full w-full object-cover" />
@@ -570,7 +625,7 @@ function Avatar({
       </span>
       <span
         aria-hidden
-        className={`absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-surface-raised ${
+        className={`absolute -bottom-0.5 -right-0.5 h-3.5 w-3.5 rounded-full border-2 border-surface-raised ${
           online ? "bg-emerald-400" : "bg-ink-subtle/40"
         }`}
       />

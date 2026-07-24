@@ -48,7 +48,7 @@ export default function CompanyServices() {
             title={
               <>
                 Your product,{" "}
-                <span className="font-display italic text-accent">owned</span> like ours.
+                <span className="gradient-text">owned</span> like ours.
               </>
             }
             copy="We don't just take the project — we own it, teach it, and ship it. Engagements built for startups and enterprises that want delivery plus durable knowledge."
@@ -64,13 +64,13 @@ export default function CompanyServices() {
           </Reveal>
         </div>
 
-        <div className="divide-y divide-line border-y border-line">
+        <div className="premium-card divide-y divide-line overflow-hidden rounded-3xl">
           {OFFERS.map((offer, i) => {
             const Icon = offer.icon;
             return (
               <Reveal key={offer.title} delay={i * 70}>
-                <div className="flex items-start gap-5 py-8">
-                  <span className="font-display text-xl italic text-ink-subtle">
+                <div className="flex items-start gap-5 p-7 transition-colors hover:bg-white/[0.025]">
+                  <span className="font-display text-sm font-bold text-accent">
                     0{i + 1}
                   </span>
                   <div className="min-w-0 flex-1">
