@@ -82,6 +82,7 @@ export default function ContactForm() {
     const fields = {
       name: get("name"),
       email: get("email"),
+      phone: get("phone"),
       role: get("role"),
       message: get("message"),
       service: get("service"),
@@ -119,6 +120,7 @@ export default function ContactForm() {
           message: [
             `Name:    ${fields.name}`,
             `Email:   ${fields.email}`,
+            `Mobile:  ${fields.phone || "Not provided"}`,
             `I am a:  ${fields.role || "Not specified"}`,
             `Service: ${fields.service || "Not specified"}`,
             "",
@@ -204,6 +206,20 @@ export default function ContactForm() {
           className={INPUT}
           aria-invalid={errors.email ? true : undefined}
           aria-describedby={errors.email ? "email-error" : undefined}
+        />
+      </Field>
+
+      <Field label="Mobile number" name="phone" error={errors.phone} optional>
+        <input
+          id="phone"
+          name="phone"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel"
+          placeholder="+91 98765 43210"
+          className={INPUT}
+          aria-invalid={errors.phone ? true : undefined}
+          aria-describedby={errors.phone ? "phone-error" : undefined}
         />
       </Field>
 
