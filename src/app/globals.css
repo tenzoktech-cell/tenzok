@@ -31,9 +31,9 @@
 
   /* ---- Type ---- */
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif, system-ui,
-    sans-serif;
-  --font-hero: var(--font-space-grotesk), var(--font-manrope), ui-sans-serif,
+  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
+    system-ui, sans-serif;
+  --font-hero: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
     system-ui, sans-serif;
 }
 
@@ -204,6 +204,11 @@
 
 .text-balance {
   text-wrap: balance;
+}
+
+.deferred-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 850px;
 }
 
 @keyframes marquee {

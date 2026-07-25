@@ -5,7 +5,6 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
-import { createClient } from "@/utils/supabase/client";
 import { isSupabaseConfigured } from "@/utils/supabase/config";
 import { PROJECTS_MENU, SERVICES_MENU } from "./nav-links";
 import TenzokLogo from "./TenzokLogo";
@@ -37,6 +36,15 @@ const DIRECT_LINKS = [
   { label: "Contact", href: "/contact" },
 ] as const;
 
+type AuthSubscription = {
+  unsubscribe: () => void;
+};
+
+type IdleWindow = Window & {
+  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+  cancelIdleCallback?: (handle: number) => void;
+};
+
 export default function TenzokNav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openId, setOpenId] = useState<string | null>(null);
@@ -58,14 +66,40 @@ export default function TenzokNav() {
 
   useEffect(() => {
     if (!isSupabaseConfigured) return;
-    const supabase = createClient();
-    supabase.auth.getUser().then(({ data }) => setUser(data.user));
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null);
-    });
-    return () => subscription.unsubscribe();
+    let cancelled = false;
+    let subscription: AuthSubscription | undefined;
+
+    const loadAuth = async () => {
+      const { createClient } = await import("@/utils/supabase/client");
+      if (cancelled) return;
+
+      const supabase = createClient();
+      const { data } = await supabase.auth.getUser();
+      if (!cancelled) setUser(data.user);
+      const authListener = supabase.auth.onAuthStateChange((_event, session) => {
+        if (!cancelled) setUser(session?.user ?? null);
+      });
+      subscription = authListener.data.subscription;
+    };
+
+    const idleWindow = window as IdleWindow;
+    if (idleWindow.requestIdleCallback) {
+      const handle = idleWindow.requestIdleCallback(() => void loadAuth(), {
+        timeout: 4000,
+      });
+      return () => {
+        cancelled = true;
+        idleWindow.cancelIdleCallback?.(handle);
+        subscription?.unsubscribe();
+      };
+    }
+
+    const handle = window.setTimeout(() => void loadAuth(), 2500);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(handle);
+      subscription?.unsubscribe();
+    };
   }, []);
 
   // Close disclosures on Escape or on any press outside the nav.
@@ -104,7 +138,10 @@ export default function TenzokNav() {
   };
 
   const signOut = async () => {
-    if (isSupabaseConfigured) await createClient().auth.signOut();
+    if (isSupabaseConfigured) {
+      const { createClient } = await import("@/utils/supabase/client");
+      await createClient().auth.signOut();
+    }
     closeAll();
     router.refresh();
   };

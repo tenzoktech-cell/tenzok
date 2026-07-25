@@ -32,7 +32,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`relative scroll-mt-24 overflow-hidden py-24 md:py-32 ${
+      className={`deferred-section relative scroll-mt-24 overflow-hidden py-24 md:py-32 ${
         bordered ? "border-t border-line" : ""
       } ${className}`.trim()}
     >

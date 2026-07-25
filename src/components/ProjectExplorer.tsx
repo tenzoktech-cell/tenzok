@@ -34,11 +34,14 @@ const TIER_OPTIONS: { value: "all" | Tier; label: string }[] = [
   { value: "major", label: "Major projects" },
 ];
 
+const PAGE_SIZE = 12;
+
 export default function ProjectExplorer({ projects, domains }: ProjectExplorerProps) {
   const [query, setQuery] = useState("");
   const [domain, setDomain] = useState("all");
   const [tier, setTier] = useState<"all" | Tier>("all");
   const [technology, setTechnology] = useState("all");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const technologies = useMemo(
     () =>
@@ -74,6 +77,8 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
     });
   }, [domain, projects, query, technology, tier]);
 
+  const visibleProjects = filtered.slice(0, visibleCount);
+
   const hasFilters =
     query.trim().length > 0 || domain !== "all" || tier !== "all" || technology !== "all";
 
@@ -82,6 +87,7 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
     setDomain("all");
     setTier("all");
     setTechnology("all");
+    setVisibleCount(PAGE_SIZE);
   }
 
   return (
@@ -129,7 +135,10 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
               <input
                 type="search"
                 value={query}
-                onChange={(event) => setQuery(event.target.value)}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setVisibleCount(PAGE_SIZE);
+                }}
                 placeholder="Search AI, Flutter, deployment..."
                 className="min-h-12 w-full rounded-xl border border-line bg-surface-overlay pl-11 pr-4 text-base text-ink outline-none placeholder:text-ink-subtle transition-colors hover:border-line-strong focus:border-accent"
               />
@@ -139,7 +148,10 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
               <span className="sr-only">Filter by domain</span>
               <select
                 value={domain}
-                onChange={(event) => setDomain(event.target.value)}
+                onChange={(event) => {
+                  setDomain(event.target.value);
+                  setVisibleCount(PAGE_SIZE);
+                }}
                 className="min-h-12 w-full cursor-pointer rounded-xl border border-line bg-surface-overlay px-4 text-base text-ink outline-none transition-colors hover:border-line-strong focus:border-accent"
               >
                 <option value="all">Every domain</option>
@@ -155,7 +167,10 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
               <span className="sr-only">Filter by technology</span>
               <select
                 value={technology}
-                onChange={(event) => setTechnology(event.target.value)}
+                onChange={(event) => {
+                  setTechnology(event.target.value);
+                  setVisibleCount(PAGE_SIZE);
+                }}
                 className="min-h-12 w-full cursor-pointer rounded-xl border border-line bg-surface-overlay px-4 text-base text-ink outline-none transition-colors hover:border-line-strong focus:border-accent"
               >
                 <option value="all">Every technology</option>
@@ -177,7 +192,10 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
                     key={option.value}
                     type="button"
                     aria-pressed={active}
-                    onClick={() => setTier(option.value)}
+                    onClick={() => {
+                      setTier(option.value);
+                      setVisibleCount(PAGE_SIZE);
+                    }}
                     className={`min-h-11 cursor-pointer rounded-full border px-4 text-sm font-medium transition-colors ${
                       active
                         ? "border-accent bg-accent-strong text-accent-ink"
@@ -206,7 +224,7 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
 
       {filtered.length > 0 ? (
         <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filtered.map((project) => {
+          {visibleProjects.map((project) => {
             const major = project.tier === "major";
             return (
               <article
@@ -273,6 +291,17 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
               </article>
             );
           })}
+          {visibleCount < filtered.length && (
+            <div className="flex justify-center pt-4 md:col-span-2 xl:col-span-3">
+              <button
+                type="button"
+                onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
+                className="min-h-12 cursor-pointer rounded-full border border-line-strong bg-surface-overlay px-6 text-sm font-medium text-ink transition-colors hover:border-accent hover:text-accent"
+              >
+                Load more projects ({Math.min(PAGE_SIZE, filtered.length - visibleCount)})
+              </button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="mt-8 rounded-2xl border border-dashed border-line-strong bg-surface-raised px-6 py-16 text-center">

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Manrope, Space_Grotesk } from "next/font/google";
-import ChatWidget from "@/components/chat/ChatWidget";
+import { Inter, Space_Grotesk } from "next/font/google";
+import LazyChatWidget from "@/components/chat/LazyChatWidget";
 import { ToastProvider } from "@/components/ui/Toast";
 import { SITE } from "@/lib/site";
 import "./globals.css";
@@ -9,12 +9,6 @@ import "./globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
-  display: "swap",
-});
-
-const manrope = Manrope({
-  subsets: ["latin"],
-  variable: "--font-manrope",
   display: "swap",
 });
 
@@ -57,7 +51,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${manrope.variable} ${spaceGrotesk.variable} h-full scroll-smooth antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} h-full scroll-smooth antialiased`}
     >
       <body className="min-h-full bg-surface text-ink">
         <a href="#main" className="skip-link">
@@ -66,7 +60,7 @@ export default function RootLayout({
         <ToastProvider>
           {children}
           {/* Floating messenger; renders nothing while signed out. */}
-          <ChatWidget />
+          <LazyChatWidget />
         </ToastProvider>
         {/* .reveal starts at opacity:0 until an IntersectionObserver fires, so
             without this the whole page is invisible to non-JS crawlers. */}
