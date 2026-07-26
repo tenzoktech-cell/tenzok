@@ -11,7 +11,6 @@ import {
 import JsonLd from "@/components/JsonLd";
 import ProcessBar from "@/components/ProcessBar";
 import StartJourneyButton from "@/components/StartJourneyModal";
-import TenzokNav from "@/components/TenzokNav";
 import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
 import SectionHeading from "@/components/sections/SectionHeading";
@@ -71,7 +70,6 @@ export default async function ServicePage({ params }: ServicePageProps) {
           ]),
         ]}
       />
-      <TenzokNav />
 
       <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
         <div

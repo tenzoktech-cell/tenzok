@@ -4,8 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { ChevronDown, Menu, X } from "lucide-react";
-import type { User } from "@supabase/supabase-js";
-import { isSupabaseConfigured } from "@/utils/supabase/config";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { PROJECTS_MENU, SERVICES_MENU } from "./nav-links";
 import TenzokLogo from "./TenzokLogo";
 import { Button, ButtonLink } from "./ui/Button";
@@ -36,26 +35,17 @@ const DIRECT_LINKS = [
   { label: "Contact", href: "/contact" },
 ] as const;
 
-type AuthSubscription = {
-  unsubscribe: () => void;
-};
-
-type IdleWindow = Window & {
-  requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
-  cancelIdleCallback?: (handle: number) => void;
-};
-
 export default function TenzokNav() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openId, setOpenId] = useState<string | null>(null);
   const [mobileOpenId, setMobileOpenId] = useState<string | null>(null);
   const [scrolled, setScrolled] = useState(false);
-  const [user, setUser] = useState<User | null>(null);
   const navRef = useRef<HTMLElement>(null);
   const mobileTriggerRef = useRef<HTMLButtonElement>(null);
   const dropdownTriggerRefs = useRef<Record<string, HTMLButtonElement | null>>({});
   const pathname = usePathname() ?? "/";
   const router = useRouter();
+  const { user, status: authStatus, signOut: signOutUser } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24);
@@ -65,42 +55,8 @@ export default function TenzokNav() {
   }, []);
 
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
-    let cancelled = false;
-    let subscription: AuthSubscription | undefined;
-
-    const loadAuth = async () => {
-      const { createClient } = await import("@/utils/supabase/client");
-      if (cancelled) return;
-
-      const supabase = createClient();
-      const { data } = await supabase.auth.getUser();
-      if (!cancelled) setUser(data.user);
-      const authListener = supabase.auth.onAuthStateChange((_event, session) => {
-        if (!cancelled) setUser(session?.user ?? null);
-      });
-      subscription = authListener.data.subscription;
-    };
-
-    const idleWindow = window as IdleWindow;
-    if (idleWindow.requestIdleCallback) {
-      const handle = idleWindow.requestIdleCallback(() => void loadAuth(), {
-        timeout: 4000,
-      });
-      return () => {
-        cancelled = true;
-        idleWindow.cancelIdleCallback?.(handle);
-        subscription?.unsubscribe();
-      };
-    }
-
-    const handle = window.setTimeout(() => void loadAuth(), 2500);
-    return () => {
-      cancelled = true;
-      window.clearTimeout(handle);
-      subscription?.unsubscribe();
-    };
-  }, []);
+    if (user) router.prefetch("/profile");
+  }, [router, user]);
 
   // Close disclosures on Escape or on any press outside the nav.
   useEffect(() => {
@@ -138,11 +94,9 @@ export default function TenzokNav() {
   };
 
   const signOut = async () => {
-    if (isSupabaseConfigured) {
-      const { createClient } = await import("@/utils/supabase/client");
-      await createClient().auth.signOut();
-    }
+    await signOutUser();
     closeAll();
+    router.push("/");
     router.refresh();
   };
 
@@ -294,12 +248,28 @@ export default function TenzokNav() {
             by the order they appear in the class attribute — `inline-flex` won,
             so the button never hid on mobile and pushed the whole page sideways. */}
         <div className="hidden items-center gap-2 xl:flex">
-          {user ? (
+          {authStatus === "loading" ? (
+            <div
+              role="status"
+              aria-label="Loading account"
+              className="flex min-h-11 w-[19rem] items-center justify-end gap-2"
+            >
+              <span className="h-3 w-24 animate-pulse rounded-full bg-white/[0.08]" />
+              <span className="h-11 w-24 animate-pulse rounded-full bg-white/[0.08]" />
+              <span className="h-11 w-20 animate-pulse rounded-full bg-white/[0.05]" />
+            </div>
+          ) : user ? (
             <>
               <span className="hidden text-sm text-ink-muted lg:block">
                 Welcome, <span className="font-medium text-ink">{displayName}</span>
               </span>
-              <ButtonLink href="/profile" onClick={closeAll} variant="inverse">
+              <ButtonLink
+                href="/profile"
+                prefetch={true}
+                onPointerEnter={() => router.prefetch("/profile")}
+                onClick={closeAll}
+                variant="inverse"
+              >
                 Profile
               </ButtonLink>
               <Button variant="ghost" onClick={signOut}>
@@ -399,13 +369,24 @@ export default function TenzokNav() {
             </Link>
           ))}
 
-          {user ? (
+          {authStatus === "loading" ? (
+            <div
+              role="status"
+              aria-label="Loading account"
+              className="mt-3 grid gap-2 px-1"
+            >
+              <span className="h-4 w-32 animate-pulse rounded-full bg-white/[0.08]" />
+              <span className="h-12 w-full animate-pulse rounded-full bg-white/[0.08]" />
+            </div>
+          ) : user ? (
             <>
               <p className="mt-3 px-4 text-sm text-ink-muted">
                 Welcome, <span className="font-medium text-ink">{displayName}</span>
               </p>
               <ButtonLink
                 href="/profile"
+                prefetch={true}
+                onPointerEnter={() => router.prefetch("/profile")}
                 onClick={closeAll}
                 variant="inverse"
                 size="lg"

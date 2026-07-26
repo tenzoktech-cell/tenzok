@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import TenzokNav from "@/components/TenzokNav";
 import type {
   CompanyProfile,
   Profile,
@@ -22,54 +21,67 @@ export default async function ProfilePage() {
   if (!isSupabaseConfigured) redirect("/login");
 
   const supabase = createClient(await cookies());
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) redirect("/login");
+  const { data: authData } = await supabase.auth.getClaims();
+  const userId = authData?.claims.sub;
+  if (!userId) redirect("/login");
 
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("*")
-    .eq("id", user.id)
-    .single<Profile>();
+  const [
+    { data: profile },
+    { data: projects },
+    { data: student },
+    { data: company },
+  ] = await Promise.all([
+    supabase
+      .from("profiles")
+      .select("*")
+      .eq("id", userId)
+      .single<Profile>(),
+    supabase
+      .from("projects")
+      .select("*")
+      .eq("owner_id", userId)
+      .order("updated_at", { ascending: false })
+      .returns<Project[]>(),
+    supabase
+      .from("student_profiles")
+      .select("*")
+      .eq("user_id", userId)
+      .maybeSingle<StudentProfile>(),
+    supabase
+      .from("company_profiles")
+      .select("*")
+      .eq("user_id", userId)
+      .maybeSingle<CompanyProfile>(),
+  ]);
 
   // The signup trigger creates this row; a missing one means the database
   // migration hasn't run yet. Fail soft rather than crash.
   if (!profile) redirect("/login");
 
-  const [{ data: projects }, { data: student }, { data: company }] =
-    await Promise.all([
-      supabase
-        .from("projects")
-        .select("*")
-        .eq("owner_id", user.id)
-        .order("updated_at", { ascending: false })
-        .returns<Project[]>(),
-      profile.role === "student"
-        ? supabase
-            .from("student_profiles")
-            .select("*")
-            .eq("user_id", user.id)
-            .maybeSingle<StudentProfile>()
-        : Promise.resolve({ data: null }),
-      profile.role === "company"
-        ? supabase
-            .from("company_profiles")
-            .select("*")
-            .eq("user_id", user.id)
-            .maybeSingle<CompanyProfile>()
-        : Promise.resolve({ data: null }),
-    ]);
+  const authMethods = Array.isArray(authData?.claims.amr)
+    ? authData.claims.amr
+    : [];
+  const lastAuthTimestamp = authMethods.reduce(
+    (latest, method) =>
+      typeof method === "object" &&
+      method !== null &&
+      typeof method.timestamp === "number"
+        ? Math.max(latest, method.timestamp)
+        : latest,
+    0,
+  );
+  const lastLogin = lastAuthTimestamp
+    ? new Date(lastAuthTimestamp * 1000).toISOString()
+    : null;
 
   return (
     <main id="main" tabIndex={-1} className="bg-surface">
-      <TenzokNav />
       <ProfileDashboard
         profile={profile}
         projects={projects ?? []}
-        student={student ?? null}
-        company={company ?? null}
-        lastLogin={user.last_sign_in_at ?? null}
+        student={profile.role === "student" ? (student ?? null) : null}
+        company={profile.role === "company" ? (company ?? null) : null}
+        lastLogin={lastLogin}
       />
     </main>
   );

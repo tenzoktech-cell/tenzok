@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { BookOpen, Code2, Lightbulb, Search } from "lucide-react";
 import BlogExplorer, { type ExplorerPost } from "@/components/BlogExplorer";
 import JsonLd from "@/components/JsonLd";
-import TenzokNav from "@/components/TenzokNav";
 import { POSTS } from "@/components/blog-posts";
 import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
@@ -71,7 +70,6 @@ export default function BlogsPage() {
           ),
         ]}
       />
-      <TenzokNav />
 
       <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
         <div

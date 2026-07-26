@@ -3,7 +3,6 @@ import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ArrowUpRight, CheckCircle2, Sparkles } from "lucide-react";
-import TenzokNav from "@/components/TenzokNav";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { isSupabaseConfigured } from "@/utils/supabase/config";
 import { createClient } from "@/utils/supabase/server";
@@ -28,7 +27,6 @@ export default async function SignupPage() {
 
   return (
     <main id="main" tabIndex={-1} className="bg-surface">
-      <TenzokNav />
 
       <section className="relative isolate min-h-screen overflow-hidden pb-20 pt-28 sm:pt-36 lg:flex lg:items-center lg:py-36">
         <div

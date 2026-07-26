@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 import JsonLd from "@/components/JsonLd";
 import StartJourneyButton from "@/components/StartJourneyModal";
-import TenzokNav from "@/components/TenzokNav";
 import { SERVICES } from "@/components/services-data";
 import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
@@ -93,7 +92,6 @@ export default function ServicesIndexPage() {
           ),
         ]}
       />
-      <TenzokNav />
 
       <section className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-20">
         <div

@@ -5,7 +5,6 @@ import {
   RepresentativeBriefs,
 } from "@/components/marketing/CapabilityLibrary";
 import PageHero from "@/components/marketing/PageHero";
-import TenzokNav from "@/components/TenzokNav";
 import { DOMAINS, TOTAL_PROJECTS } from "@/components/projects-data";
 import CtaFooter from "@/components/sections/CtaFooter";
 import { ButtonLink } from "@/components/ui/Button";
@@ -42,7 +41,6 @@ export default function PortfolioPage() {
           ),
         ]}
       />
-      <TenzokNav />
 
       <PageHero
         eyebrow="Capabilities & build library"

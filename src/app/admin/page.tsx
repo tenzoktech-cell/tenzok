@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import TenzokNav from "@/components/TenzokNav";
 import type { ChatMessage, Profile, Project } from "@/lib/db-types";
 import { isSupabaseConfigured } from "@/utils/supabase/config";
 import { createClient } from "@/utils/supabase/server";
@@ -79,7 +78,6 @@ export default async function AdminPage() {
 
   return (
     <main id="main" tabIndex={-1} className="bg-surface">
-      <TenzokNav />
       <AdminDashboard
         adminId={user.id}
         users={users ?? []}

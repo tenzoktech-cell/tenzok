@@ -13,7 +13,6 @@ import {
 import JsonLd from "@/components/JsonLd";
 import ProjectCard from "@/components/ProjectCard";
 import StartJourneyButton from "@/components/StartJourneyModal";
-import TenzokNav from "@/components/TenzokNav";
 import { DOMAINS, getDomain } from "@/components/projects-data";
 import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
@@ -90,7 +89,6 @@ export default async function DomainPage({
           ),
         ]}
       />
-      <TenzokNav />
 
       <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
         <div

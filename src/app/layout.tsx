@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import { AuthProvider } from "@/components/auth/AuthProvider";
 import LazyChatWidget from "@/components/chat/LazyChatWidget";
+import TenzokNav from "@/components/TenzokNav";
 import { ToastProvider } from "@/components/ui/Toast";
 import { SITE } from "@/lib/site";
 import "./globals.css";
@@ -57,11 +59,14 @@ export default function RootLayout({
         <a href="#main" className="skip-link">
           Skip to content
         </a>
-        <ToastProvider>
-          {children}
-          {/* Floating messenger; renders nothing while signed out. */}
-          <LazyChatWidget />
-        </ToastProvider>
+        <AuthProvider>
+          <ToastProvider>
+            <TenzokNav />
+            {children}
+            {/* Floating messenger; renders nothing while signed out. */}
+            <LazyChatWidget />
+          </ToastProvider>
+        </AuthProvider>
         {/* .reveal starts at opacity:0 until an IntersectionObserver fires, so
             without this the whole page is invisible to non-JS crawlers. */}
         <noscript>

@@ -4,7 +4,6 @@ import { ArrowRight, ArrowUpRight, Layers3, Search, Sparkles } from "lucide-reac
 import JsonLd from "@/components/JsonLd";
 import ProjectExplorer, { type ExplorerProject } from "@/components/ProjectExplorer";
 import StartJourneyButton from "@/components/StartJourneyModal";
-import TenzokNav from "@/components/TenzokNav";
 import { DOMAINS, TOTAL_PROJECTS } from "@/components/projects-data";
 import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
@@ -82,7 +81,6 @@ export default function ProjectsIndexPage() {
           ),
         ]}
       />
-      <TenzokNav />
 
       <section className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-20">
         <div

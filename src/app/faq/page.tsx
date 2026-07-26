@@ -3,7 +3,6 @@ import JsonLd from "@/components/JsonLd";
 import FaqList from "@/components/marketing/FaqList";
 import { GENERAL_FAQS } from "@/components/marketing/faq-data";
 import PageHero from "@/components/marketing/PageHero";
-import TenzokNav from "@/components/TenzokNav";
 import CtaFooter from "@/components/sections/CtaFooter";
 import { ButtonLink } from "@/components/ui/Button";
 import { Section } from "@/components/ui/Section";
@@ -35,7 +34,6 @@ export default function FaqPage() {
           faqSchema([...GENERAL_FAQS]),
         ]}
       />
-      <TenzokNav />
 
       <PageHero
         eyebrow="Frequently asked questions"

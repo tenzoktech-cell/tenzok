@@ -19,11 +19,11 @@ import {
   X,
 } from "lucide-react";
 import type { RealtimeChannel, User } from "@supabase/supabase-js";
+import { useAuth } from "@/components/auth/AuthProvider";
 import { useToast } from "@/components/ui/Toast";
 import type { ChatContact, ChatMessage, UserRole } from "@/lib/db-types";
 import { ROLE_LABELS } from "@/lib/db-types";
 import { createClient } from "@/utils/supabase/client";
-import { isSupabaseConfigured } from "@/utils/supabase/config";
 
 /* ------------------------------------------------------------------ */
 
@@ -46,40 +46,47 @@ const fmtTime = (iso: string) =>
 
 /** LinkedIn-style floating messenger. Renders nothing while signed out. */
 export default function ChatWidget() {
-  const [user, setUser] = useState<User | null>(null);
-  const [role, setRole] = useState<UserRole | null>(null);
-  const [chatToasts, setChatToasts] = useState(true);
+  const { user } = useAuth();
+  const [profileSettings, setProfileSettings] = useState<{
+    userId: string;
+    role: UserRole;
+    chatToasts: boolean;
+  } | null>(null);
 
   useEffect(() => {
-    if (!isSupabaseConfigured) return;
+    let cancelled = false;
+    if (!user) return;
     const supabase = createClient();
 
-    const load = async (u: User | null) => {
-      setUser(u);
-      if (!u) {
-        setRole(null);
-        return;
-      }
+    const loadProfile = async () => {
       const { data } = await supabase
         .from("profiles")
         .select("role, prefs")
-        .eq("id", u.id)
+        .eq("id", user.id)
         .single();
-      setRole((data?.role as UserRole) ?? "student");
-      setChatToasts((data?.prefs?.chat_notifications as boolean | undefined) ?? true);
+      if (cancelled) return;
+      setProfileSettings({
+        userId: user.id,
+        role: (data?.role as UserRole) ?? "student",
+        chatToasts:
+          (data?.prefs?.chat_notifications as boolean | undefined) ?? true,
+      });
     };
 
-    supabase.auth.getUser().then(({ data }) => load(data.user));
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) =>
-      load(session?.user ?? null),
-    );
-    return () => subscription.unsubscribe();
-  }, []);
+    void loadProfile();
+    return () => {
+      cancelled = true;
+    };
+  }, [user]);
 
-  if (!user || !role) return null;
-  return <ChatPanel user={user} role={role} chatToasts={chatToasts} />;
+  if (!user || profileSettings?.userId !== user.id) return null;
+  return (
+    <ChatPanel
+      user={user}
+      role={profileSettings.role}
+      chatToasts={profileSettings.chatToasts}
+    />
+  );
 }
 
 /* ------------------------------------------------------------------ */

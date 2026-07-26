@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { ArrowLeft, Search } from "lucide-react";
-import TenzokNav from "@/components/TenzokNav";
 import { ButtonLink } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Section";
 
 export default function NotFound() {
   return (
     <main id="main" tabIndex={-1} className="min-h-screen bg-surface">
-      <TenzokNav />
       <Container className="flex min-h-screen items-center justify-center py-32">
         <div className="premium-card relative w-full max-w-2xl overflow-hidden rounded-[2rem] p-8 text-center sm:p-12">
           <div

@@ -2,9 +2,15 @@ import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 import { isSupabaseConfigured, supabaseKey, supabaseUrl } from "./config";
 
-/** Refreshes the auth session on every request and keeps the request and
- *  response cookies in sync, so Server Components always see a valid token. */
+/** Verifies protected-route sessions and keeps refreshed cookies in sync. */
 export const updateSession = async (request: NextRequest) => {
+  const path = request.nextUrl.pathname;
+  const isProtected = path.startsWith("/profile") || path.startsWith("/admin");
+
+  // Public pages do not read server-side auth state. Avoiding an auth round
+  // trip here makes Home/Services/About navigation immediate; the persistent
+  // browser AuthProvider owns their header state.
+  if (!isProtected) return NextResponse.next({ request });
   // Without Supabase env vars there is no session to refresh — and calling
   // createServerClient(undefined, …) here would 500 every route on the site.
   if (!isSupabaseConfigured) return NextResponse.next({ request });
@@ -27,16 +33,13 @@ export const updateSession = async (request: NextRequest) => {
   });
 
   // Not decorative: this call is what triggers the token refresh.
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
+  const { data: authData } = await supabase.auth.getClaims();
+  const isAuthenticated = Boolean(authData?.claims.sub);
 
   // Gate protected routes at the edge. Doing it here (rather than only in the
   // page) gives a clean redirect before any streaming — so a signed-out visitor
   // never sees a page's loading skeleton flash before bouncing to /login.
-  const path = request.nextUrl.pathname;
-  const isProtected = path.startsWith("/profile") || path.startsWith("/admin");
-  if (isProtected && !user) {
+  if (isProtected && !isAuthenticated) {
     const loginUrl = request.nextUrl.clone();
     loginUrl.pathname = "/login";
     loginUrl.search = "";

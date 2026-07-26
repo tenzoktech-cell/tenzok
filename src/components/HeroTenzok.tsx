@@ -9,7 +9,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import StartJourneyButton from "./StartJourneyModal";
-import TenzokNav from "./TenzokNav";
 import { ButtonLink } from "./ui/Button";
 import { Container } from "./ui/Section";
 
@@ -23,7 +22,6 @@ const CAPABILITIES = [
 export default function HeroTenzok() {
   return (
     <>
-      <TenzokNav />
 
       <section className="relative overflow-hidden pt-24 pb-14 sm:pt-28 sm:pb-20 lg:pt-30">
         <HeroBackdrop />

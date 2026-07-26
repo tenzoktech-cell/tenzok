@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { ArrowUpRight, Clock3, FileLock2, Mail, MessageSquare, Sparkles } from "lucide-react";
-import TenzokNav from "@/components/TenzokNav";
 import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
 import { Container, Eyebrow, Section } from "@/components/ui/Section";
@@ -42,7 +41,6 @@ const PROMISES = [
 export default function ContactPage() {
   return (
     <main id="main" tabIndex={-1} className="overflow-hidden bg-surface">
-      <TenzokNav />
 
       <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
         <div

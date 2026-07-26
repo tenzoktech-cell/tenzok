@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Building2, FileCheck2, GraduationCap, PackageOpen } from "lucide-react";
 import JsonLd from "@/components/JsonLd";
 import PageHero from "@/components/marketing/PageHero";
-import TenzokNav from "@/components/TenzokNav";
 import Commitments from "@/components/sections/Commitments";
 import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
@@ -61,7 +60,6 @@ export default function AboutPage() {
           ]),
         ]}
       />
-      <TenzokNav />
 
       <PageHero
         eyebrow="About Tenzok"

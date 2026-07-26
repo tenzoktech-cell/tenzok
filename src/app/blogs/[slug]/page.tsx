@@ -12,7 +12,6 @@ import {
 } from "lucide-react";
 import ArticleBody, { headingId } from "@/components/ArticleBody";
 import JsonLd from "@/components/JsonLd";
-import TenzokNav from "@/components/TenzokNav";
 import { POSTS, getPost } from "@/components/blog-posts";
 import CtaFooter from "@/components/sections/CtaFooter";
 import Reveal from "@/components/sections/Reveal";
@@ -92,7 +91,6 @@ export default async function BlogPostPage({ params }: PostPageProps) {
           ...(post.faq.length > 0 ? [faqSchema(post.faq)] : []),
         ]}
       />
-      <TenzokNav />
 
       <article>
         <header className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
