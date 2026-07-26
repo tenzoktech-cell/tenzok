@@ -7,6 +7,7 @@ import { CheckCircle2, Mail } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { getService, SERVICES } from "@/components/services-data";
 import { Button } from "@/components/ui/Button";
+import { InternationalPhoneField } from "@/components/ui/InternationalPhoneField";
 import { MIN_FILL_MS, validateEnquiry, type FieldErrors } from "./validate";
 
 /**
@@ -120,8 +121,8 @@ export default function ContactForm() {
           message: [
             `Name:    ${fields.name}`,
             `Email:   ${fields.email}`,
-            `Mobile:  ${fields.phone || "Not provided"}`,
-            `I am a:  ${fields.role || "Not specified"}`,
+            `Mobile:  ${fields.phone}`,
+            `I am a:  ${fields.role}`,
             `Service: ${fields.service || "Not specified"}`,
             "",
             fields.message,
@@ -209,22 +210,27 @@ export default function ContactForm() {
         />
       </Field>
 
-      <Field label="Mobile number" name="phone" error={errors.phone} optional>
-        <input
+      <Field label="Mobile number" name="phone" error={errors.phone}>
+        <InternationalPhoneField
           id="phone"
           name="phone"
-          type="tel"
-          inputMode="tel"
-          autoComplete="tel"
-          placeholder="+91 98765 43210"
-          className={INPUT}
-          aria-invalid={errors.phone ? true : undefined}
-          aria-describedby={errors.phone ? "phone-error" : undefined}
+          required
+          invalid={Boolean(errors.phone)}
+          describedBy={errors.phone ? "phone-error" : undefined}
+          radiusClassName="rounded-xl"
         />
       </Field>
 
-      <Field label="I'm a…" name="role" optional>
-        <select id="role" name="role" className={`${INPUT} cursor-pointer`} defaultValue="">
+      <Field label="I'm a…" name="role" error={errors.role}>
+        <select
+          id="role"
+          name="role"
+          required
+          aria-invalid={errors.role ? true : undefined}
+          aria-describedby={errors.role ? "role-error" : undefined}
+          className={`${INPUT} cursor-pointer`}
+          defaultValue=""
+        >
           <option value="">Select one</option>
           {ROLES.map((role) => (
             <option key={role} value={role}>

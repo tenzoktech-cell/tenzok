@@ -1,3 +1,5 @@
+import { isValidPhoneNumber } from "libphonenumber-js/min";
+
 export interface EnquiryFields {
   name: string;
   email: string;
@@ -10,7 +12,6 @@ export interface EnquiryFields {
 export type FieldErrors = Partial<Record<keyof EnquiryFields, string>>;
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
-const PHONE_RE = /^\+?[0-9][0-9\s().-]{6,19}$/;
 
 export function validateEnquiry(fields: EnquiryFields): FieldErrors {
   const errors: FieldErrors = {};
@@ -22,12 +23,11 @@ export function validateEnquiry(fields: EnquiryFields): FieldErrors {
     errors.email = "That email address doesn't look right.";
   }
   const phone = fields.phone.trim();
-  const phoneDigits = phone.replace(/\D/g, "");
-  if (
-    phone &&
-    (!PHONE_RE.test(phone) || phoneDigits.length < 7 || phoneDigits.length > 15)
-  ) {
-    errors.phone = "Enter a valid mobile number, including the country code.";
+  if (!phone || !isValidPhoneNumber(phone)) {
+    errors.phone = "Enter a valid mobile number.";
+  }
+  if (!fields.role.trim()) {
+    errors.role = "Choose the option that best describes you.";
   }
   if (fields.message.trim().length < 15) {
     errors.message = "A sentence or two, so we know what we'd be working on.";

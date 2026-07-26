@@ -12,6 +12,7 @@ import {
   UserRound,
 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { InternationalPhoneField } from "@/components/ui/InternationalPhoneField";
 import { signup } from "@/lib/auth-actions";
 
 // text-base (16px) is deliberate: iOS Safari zooms the page when a focused
@@ -117,6 +118,13 @@ export default function SignupForm() {
             className={ICON_INPUT}
           />
         </div>
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label htmlFor="phone" className={LABEL}>
+          Mobile number
+        </label>
+        <InternationalPhoneField id="phone" name="phone" required />
       </div>
 
       <div className="flex flex-col gap-2">

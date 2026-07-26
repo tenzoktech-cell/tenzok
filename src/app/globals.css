@@ -206,6 +206,39 @@
   text-wrap: balance;
 }
 
+.premium-scrollbar {
+  scrollbar-color:
+    color-mix(in srgb, var(--color-accent) 62%, var(--color-ink-subtle))
+    transparent;
+  scrollbar-width: thin;
+}
+
+.premium-scrollbar::-webkit-scrollbar {
+  width: 9px;
+}
+
+.premium-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  margin-block: 0.5rem;
+}
+
+.premium-scrollbar::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 9999px;
+  background:
+    linear-gradient(
+        180deg,
+        color-mix(in srgb, var(--color-cool) 72%, var(--color-accent)),
+        var(--color-accent)
+      )
+      padding-box;
+}
+
+.premium-scrollbar::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(180deg, var(--color-cool), var(--color-accent)) padding-box;
+}
+
 .deferred-section {
   content-visibility: auto;
   contain-intrinsic-size: auto 850px;

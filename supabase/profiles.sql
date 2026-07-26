@@ -1,6 +1,6 @@
 -- Run this ONCE in the Supabase dashboard: SQL Editor → New query → paste → Run.
 --
--- Signup stores name / designation / country / address in
+-- Signup stores name / designation / phone / country / address in
 -- auth.users.raw_user_meta_data. That data is real but lives inside the auth
 -- schema; this script gives it a proper table. The trigger copies every new
 -- signup into public.profiles automatically — no app code involved.
@@ -10,6 +10,7 @@ create table if not exists public.profiles (
   email text,
   full_name text,
   designation text, -- "Student" | "Company"
+  phone text,
   country text,
   address text,
   created_at timestamptz not null default now()
@@ -34,12 +35,14 @@ security definer
 set search_path = ''
 as $$
 begin
-  insert into public.profiles (id, email, full_name, designation, country, address)
+  insert into public.profiles
+    (id, email, full_name, designation, phone, country, address)
   values (
     new.id,
     new.email,
     new.raw_user_meta_data ->> 'full_name',
     new.raw_user_meta_data ->> 'designation',
+    new.raw_user_meta_data ->> 'phone',
     new.raw_user_meta_data ->> 'country',
     new.raw_user_meta_data ->> 'address'
   );
@@ -53,12 +56,14 @@ create trigger on_auth_user_created
   for each row execute function public.handle_new_user();
 
 -- Backfill: copy any users who signed up before this script ran.
-insert into public.profiles (id, email, full_name, designation, country, address)
+insert into public.profiles
+  (id, email, full_name, designation, phone, country, address)
 select
   id,
   email,
   raw_user_meta_data ->> 'full_name',
   raw_user_meta_data ->> 'designation',
+  raw_user_meta_data ->> 'phone',
   raw_user_meta_data ->> 'country',
   raw_user_meta_data ->> 'address'
 from auth.users

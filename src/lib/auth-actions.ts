@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { isValidPhoneNumber } from "libphonenumber-js/min";
 import { isSupabaseConfigured } from "@/utils/supabase/config";
 import { createClient } from "@/utils/supabase/server";
 
@@ -42,15 +43,19 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
 
   const name = String(formData.get("name") ?? "").trim();
   const designation = String(formData.get("designation") ?? "").trim();
+  const phone = String(formData.get("phone") ?? "").trim();
   const country = String(formData.get("country") ?? "").trim();
   const address = String(formData.get("address") ?? "").trim();
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
-  if (!name || !email || !password || !designation || !country || !address)
+  if (!name || !email || !password || !designation || !phone || !country || !address)
     return { error: "Fill in every field." };
   if (!DESIGNATIONS.includes(designation))
     return { error: "Choose whether you're a student or a company." };
+  if (!isValidPhoneNumber(phone)) {
+    return { error: "Enter a valid mobile number." };
+  }
   if (password.length < 6) return { error: "Password needs at least 6 characters." };
 
   const supabase = createClient(await cookies());
@@ -59,7 +64,9 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
     password,
     // Lands in auth.users.raw_user_meta_data; the on_auth_user_created trigger
     // (supabase/profiles.sql) copies it into public.profiles.
-    options: { data: { full_name: name, designation, country, address } },
+    options: {
+      data: { full_name: name, designation, phone, country, address },
+    },
   });
   if (error) return { error: friendly(error.message) };
 

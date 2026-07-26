@@ -47,7 +47,7 @@ set search_path = ''
 as $$
 begin
   insert into public.profiles
-    (id, email, username, full_name, designation, role, country, address)
+    (id, email, username, full_name, designation, role, phone, country, address)
   values (
     new.id,
     new.email,
@@ -58,6 +58,7 @@ begin
       when 'company' then 'company'
       else 'student'
     end,
+    new.raw_user_meta_data ->> 'phone',
     new.raw_user_meta_data ->> 'country',
     new.raw_user_meta_data ->> 'address'
   )
