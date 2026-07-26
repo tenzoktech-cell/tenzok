@@ -1,6 +1,11 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { ArrowUpRight, Mail, Rss } from "lucide-react";
+import {
+  ArrowUpRight,
+  Mail,
+  Rss,
+  X as XIcon,
+} from "lucide-react";
 import { SITE } from "@/lib/site";
 import { NAV_ITEMS } from "../nav-links";
 import { DOMAINS } from "../projects-data";
@@ -85,11 +90,29 @@ export default function CtaFooter() {
               </a>
               <div className="mt-6 flex items-center gap-2" aria-label="Social links">
                 <a href="https://www.instagram.com/tenzok.in" target="_blank" rel="noreferrer" aria-label="Tenzok on Instagram" className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink-muted transition-colors hover:border-cool/50 hover:text-cool">
-                  <span aria-hidden className="text-xs font-semibold">IG</span>
+                  <InstagramMark />
                 </a>
                 <a href="https://x.com/tenzokin" target="_blank" rel="noreferrer" aria-label="Tenzok on X" className="flex h-10 w-10 items-center justify-center rounded-full border border-line text-ink-muted transition-colors hover:border-cool/50 hover:text-cool">
-                  <span aria-hidden className="text-xs font-semibold">X</span>
+                  <XIcon aria-hidden size={17} strokeWidth={1.8} />
                 </a>
+                <button
+                  type="button"
+                  disabled
+                  title="LinkedIn (coming soon)"
+                  aria-label="Tenzok on LinkedIn (coming soon)"
+                  className="flex h-10 w-10 cursor-not-allowed items-center justify-center rounded-full border border-line text-ink-subtle opacity-45"
+                >
+                  <LinkedInMark />
+                </button>
+                <button
+                  type="button"
+                  disabled
+                  title="Facebook (coming soon)"
+                  aria-label="Tenzok on Facebook (coming soon)"
+                  className="flex h-10 w-10 cursor-not-allowed items-center justify-center rounded-full border border-line text-ink-subtle opacity-45"
+                >
+                  <FacebookMark />
+                </button>
               </div>
             </div>
 
@@ -164,5 +187,38 @@ function FooterLink({ href, children }: { href: string; children: ReactNode }) {
         className="opacity-0 transition-opacity group-hover:opacity-100"
       />
     </Link>
+  );
+}
+
+function InstagramMark() {
+  return (
+    <span
+      aria-hidden
+      className="relative block h-4 w-4 rounded-[4px] border-[1.5px] border-current"
+    >
+      <span
+        className="absolute left-1/2 top-1/2 h-[6px] w-[6px] -translate-x-1/2 -translate-y-1/2 rounded-full border-[1.5px] border-current"
+      />
+      <span className="absolute right-[2px] top-[2px] h-[2px] w-[2px] rounded-full bg-current" />
+    </span>
+  );
+}
+
+function LinkedInMark() {
+  return (
+    <span
+      aria-hidden
+      className="flex h-4 w-4 items-center justify-center rounded-[2px] border border-current text-[9px] font-bold leading-none"
+    >
+      in
+    </span>
+  );
+}
+
+function FacebookMark() {
+  return (
+    <span aria-hidden className="text-lg font-bold leading-none">
+      f
+    </span>
   );
 }

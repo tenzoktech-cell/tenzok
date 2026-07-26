@@ -3,7 +3,6 @@ import HeroTenzok from "@/components/HeroTenzok";
 import JsonLd from "@/components/JsonLd";
 import AgencyServices from "@/components/sections/AgencyServices";
 import CapabilityMarquee from "@/components/sections/CapabilityMarquee";
-import ConceptProducts from "@/components/sections/ConceptProducts";
 import CtaFooter from "@/components/sections/CtaFooter";
 import DeliveryProcess from "@/components/sections/DeliveryProcess";
 import InsightsFaq from "@/components/sections/InsightsFaq";
@@ -26,7 +25,6 @@ export default function Home() {
       <HeroTenzok />
       <CapabilityMarquee />
       <AgencyServices />
-      <ConceptProducts />
       <DeliveryProcess />
       <InsightsFaq />
       <CtaFooter />
