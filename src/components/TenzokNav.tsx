@@ -335,7 +335,7 @@ export default function TenzokNav() {
       </div>
 
       {menuOpen && (
-        <div className="premium-card absolute inset-x-4 top-full mt-2 flex max-h-[calc(100dvh-6rem)] flex-col overflow-y-auto rounded-3xl p-3 shadow-2xl shadow-black/70 xl:hidden">
+        <div className="premium-card absolute inset-x-4 top-full mt-2 flex max-h-[calc(100dvh-6rem)] flex-col overflow-y-auto overscroll-contain rounded-3xl !bg-surface p-3 shadow-2xl shadow-black/70 backdrop-blur-xl xl:hidden">
           <Link
             href="/"
             onClick={closeAll}
