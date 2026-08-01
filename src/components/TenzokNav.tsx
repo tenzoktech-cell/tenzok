@@ -300,15 +300,15 @@ export default function TenzokNav() {
                 <UserRound size={15} />
                 <span className="hidden 2xl:inline">Profile</span>
               </ButtonLink>
-              <Button
-                variant="ghost"
+              <button
+                type="button"
                 onClick={signOut}
                 aria-label="Sign out"
                 title="Sign out"
-                className="min-h-9 w-9 border-l border-white/10 px-0 text-ink-subtle hover:text-red-300"
+                className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-red-400/25 bg-red-500/10 text-red-300 transition-colors hover:bg-red-500/20 hover:text-red-100"
               >
-                <LogOut size={16} />
-              </Button>
+                <LogOut size={17} strokeWidth={2.25} />
+              </button>
             </div>
           ) : (
             <>
