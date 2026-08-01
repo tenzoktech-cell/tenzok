@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { ArrowUpRight, CheckCircle2, Sparkles } from "lucide-react";
 import { Container, Eyebrow } from "@/components/ui/Section";
-import { isSupabaseConfigured } from "@/utils/supabase/config";
-import { createClient } from "@/utils/supabase/server";
 import { url } from "@/lib/site";
 import SignupForm from "./SignupForm";
+import LoginSessionRedirect from "../login/LoginSessionRedirect";
 
 export const metadata: Metadata = {
   title: "Sign up",
@@ -16,17 +13,10 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default async function SignupPage() {
-  if (isSupabaseConfigured) {
-    const supabase = createClient(await cookies());
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) redirect("/profile");
-  }
-
+export default function SignupPage() {
   return (
     <main id="main" tabIndex={-1} className="bg-surface">
+      <LoginSessionRedirect />
 
       <section className="relative isolate min-h-screen overflow-hidden pb-20 pt-28 sm:pt-36 lg:flex lg:items-center lg:py-36">
         <div

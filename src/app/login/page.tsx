@@ -1,13 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
 import { Container, Eyebrow } from "@/components/ui/Section";
-import { isSupabaseConfigured } from "@/utils/supabase/config";
-import { createClient } from "@/utils/supabase/server";
 import { url } from "@/lib/site";
 import LoginForm from "./LoginForm";
+import LoginSessionRedirect from "./LoginSessionRedirect";
 
 export const metadata: Metadata = {
   title: "Log in",
@@ -16,24 +13,10 @@ export const metadata: Metadata = {
   robots: { index: false },
 };
 
-export default async function LoginPage() {
-  if (isSupabaseConfigured) {
-    const supabase = createClient(await cookies());
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
-    if (user) {
-      const { data: profile } = await supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .single();
-      redirect(profile?.role === "admin" ? "/admin" : "/profile");
-    }
-  }
-
+export default function LoginPage() {
   return (
     <main id="main" tabIndex={-1} className="bg-surface">
+      <LoginSessionRedirect />
 
       <section className="relative isolate min-h-screen overflow-hidden pb-20 pt-28 sm:pt-36 lg:flex lg:items-center lg:py-36">
         <div
