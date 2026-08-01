@@ -305,10 +305,9 @@ export default function TenzokNav() {
                 onClick={signOut}
                 aria-label="Sign out"
                 title="Sign out"
-                className="min-h-9 gap-1.5 px-3"
+                className="min-h-9 w-9 border-l border-white/10 px-0 text-ink-subtle hover:text-red-300"
               >
                 <LogOut size={16} />
-                <span className="hidden 2xl:inline">Sign out</span>
               </Button>
             </div>
           ) : (
