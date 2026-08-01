@@ -452,7 +452,8 @@ function ProjectsSection({ projects }: { projects: Project[] }) {
           onDone={() => setEditing(null)}
         />
       ) : (
-        <>`r`n{projects.length === 0 ? (
+        <>
+          {projects.length === 0 ? (
             <div className="rounded-[1.75rem] border border-dashed border-line-strong bg-gradient-to-br from-cool/[0.06] to-transparent px-6 py-16 text-center">
               <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-cool/25 bg-cool/10 text-cool">
                 <FolderKanban size={24} />

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, LogOut, Menu, UserRound, X } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { PROJECTS_MENU, SERVICES_MENU } from "./nav-links";
 import TenzokLogo from "./TenzokLogo";
@@ -121,6 +121,8 @@ export default function TenzokNav() {
       user.email?.split("@")[0] ??
       "there")
     : "";
+
+  const accountInitial = displayName.charAt(0).toUpperCase() || "T";
 
   return (
     <nav
@@ -272,9 +274,20 @@ export default function TenzokNav() {
               <span className="h-11 w-20 animate-pulse rounded-full bg-white/[0.05]" />
             </div>
           ) : user ? (
-            <>
-              <span className="hidden text-sm text-ink-muted lg:block">
-                Welcome, <span className="font-medium text-ink">{displayName}</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.045] p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.16)]">
+              <span
+                aria-hidden
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cool/30 bg-gradient-to-br from-cool/25 to-accent/25 text-xs font-bold text-ink"
+              >
+                {accountInitial}
+              </span>
+              <span className="hidden min-w-0 pr-1 lg:block">
+                <span className="block text-[10px] font-medium uppercase tracking-[0.14em] text-ink-subtle">
+                  Workspace
+                </span>
+                <span className="block max-w-24 truncate text-sm font-semibold text-ink">
+                  {displayName}
+                </span>
               </span>
               <ButtonLink
                 href="/profile"
@@ -282,13 +295,21 @@ export default function TenzokNav() {
                 onPointerEnter={() => router.prefetch("/profile")}
                 onClick={closeAll}
                 variant="inverse"
+                className="min-h-9 px-4"
               >
-                Profile
+                <UserRound size={15} />
+                <span className="hidden 2xl:inline">Profile</span>
               </ButtonLink>
-              <Button variant="ghost" onClick={signOut}>
-                Sign out
+              <Button
+                variant="ghost"
+                onClick={signOut}
+                aria-label="Sign out"
+                title="Sign out"
+                className="min-h-9 w-9 px-0"
+              >
+                <LogOut size={16} />
               </Button>
-            </>
+            </div>
           ) : (
             <>
               <ButtonLink href="/login" onClick={closeAll} variant="inverse">
