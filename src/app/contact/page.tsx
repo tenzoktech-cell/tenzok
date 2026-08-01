@@ -45,11 +45,11 @@ export default function ContactPage() {
       <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-3xl"
+          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-2xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-3xl"
+          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-2xl"
         />
 
         <Container className="relative">
@@ -79,7 +79,7 @@ export default function ContactPage() {
               <div className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 shadow-2xl shadow-black/20 sm:p-8">
                 <div
                   aria-hidden
-                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cool/15 blur-3xl"
+                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cool/15 blur-2xl"
                 />
                 <span className="relative flex h-11 w-11 items-center justify-center rounded-xl border border-cool/30 bg-cool/10">
                   <Sparkles size={18} className="text-cool" />
@@ -139,7 +139,7 @@ export default function ContactPage() {
             <div className="relative h-full overflow-hidden rounded-3xl border border-line bg-surface-raised p-6 shadow-2xl shadow-black/25 sm:p-8 lg:p-10">
               <div
                 aria-hidden
-                className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-accent/10 blur-3xl"
+                className="pointer-events-none absolute -right-24 -top-28 h-72 w-72 rounded-full bg-accent/10 blur-2xl"
               />
               <div className="relative">
                 <div className="mb-8 border-b border-line pb-7">

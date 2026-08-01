@@ -33,11 +33,11 @@ export default function ProcessBar({ steps }: { steps: ServiceStep[] }) {
     <div className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-6 shadow-2xl shadow-black/20 sm:p-8 lg:p-10">
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full bg-cool/10 blur-3xl"
+        className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full bg-cool/10 blur-2xl"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-28 left-1/4 h-64 w-64 rounded-full bg-accent/10 blur-3xl"
+        className="pointer-events-none absolute -bottom-28 left-1/4 h-64 w-64 rounded-full bg-accent/10 blur-2xl"
       />
 
       {/* ------------------------- Desktop ------------------------- */}

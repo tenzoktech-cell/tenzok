@@ -122,11 +122,11 @@ export default function BlogExplorer({ posts }: { posts: ExplorerPost[] }) {
           >
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full bg-cool/10 blur-3xl"
+              className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full bg-cool/10 blur-2xl"
             />
             <div
               aria-hidden
-              className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-accent/10 blur-3xl"
+              className="pointer-events-none absolute -bottom-28 left-1/3 h-64 w-64 rounded-full bg-accent/10 blur-2xl"
             />
 
             <div className="relative p-7 sm:p-10 lg:p-12">

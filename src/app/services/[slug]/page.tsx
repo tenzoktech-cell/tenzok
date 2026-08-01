@@ -74,11 +74,11 @@ export default async function ServicePage({ params }: ServicePageProps) {
       <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-3xl"
+          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-2xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-3xl"
+          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-2xl"
         />
 
         <Container className="relative">
@@ -131,7 +131,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
               <aside className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 shadow-2xl shadow-black/25">
                 <div
                   aria-hidden
-                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cool/15 blur-3xl"
+                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cool/15 blur-2xl"
                 />
                 <div className="relative flex items-center gap-3">
                   <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-cool/30 bg-cool/10">
@@ -213,7 +213,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
             <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-accent/[0.06] p-8 shadow-2xl shadow-black/20 sm:p-10">
               <div
                 aria-hidden
-                className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cool/15 blur-3xl"
+                className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cool/15 blur-2xl"
               />
               <p className="relative bg-gradient-to-r from-accent to-cool bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl">
                 {service.big.stat.value}
@@ -270,7 +270,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
           <div className="relative mt-12 flex flex-col items-center justify-between gap-6 overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-8 text-center sm:flex-row sm:text-left">
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 blur-3xl"
+              className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 blur-2xl"
             />
             <p className="relative max-w-xl text-base text-ink">{service.ctaLine}</p>
             <ButtonLink

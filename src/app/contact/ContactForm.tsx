@@ -154,7 +154,7 @@ export default function ContactForm() {
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cool/15 blur-3xl"
+          className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cool/15 blur-2xl"
         />
         <span className="relative flex h-12 w-12 items-center justify-center rounded-full border border-accent/30 bg-accent/10">
           <CheckCircle2 size={23} className="text-accent" />

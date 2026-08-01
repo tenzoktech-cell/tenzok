@@ -183,8 +183,8 @@ function HeroBackdrop() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       <div className="page-grid absolute inset-x-0 top-0 h-[52rem] opacity-70" />
-      <div className="absolute -left-40 top-10 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-[120px]" />
-      <div className="absolute -right-52 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-[140px]" />
+      <div className="absolute -left-40 top-10 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-[80px]" />
+      <div className="absolute -right-52 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-[90px]" />
       <div className="absolute inset-x-0 bottom-0 h-56 bg-gradient-to-b from-transparent to-surface" />
     </div>
   );

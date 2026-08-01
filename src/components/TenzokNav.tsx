@@ -48,10 +48,23 @@ export default function TenzokNav() {
   const { user, status: authStatus, signOut: signOutUser } = useAuth();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(() => {
+        frame = 0;
+        setScrolled((current) => {
+          const next = window.scrollY > 24;
+          return current === next ? current : next;
+        });
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
   }, []);
 
   useEffect(() => {
@@ -114,7 +127,7 @@ export default function TenzokNav() {
       ref={navRef}
       className={`fixed inset-x-0 top-0 z-60 border-b px-4 py-3 transition-colors duration-300 sm:px-6 ${
         scrolled || menuOpen || openId
-          ? "border-line bg-surface/88 shadow-[0_18px_50px_rgba(0,0,0,0.24)] backdrop-blur-xl"
+          ? "border-line bg-surface/95 shadow-[0_12px_30px_rgba(0,0,0,0.2)] backdrop-blur-sm"
           : "border-transparent bg-transparent"
       }`}
     >
@@ -133,7 +146,7 @@ export default function TenzokNav() {
           </span>
         </Link>
 
-        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-0.5 rounded-full border border-white/10 bg-white/[0.045] p-1 backdrop-blur-xl xl:flex">
+        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-0.5 rounded-full border border-white/10 bg-white/[0.045] p-1 backdrop-blur-sm xl:flex">
           <Link
             href="/"
             onClick={closeAll}

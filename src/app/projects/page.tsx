@@ -85,11 +85,11 @@ export default function ProjectsIndexPage() {
       <section className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-20">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-3xl"
+          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-2xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-3xl"
+          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-2xl"
         />
         <div
           aria-hidden
@@ -124,7 +124,7 @@ export default function ProjectsIndexPage() {
               <div className="relative max-w-md overflow-hidden rounded-3xl border border-line bg-surface-raised p-5 shadow-2xl shadow-black/25 sm:p-6 lg:ml-auto">
                 <div
                   aria-hidden
-                  className="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cool/15 blur-3xl"
+                  className="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cool/15 blur-2xl"
                 />
                 <div className="relative flex items-center gap-3">
                   <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10">
@@ -266,7 +266,7 @@ export default function ProjectsIndexPage() {
           <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-8 sm:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full bg-accent/15 blur-3xl"
+              className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full bg-accent/15 blur-2xl"
             />
             <div className="relative max-w-2xl">
               <Eyebrow>Your own problem statement</Eyebrow>

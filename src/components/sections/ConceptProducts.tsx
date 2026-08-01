@@ -100,8 +100,8 @@ export default function ConceptProducts() {
 function ProductPreview({ variant }: { variant: (typeof PRODUCTS)[number]["variant"] }) {
   return (
     <div className={"relative h-52 overflow-hidden border-b border-line bg-surface-overlay p-5 " + variant}>
-      <div aria-hidden className="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-accent/15 blur-3xl" />
-      <div aria-hidden className="absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-cool/10 blur-3xl" />
+      <div aria-hidden className="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-accent/15 blur-2xl" />
+      <div aria-hidden className="absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-cool/10 blur-2xl" />
       <div className="relative h-full rounded-2xl border border-white/10 bg-[#0b0d14]/90 p-4 shadow-2xl shadow-black/30">
         <div className="flex items-center justify-between border-b border-white/10 pb-3">
           <div className="flex gap-1.5">

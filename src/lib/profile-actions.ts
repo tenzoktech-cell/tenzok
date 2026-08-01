@@ -124,19 +124,23 @@ export async function saveProject(
     return { error: "Pick a valid status." };
 
   const id = str(formData, "id", 60);
+  if (!id) return { error: "Projects are assigned by the Tenzok team." };
+
   const row = {
     title,
     description: str(formData, "description", 2000) || null,
     status,
   };
 
-  const { error } = id
-    ? await ctx.supabase.from("projects").update(row).eq("id", id).eq("owner_id", ctx.user.id)
-    : await ctx.supabase.from("projects").insert({ ...row, owner_id: ctx.user.id });
+  const { error } = await ctx.supabase
+    .from("projects")
+    .update(row)
+    .eq("id", id)
+    .eq("owner_id", ctx.user.id);
 
   if (error) return { error: error.message };
   revalidatePath("/profile");
-  return { notice: id ? "Project updated." : "Project created." };
+  return { notice: "Project updated." };
 }
 
 export async function deleteProject(

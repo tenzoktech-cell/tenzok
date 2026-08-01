@@ -52,7 +52,7 @@ export default function FeaturedBlueprints() {
               >
                 <div
                   aria-hidden
-                  className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-cool/12 to-accent/12 blur-3xl"
+                  className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-cool/12 to-accent/12 blur-2xl"
                 />
                 <div className="relative flex items-start justify-between">
                   <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05]">

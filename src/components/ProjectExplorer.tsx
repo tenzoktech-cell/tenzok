@@ -95,11 +95,11 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
       <div className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-5 shadow-2xl shadow-black/20 sm:p-7">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cool/10 blur-3xl"
+          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cool/10 blur-2xl"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-28 left-1/4 h-56 w-56 rounded-full bg-accent/10 blur-3xl"
+          className="pointer-events-none absolute -bottom-28 left-1/4 h-56 w-56 rounded-full bg-accent/10 blur-2xl"
         />
 
         <div className="relative">

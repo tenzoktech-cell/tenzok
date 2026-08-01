@@ -23,7 +23,6 @@ import {
   Mail,
   LayoutDashboard,
   Pencil,
-  Plus,
   Shield,
   Trash2,
   Upload,
@@ -132,7 +131,7 @@ function Card({
     <section className="relative overflow-hidden rounded-[2rem] border border-line bg-surface-raised/80 p-6 shadow-xl shadow-black/10 backdrop-blur sm:p-8">
       <div
         aria-hidden
-        className="pointer-events-none absolute right-0 top-0 h-28 w-28 rounded-full bg-cool/5 blur-3xl"
+        className="pointer-events-none absolute right-0 top-0 h-28 w-28 rounded-full bg-cool/5 blur-2xl"
       />
       <h2 className="relative flex items-center gap-3 text-lg font-semibold tracking-tight text-ink">
         <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cool/25 bg-cool/10 text-cool">
@@ -453,15 +452,7 @@ function ProjectsSection({ projects }: { projects: Project[] }) {
           onDone={() => setEditing(null)}
         />
       ) : (
-        <>
-          <div className="mb-6">
-            <Button onClick={() => setEditing("new")} className="shadow-lg shadow-black/15">
-              <Plus size={15} />
-              New project
-            </Button>
-          </div>
-
-          {projects.length === 0 ? (
+        <>`r`n{projects.length === 0 ? (
             <div className="rounded-[1.75rem] border border-dashed border-line-strong bg-gradient-to-br from-cool/[0.06] to-transparent px-6 py-16 text-center">
               <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-cool/25 bg-cool/10 text-cool">
                 <FolderKanban size={24} />
@@ -470,7 +461,7 @@ function ProjectsSection({ projects }: { projects: Project[] }) {
                 No projects yet
               </p>
               <p className="mt-2 text-sm text-ink-muted">
-                Create your first project to get started.
+                Projects are assigned to your workspace by the Tenzok team.
               </p>
             </div>
           ) : (

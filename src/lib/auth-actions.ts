@@ -33,7 +33,7 @@ export async function login(_prev: AuthState, formData: FormData): Promise<AuthS
   if (error) return { error: friendly(error.message) };
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/profile");
 }
 
 const DESIGNATIONS = ["Student", "Company"];
@@ -79,5 +79,5 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
   }
 
   revalidatePath("/", "layout");
-  redirect("/");
+  redirect("/profile");
 }

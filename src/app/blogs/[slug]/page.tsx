@@ -96,11 +96,11 @@ export default async function BlogPostPage({ params }: PostPageProps) {
         <header className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
           <div
             aria-hidden
-            className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-cool/10 blur-3xl"
+            className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-cool/10 blur-2xl"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-accent/10 blur-3xl"
+            className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-accent/10 blur-2xl"
           />
           <Container className="relative">
             <Link
@@ -187,7 +187,7 @@ export default async function BlogPostPage({ params }: PostPageProps) {
               <aside className="relative mt-24 overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-8 sm:p-10">
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 blur-3xl"
+                  className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 blur-2xl"
                 />
                 <div className="relative">
                   <Eyebrow>Apply it to your project</Eyebrow>

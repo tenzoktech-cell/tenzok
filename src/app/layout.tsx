@@ -52,8 +52,8 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      data-scroll-behavior="smooth"
-      className={`${inter.variable} ${spaceGrotesk.variable} h-full scroll-smooth antialiased`}
+      data-scroll-behavior="auto"
+      className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-surface text-ink">
         <a href="#main" className="skip-link">
