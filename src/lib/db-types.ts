@@ -2,6 +2,7 @@ export type UserRole = "student" | "company" | "freelancer" | "recruiter" | "adm
 export type Plan = "free" | "pro" | "enterprise";
 export type AccountStatus = "active" | "suspended";
 export type ProjectStatus = "draft" | "active" | "completed";
+export type EnquiryStatus = "new" | "reviewing" | "contacted" | "qualified" | "closed";
 
 export interface Profile {
   id: string;
@@ -63,6 +64,36 @@ export interface Project {
   updated_at: string;
 }
 
+export interface Enquiry {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  role: string | null;
+  service: string | null;
+  message: string;
+  status: EnquiryStatus;
+  admin_note: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface ProjectUpdate {
+  id: string;
+  project_id: string;
+  body: string;
+  created_by: string;
+  created_at: string;
+}
+
+export interface ProjectFile {
+  id: string;
+  project_id: string;
+  name: string;
+  url: string;
+  created_by: string;
+  created_at: string;
+}
 export interface ChatContact {
   id: string;
   username: string | null;

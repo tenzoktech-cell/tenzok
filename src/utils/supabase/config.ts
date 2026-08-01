@@ -1,7 +1,11 @@
 // trim(): env values pasted into dashboards routinely pick up a trailing
 // newline, and a URL ending in "\n" makes every Supabase fetch fail.
 export const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL?.trim();
-export const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim();
+// Supabase renamed its browser-safe anon key to a publishable key. Support
+// either dashboard variable name so existing deployments stay functional.
+export const supabaseKey =
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY?.trim() ||
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY?.trim();
 
 /**
  * True once both public Supabase env vars are present. When false, every auth

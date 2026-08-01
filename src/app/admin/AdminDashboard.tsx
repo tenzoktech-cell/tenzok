@@ -1,482 +1,53 @@
 "use client";
 
 import { useActionState, useEffect, useMemo, useState } from "react";
-import {
-  FolderKanban,
-  MessagesSquare,
-  Search,
-  ShieldCheck,
-  Trash2,
-  Users,
-} from "lucide-react";
+import { ClipboardList, FileText, FolderKanban, Inbox, MessagesSquare, Plus, Search, Send, ShieldCheck, Trash2, Users } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { useToast } from "@/components/ui/Toast";
-import {
-  adminDeleteMessage,
-  adminDeleteProject,
-  adminUpdateUser,
-} from "@/lib/admin-actions";
+import { adminAddProjectFile, adminCreateProject, adminCreateProjectUpdate, adminDeleteMessage, adminDeleteProject, adminUpdateEnquiry, adminUpdateUser } from "@/lib/admin-actions";
 import type { ActionState } from "@/lib/profile-actions";
-import type { ChatMessage, Profile, Project } from "@/lib/db-types";
+import type { ChatMessage, Enquiry, Profile, Project, ProjectFile, ProjectUpdate } from "@/lib/db-types";
 import { ROLE_LABELS } from "@/lib/db-types";
 import type { AdminConversation } from "./page";
 
-const fmt = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-    timeZone: "UTC",
-  });
+const fmt = (iso: string) => new Date(iso).toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+const INPUT = "w-full rounded-xl border border-line bg-surface/80 px-3.5 py-2.5 text-sm text-ink transition-all focus:border-cool focus:outline-none";
+type Tab = "overview" | "users" | "projects" | "enquiries" | "conversations" | "delivery";
 
-const INPUT =
-  "rounded-xl border border-line bg-surface/80 px-3.5 py-2.5 text-sm text-ink transition-all hover:border-line-strong focus:border-cool focus:bg-surface focus:outline-none";
+interface Props { adminId: string; users: Profile[]; projects: Project[]; enquiries: Enquiry[]; projectUpdates: ProjectUpdate[]; projectFiles: ProjectFile[]; conversations: AdminConversation[]; messages: ChatMessage[]; operationsReady: boolean; }
 
-type Tab = "users" | "projects" | "conversations";
-
-interface Props {
-  adminId: string;
-  users: Profile[];
-  projects: Project[];
-  conversations: AdminConversation[];
-  messages: ChatMessage[];
+export default function AdminDashboard(props: Props) {
+  const { adminId, users, projects, enquiries, projectUpdates, projectFiles, conversations, messages, operationsReady } = props;
+  const [tab, setTab] = useState<Tab>("overview");
+  const nameOf = useMemo(() => { const map = new Map(users.map((u) => [u.id, u.full_name ?? u.email ?? "Unknown"])); return (id: string) => map.get(id) ?? "Unknown"; }, [users]);
+  const stats = [{ icon: Users, label: "Users", value: users.length }, { icon: FolderKanban, label: "Active projects", value: projects.filter((p) => p.status === "active").length }, { icon: Inbox, label: "New enquiries", value: enquiries.filter((e) => e.status === "new").length }, { icon: MessagesSquare, label: "Conversations", value: conversations.length }];
+  const tabs: [Tab, string][] = [["overview", "Overview"], ["users", "Users"], ["projects", "Project assignment"], ["enquiries", "Enquiries"], ["conversations", "Chat"], ["delivery", "Files & updates"]];
+  return <div className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-36"><Container className="max-w-7xl">
+    <div className="flex flex-wrap items-end justify-between gap-6"><div><Eyebrow>Administration</Eyebrow><h1 className="mt-5 flex items-center gap-3 text-3xl font-semibold tracking-[-0.04em] text-ink sm:text-5xl"><span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cool/30 bg-cool/10 text-cool"><ShieldCheck size={23} /></span>Control centre</h1><p className="mt-4 max-w-2xl text-sm leading-6 text-ink-muted sm:text-base">Manage users, project delivery, enquiries, and customer conversations from one workspace.</p></div><span className="rounded-full border border-cool/25 bg-cool/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.14em] text-cool">Admin access</span></div>
+    <dl className="mt-10 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">{stats.map(({ icon: Icon, label, value }) => <div key={label} className="rounded-[1.6rem] border border-line bg-surface-raised/80 p-6 shadow-xl shadow-black/10"><div className="flex items-center justify-between"><div><dt className="text-xs uppercase tracking-[0.12em] text-ink-subtle">{label}</dt><dd className="mt-1 text-3xl font-semibold text-ink">{value}</dd></div><span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-surface text-cool"><Icon size={19} /></span></div></div>)}</dl>
+    <div role="group" aria-label="Administration sections" className="mt-10 flex flex-wrap gap-1.5 rounded-2xl border border-line bg-surface-raised/70 p-1.5 shadow-lg shadow-black/10">{tabs.map(([id, label]) => <button key={id} type="button" onClick={() => setTab(id)} className={`min-h-11 cursor-pointer rounded-xl border px-4 text-sm font-medium transition-all ${tab === id ? "border-cool/35 bg-cool/10 text-ink" : "border-transparent text-ink-subtle hover:bg-surface-overlay hover:text-ink"}`}>{label}</button>)}</div>
+    {!operationsReady && <p className="mt-5 rounded-2xl border border-amber-400/30 bg-amber-400/10 px-4 py-3 text-sm text-amber-100">Run <code className="font-mono">supabase/admin-workspace.sql</code> in Supabase to enable enquiries, project files, and updates.</p>}
+    <div className="mt-8">{tab === "overview" && <Overview users={users} projects={projects} enquiries={enquiries} messages={messages} nameOf={nameOf} />}{tab === "users" && <UsersTab users={users} adminId={adminId} />}{tab === "projects" && <ProjectsTab projects={projects} users={users} nameOf={nameOf} />}{tab === "enquiries" && <EnquiriesTab enquiries={enquiries} />}{tab === "conversations" && <ConversationsTab conversations={conversations} messages={messages} nameOf={nameOf} />}{tab === "delivery" && <DeliveryTab projects={projects} updates={projectUpdates} files={projectFiles} nameOf={nameOf} />}</div>
+  </Container></div>;
 }
 
-export default function AdminDashboard({
-  adminId,
-  users,
-  projects,
-  conversations,
-  messages,
-}: Props) {
-  const [tab, setTab] = useState<Tab>("users");
+function useActionToast(state: ActionState) { const toast = useToast(); useEffect(() => { if (state?.notice) toast("success", state.notice); if (state?.error) toast("error", state.error); }, [state, toast]); }
+function Panel({ children, className = "" }: { children: React.ReactNode; className?: string }) { return <section className={`rounded-[2rem] border border-line bg-surface-raised/70 p-5 shadow-xl shadow-black/10 sm:p-7 ${className}`}>{children}</section>; }
 
-  const nameOf = useMemo(() => {
-    const map = new Map(users.map((u) => [u.id, u.full_name ?? u.email ?? "Unknown"]));
-    return (id: string) => map.get(id) ?? "Unknown";
-  }, [users]);
+function Overview({ users, projects, enquiries, messages, nameOf }: { users: Profile[]; projects: Project[]; enquiries: Enquiry[]; messages: ChatMessage[]; nameOf: (id: string) => string }) { const activity = [...enquiries.map((e) => ({ id: e.id, title: `${e.name} sent an enquiry`, text: e.service || "General enquiry", date: e.created_at })), ...messages.map((m) => ({ id: m.id, title: `${nameOf(m.sender_id)} sent a message`, text: m.message, date: m.created_at })), ...projects.map((p) => ({ id: p.id, title: `Project: ${p.title}`, text: `${p.status} · ${nameOf(p.owner_id)}`, date: p.updated_at }))].sort((a, b) => b.date.localeCompare(a.date)).slice(0, 8); return <div className="grid gap-5 lg:grid-cols-[1.25fr_.75fr]"><Panel><p className="text-lg font-semibold text-ink">Today’s operations</p><p className="mt-1 text-sm text-ink-muted">A quick view of work that needs attention.</p><div className="mt-6 grid gap-3 sm:grid-cols-3"><MiniStat label="New leads" value={enquiries.filter((e) => e.status === "new").length} /><MiniStat label="Active builds" value={projects.filter((p) => p.status === "active").length} /><MiniStat label="Team users" value={users.filter((u) => u.status === "active").length} /></div></Panel><Panel><p className="text-lg font-semibold text-ink">Quick actions</p><div className="mt-5 grid gap-2 text-sm text-ink-muted"><p>1. Assign new project work to a user.</p><p>2. Qualify and reply to new enquiries.</p><p>3. Share milestone updates and file links.</p></div></Panel><Panel className="lg:col-span-2"><p className="text-lg font-semibold text-ink">Latest activity</p><div className="mt-5 divide-y divide-line">{activity.length ? activity.map((item) => <div key={item.id} className="flex items-start justify-between gap-4 py-3"><div><p className="text-sm font-medium text-ink">{item.title}</p><p className="mt-1 line-clamp-1 text-xs text-ink-muted">{item.text}</p></div><time className="shrink-0 text-xs text-ink-subtle">{fmt(item.date)}</time></div>) : <p className="py-8 text-center text-sm text-ink-muted">Activity will appear here as your workspace grows.</p>}</div></Panel></div>; }
+function MiniStat({ label, value }: { label: string; value: number }) { return <div className="rounded-2xl border border-line bg-surface/50 p-4"><p className="text-2xl font-semibold text-ink">{value}</p><p className="mt-1 text-xs text-ink-subtle">{label}</p></div>; }
 
-  const stats = [
-    { icon: Users, label: "Users", value: users.length },
-    { icon: FolderKanban, label: "Projects", value: projects.length },
-    { icon: MessagesSquare, label: "Conversations", value: conversations.length },
-  ];
+function UsersTab({ users, adminId }: { users: Profile[]; adminId: string }) { const [query, setQuery] = useState(""); const [state, action, pending] = useActionState(adminUpdateUser, null); useActionToast(state); const q = query.trim().toLowerCase(); const filtered = q ? users.filter((u) => u.full_name?.toLowerCase().includes(q) || u.email?.toLowerCase().includes(q) || u.username?.toLowerCase().includes(q)) : users; return <Panel><div className="flex flex-wrap items-end justify-between gap-4"><div><p className="text-lg font-semibold text-ink">Workspace users</p><p className="mt-1 text-sm text-ink-muted">Manage account roles and access.</p></div><label className="relative w-full max-w-sm"><Search size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle" /><input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search users…" className={`${INPUT} pl-9`} /></label></div><div className="mt-6 overflow-x-auto rounded-[1.5rem] border border-line"><table className="w-full min-w-[720px] text-left text-sm"><thead className="border-b border-line text-xs uppercase tracking-[.12em] text-ink-subtle"><tr><th className="px-4 py-3">User</th><th className="px-4 py-3">Joined</th><th className="px-4 py-3">Plan</th><th className="px-4 py-3">Role</th><th className="px-4 py-3">Status</th><th className="px-4 py-3">Save</th></tr></thead><tbody>{filtered.map((u) => <tr key={u.id} className="border-b border-line last:border-0"><td className="px-4 py-4"><p className="font-medium text-ink">{u.full_name ?? "—"}</p><p className="text-xs text-ink-subtle">{u.email}</p></td><td className="px-4 py-4 text-ink-muted">{fmt(u.created_at)}</td><td className="px-4 py-4 capitalize text-ink-muted">{u.plan}</td>{u.id === adminId ? <td colSpan={3} className="px-4 text-xs text-ink-subtle">This is you · {ROLE_LABELS[u.role]}</td> : <UserEditCells user={u} action={action} pending={pending} />}</tr>)}</tbody></table></div></Panel>; }
+function UserEditCells({ user, action, pending }: { user: Profile; action: (formData: FormData) => void; pending: boolean }) { const formId = `user-${user.id}`; return <><td className="px-4"><form id={formId} action={action}><input type="hidden" name="id" value={user.id} /></form><select name="role" form={formId} defaultValue={user.role} className={INPUT}>{Object.entries(ROLE_LABELS).map(([value, label]) => <option key={value} value={value}>{label}</option>)}</select></td><td className="px-4"><select name="status" form={formId} defaultValue={user.status} className={INPUT}><option value="active">Active</option><option value="suspended">Suspended</option></select></td><td className="px-4"><Button type="submit" form={formId} size="md" variant="secondary" disabled={pending}>Save</Button></td></>; }
 
-  return (
-    <div className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-36">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute right-[-10rem] top-12 -z-10 h-[36rem] w-[36rem] rounded-full bg-cool/10 blur-[150px]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute left-[-12rem] top-[42rem] -z-10 h-[28rem] w-[28rem] rounded-full bg-accent/[0.08] blur-[130px]"
-      />
-      <Container className="max-w-7xl">
-        <div className="flex flex-wrap items-end justify-between gap-6">
-          <div>
-            <Eyebrow>Administration</Eyebrow>
-            <h1 className="mt-5 flex items-center gap-3 text-3xl font-semibold tracking-[-0.04em] text-ink sm:text-5xl">
-              <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cool/30 bg-cool/10 text-cool">
-                <ShieldCheck size={23} />
-              </span>
-              Control centre
-            </h1>
-            <p className="mt-4 max-w-2xl text-sm leading-6 text-ink-muted sm:text-base">
-              Manage access, review project activity, and keep conversations healthy
-              across the Tenzok workspace.
-            </p>
-          </div>
-          <span className="rounded-full border border-cool/25 bg-cool/10 px-4 py-2 text-xs font-medium uppercase tracking-[0.14em] text-cool">
-            Admin access
-          </span>
-        </div>
+function ProjectsTab({ projects, users, nameOf }: { projects: Project[]; users: Profile[]; nameOf: (id: string) => string }) { const [state, createAction, creating] = useActionState(adminCreateProject, null); const [deleteState, deleteAction, deleting] = useActionState(adminDeleteProject, null); useActionToast(state); useActionToast(deleteState); return <div className="grid gap-5"><Panel><div className="flex items-center gap-3"><span className="flex h-10 w-10 items-center justify-center rounded-xl bg-cool/10 text-cool"><Plus size={19}/></span><div><p className="font-semibold text-ink">Assign a project</p><p className="text-sm text-ink-muted">Projects are created here by the team, then appear in the user’s workspace.</p></div></div><form action={createAction} className="mt-5 grid gap-3 md:grid-cols-2"><select name="owner_id" required defaultValue="" className={INPUT}><option value="" disabled>Choose a user</option>{users.filter((u) => u.status === "active").map((u) => <option key={u.id} value={u.id}>{u.full_name || u.email}</option>)}</select><input name="title" required maxLength={140} placeholder="Project title" className={INPUT}/><textarea name="description" maxLength={3000} placeholder="Brief or delivery scope (optional)" className={`${INPUT} min-h-24 md:col-span-2`}/><div className="flex flex-wrap items-center justify-between gap-3 md:col-span-2"><select name="status" defaultValue="draft" className={INPUT + " max-w-44"}><option value="draft">Draft</option><option value="active">Active</option><option value="completed">Completed</option></select><Button type="submit" disabled={creating}>Assign project</Button></div></form></Panel><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{projects.map((p) => <article key={p.id} className="flex min-h-52 flex-col rounded-[1.6rem] border border-line bg-surface-raised/80 p-5"><div className="flex justify-between gap-3"><h3 className="font-semibold text-ink">{p.title}</h3><span className="rounded-full bg-cool/10 px-2 py-1 text-xs capitalize text-cool">{p.status}</span></div><p className="mt-2 text-xs text-ink-subtle">Assigned to {nameOf(p.owner_id)} · {fmt(p.created_at)}</p>{p.description && <p className="mt-4 line-clamp-3 text-sm text-ink-muted">{p.description}</p>}<form action={deleteAction} className="mt-auto pt-4"><input type="hidden" name="id" value={p.id}/><button type="submit" disabled={deleting} className="flex items-center gap-1 text-xs text-red-400"><Trash2 size={13}/>Delete</button></form></article>)}{!projects.length && <p className="rounded-2xl border border-dashed border-line p-10 text-center text-sm text-ink-muted sm:col-span-2 lg:col-span-3">No assigned projects yet.</p>}</div></div>; }
 
-        <dl className="mt-10 grid gap-4 sm:grid-cols-3">
-          {stats.map(({ icon: Icon, label, value }, index) => (
-            <div
-              key={label}
-              className="relative overflow-hidden rounded-[1.6rem] border border-line bg-surface-raised/80 p-6 shadow-xl shadow-black/10"
-            >
-              <div
-                aria-hidden
-                className={`absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent ${
-                  index === 1 ? "via-accent/70" : "via-cool/70"
-                } to-transparent`}
-              />
-              <div className="flex items-center justify-between gap-4">
-                <div className="flex flex-col">
-                  <dt className="order-2 mt-1 text-xs uppercase tracking-[0.12em] text-ink-subtle">
-                    {label}
-                  </dt>
-                  <dd className="order-1 text-3xl font-semibold tracking-tight text-ink">{value}</dd>
-                </div>
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-surface text-cool">
-                  <Icon size={19} />
-                </span>
-              </div>
-            </div>
-          ))}
-        </dl>
+function EnquiriesTab({ enquiries }: { enquiries: Enquiry[] }) { if (!enquiries.length) return <Empty icon={Inbox} text="No enquiries yet. New contact form submissions will appear here."/>; return <div className="grid gap-4 lg:grid-cols-2">{enquiries.map((enquiry) => <EnquiryCard key={enquiry.id} enquiry={enquiry} />)}</div>; }
+function EnquiryCard({ enquiry }: { enquiry: Enquiry }) { const [state, action, pending] = useActionState(adminUpdateEnquiry, null); useActionToast(state); return <Panel><div className="flex justify-between gap-4"><div><p className="font-semibold text-ink">{enquiry.name}</p><a href={`mailto:${enquiry.email}`} className="text-sm text-cool">{enquiry.email}</a><p className="mt-1 text-xs text-ink-subtle">{enquiry.phone} · {fmt(enquiry.created_at)}</p></div><span className="h-fit rounded-full bg-cool/10 px-2.5 py-1 text-xs capitalize text-cool">{enquiry.status}</span></div><p className="mt-5 whitespace-pre-wrap text-sm leading-6 text-ink-muted">{enquiry.message}</p><p className="mt-3 text-xs text-ink-subtle">{[enquiry.role, enquiry.service].filter(Boolean).join(" · ") || "No service selected"}</p><form action={action} className="mt-5 grid gap-3"><input type="hidden" name="id" value={enquiry.id}/><select name="status" defaultValue={enquiry.status} className={INPUT}><option value="new">New</option><option value="reviewing">Reviewing</option><option value="contacted">Contacted</option><option value="qualified">Qualified</option><option value="closed">Closed</option></select><textarea name="admin_note" defaultValue={enquiry.admin_note ?? ""} placeholder="Internal note" maxLength={2000} className={`${INPUT} min-h-20`}/><Button type="submit" size="md" variant="secondary" disabled={pending}>Save enquiry</Button></form></Panel>; }
 
-        <div
-          role="group"
-          aria-label="Administration sections"
-          className="mt-10 flex w-full flex-wrap gap-1.5 rounded-2xl border border-line bg-surface-raised/70 p-1.5 shadow-lg shadow-black/10 sm:w-fit"
-        >
-          {(
-            [
-              ["users", "Users"],
-              ["projects", "Projects"],
-              ["conversations", "Conversations"],
-            ] as [Tab, string][]
-          ).map(([id, label]) => (
-            <button
-              key={id}
-              type="button"
-              aria-pressed={tab === id}
-              onClick={() => setTab(id)}
-              className={`min-h-11 flex-1 cursor-pointer rounded-xl border px-5 text-sm font-medium transition-all sm:flex-none ${
-                tab === id
-                  ? "border-cool/35 bg-cool/10 text-ink"
-                  : "border-transparent text-ink-subtle hover:bg-surface-overlay hover:text-ink"
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
+function ConversationsTab({ conversations, messages, nameOf }: { conversations: AdminConversation[]; messages: ChatMessage[]; nameOf: (id: string) => string }) { const [openId, setOpenId] = useState<string | null>(null); const [state, action, pending] = useActionState(adminDeleteMessage, null); useActionToast(state); const open = conversations.find((c) => c.id === openId); const thread = open ? messages.filter((m) => m.conversation_id === open.id) : []; if (!conversations.length) return <Empty icon={MessagesSquare} text="No conversations yet."/>; return <div className="grid gap-5 lg:grid-cols-[.8fr_1.2fr]"><Panel className="max-h-[560px] overflow-y-auto p-2">{conversations.map((c) => <button key={c.id} onClick={() => setOpenId(c.id)} className={`mb-1 w-full rounded-xl border px-4 py-3 text-left ${openId === c.id ? "border-cool/30 bg-cool/10" : "border-transparent hover:bg-surface-overlay"}`}><p className="truncate text-sm font-medium text-ink">{c.member_ids.map(nameOf).join(" ↔ ")}</p><p className="mt-1 text-xs text-ink-subtle">Started {fmt(c.created_at)}</p></button>)}</Panel><Panel className="max-h-[560px] overflow-y-auto">{!open ? <p className="py-20 text-center text-sm text-ink-muted">Select a conversation to read it.</p> : thread.map((m) => <article key={m.id} className="mb-3 rounded-2xl border border-line p-4"><div className="flex justify-between gap-3"><p className="text-xs font-medium text-ink">{nameOf(m.sender_id)}</p><form action={action}><input type="hidden" name="id" value={m.id}/><button type="submit" disabled={pending} className="text-ink-subtle hover:text-red-400"><Trash2 size={14}/></button></form></div><p className="mt-2 whitespace-pre-wrap text-sm text-ink-muted">{m.message}</p></article>)}</Panel></div>; }
 
-        <div className="mt-8">
-          {tab === "users" && <UsersTab users={users} adminId={adminId} />}
-          {tab === "projects" && <ProjectsTab projects={projects} nameOf={nameOf} />}
-          {tab === "conversations" && (
-            <ConversationsTab
-              conversations={conversations}
-              messages={messages}
-              nameOf={nameOf}
-            />
-          )}
-        </div>
-      </Container>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-
-function useActionToast(state: ActionState) {
-  const toast = useToast();
-  useEffect(() => {
-    if (state?.notice) toast("success", state.notice);
-    if (state?.error) toast("error", state.error);
-  }, [state, toast]);
-}
-
-function UsersTab({ users, adminId }: { users: Profile[]; adminId: string }) {
-  const [query, setQuery] = useState("");
-  const [state, action, pending] = useActionState(adminUpdateUser, null);
-  useActionToast(state);
-
-  const q = query.trim().toLowerCase();
-  const filtered = q
-    ? users.filter(
-        (u) =>
-          u.full_name?.toLowerCase().includes(q) ||
-          u.email?.toLowerCase().includes(q) ||
-          u.username?.toLowerCase().includes(q),
-      )
-    : users;
-
-  return (
-    <div className="rounded-[2rem] border border-line bg-surface-raised/70 p-5 shadow-xl shadow-black/10 sm:p-7">
-      <div className="flex flex-wrap items-end justify-between gap-4">
-        <div>
-          <p className="text-lg font-semibold tracking-tight text-ink">Workspace users</p>
-          <p className="mt-1 text-sm text-ink-muted">
-            Search accounts and manage their role or access status.
-          </p>
-        </div>
-        <label className="relative block w-full max-w-sm">
-          <span className="sr-only">Search workspace users</span>
-          <Search
-            aria-hidden
-            size={15}
-            className="absolute left-3 top-1/2 -translate-y-1/2 text-ink-subtle"
-          />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search users…"
-            className={`${INPUT} w-full pl-9`}
-          />
-        </label>
-      </div>
-
-      <div className="mt-6 overflow-x-auto rounded-[1.5rem] border border-line bg-surface/40">
-        <table className="w-full min-w-[720px] text-left text-sm">
-          <thead className="border-b border-line bg-surface-overlay/70 text-[0.68rem] uppercase tracking-[0.12em] text-ink-subtle">
-            <tr>
-              <th className="px-4 py-3 font-medium">User</th>
-              <th className="px-4 py-3 font-medium">Joined</th>
-              <th className="px-4 py-3 font-medium">Plan</th>
-              <th className="px-4 py-3 font-medium">Role</th>
-              <th className="px-4 py-3 font-medium">Status</th>
-              <th className="px-4 py-3 font-medium">Save</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map((u) => (
-              <tr
-                key={u.id}
-                className="border-b border-line transition-colors last:border-0 hover:bg-surface-raised/60"
-              >
-                <td className="px-4 py-4">
-                  <p className="font-medium text-ink">{u.full_name ?? "—"}</p>
-                  <p className="mt-0.5 text-xs text-ink-subtle">{u.email}</p>
-                </td>
-                <td className="px-4 py-4 text-ink-muted">{fmt(u.created_at)}</td>
-                <td className="px-4 py-4 capitalize text-ink-muted">{u.plan}</td>
-                {u.id === adminId ? (
-                  <td colSpan={3} className="px-4 py-4 text-xs text-ink-subtle">
-                    <span className="rounded-full border border-cool/25 bg-cool/10 px-3 py-1.5 text-cool">
-                      This is you · {ROLE_LABELS[u.role]}
-                    </span>
-                  </td>
-                ) : (
-                  <UserEditCells user={u} action={action} pending={pending} />
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  );
-}
-
-function UserEditCells({
-  user,
-  action,
-  pending,
-}: {
-  user: Profile;
-  action: (formData: FormData) => void;
-  pending: boolean;
-}) {
-  const formId = `user-${user.id}`;
-  return (
-    <>
-      <td className="px-4 py-4">
-        <form id={formId} action={action}>
-          <input type="hidden" name="id" value={user.id} />
-        </form>
-        <select name="role" form={formId} defaultValue={user.role} className={INPUT}>
-          {Object.entries(ROLE_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </td>
-      <td className="px-4 py-4">
-        <select name="status" form={formId} defaultValue={user.status} className={INPUT}>
-          <option value="active">Active</option>
-          <option value="suspended">Suspended</option>
-        </select>
-      </td>
-      <td className="px-4 py-4">
-        <Button
-          type="submit"
-          form={formId}
-          size="md"
-          variant="secondary"
-          disabled={pending}
-          aria-label={`Save changes for ${user.full_name ?? user.email}`}
-        >
-          Save
-        </Button>
-      </td>
-    </>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-
-function ProjectsTab({
-  projects,
-  nameOf,
-}: {
-  projects: Project[];
-  nameOf: (id: string) => string;
-}) {
-  const [state, action, pending] = useActionState(adminDeleteProject, null);
-  useActionToast(state);
-
-  if (projects.length === 0)
-    return (
-      <div className="rounded-[2rem] border border-dashed border-line-strong bg-surface-raised/60 p-14 text-center">
-        <FolderKanban size={25} className="mx-auto text-cool" />
-        <p className="mt-4 text-sm text-ink-muted">No projects yet.</p>
-      </div>
-    );
-
-  return (
-    <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-      {projects.map((p) => (
-        <article
-          key={p.id}
-          className="group flex min-h-56 flex-col rounded-[1.6rem] border border-line bg-surface-raised/80 p-5 shadow-xl shadow-black/10 transition-all hover:-translate-y-0.5 hover:border-line-strong"
-        >
-          <div className="flex items-start justify-between gap-3">
-            <h3 className="font-semibold tracking-tight text-ink">{p.title}</h3>
-            <span className="shrink-0 rounded-full border border-cool/20 bg-cool/[0.07] px-2.5 py-1 text-xs capitalize text-cool">
-              {p.status}
-            </span>
-          </div>
-          <p className="mt-2 text-xs text-ink-subtle">
-            by {nameOf(p.owner_id)} · {fmt(p.created_at)}
-          </p>
-          {p.description && (
-            <p className="mt-4 line-clamp-3 text-sm leading-6 text-ink-muted">
-              {p.description}
-            </p>
-          )}
-          <form
-            action={action}
-            className="mt-auto border-t border-line pt-4"
-            onSubmit={(event) => {
-              if (
-                !window.confirm(
-                  `Delete "${p.title}" permanently? This cannot be undone.`,
-                )
-              ) {
-                event.preventDefault();
-              }
-            }}
-          >
-            <input type="hidden" name="id" value={p.id} />
-            <button
-              type="submit"
-              disabled={pending}
-              aria-label={`Delete project ${p.title}`}
-              className="flex min-h-9 items-center gap-1.5 rounded-xl px-2 text-xs text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300"
-            >
-              <Trash2 size={13} />
-              Delete
-            </button>
-          </form>
-        </article>
-      ))}
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-
-function ConversationsTab({
-  conversations,
-  messages,
-  nameOf,
-}: {
-  conversations: AdminConversation[];
-  messages: ChatMessage[];
-  nameOf: (id: string) => string;
-}) {
-  const [openId, setOpenId] = useState<string | null>(null);
-  const [state, action, pending] = useActionState(adminDeleteMessage, null);
-  useActionToast(state);
-
-  if (conversations.length === 0)
-    return (
-      <div className="rounded-[2rem] border border-dashed border-line-strong bg-surface-raised/60 p-14 text-center">
-        <MessagesSquare size={25} className="mx-auto text-cool" />
-        <p className="mt-4 text-sm text-ink-muted">No conversations yet.</p>
-      </div>
-    );
-
-  const open = conversations.find((c) => c.id === openId) ?? null;
-  const thread = open
-    ? messages.filter((m) => m.conversation_id === open.id)
-    : [];
-
-  return (
-    <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.4fr)]">
-      <div className="max-h-[560px] overflow-y-auto rounded-[1.75rem] border border-line bg-surface-raised/70 p-2 shadow-xl shadow-black/10">
-        {conversations.map((c) => (
-          <button
-            key={c.id}
-            onClick={() => setOpenId(c.id)}
-            className={`mb-1 block w-full cursor-pointer rounded-2xl border px-4 py-3.5 text-left transition-all last:mb-0 ${
-              openId === c.id
-                ? "border-cool/30 bg-cool/10"
-                : "border-transparent hover:bg-surface-overlay"
-            }`}
-          >
-            <p className="truncate text-sm font-medium text-ink">
-              {c.member_ids.map(nameOf).join(" ↔ ") || "Empty conversation"}
-            </p>
-            <p className="mt-0.5 text-xs text-ink-subtle">Started {fmt(c.created_at)}</p>
-          </button>
-        ))}
-      </div>
-
-      <div className="max-h-[560px] overflow-y-auto rounded-[1.75rem] border border-line bg-surface-raised/70 p-4 shadow-xl shadow-black/10 sm:p-5">
-        {!open ? (
-          <div className="flex min-h-60 flex-col items-center justify-center p-6 text-center">
-            <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cool/25 bg-cool/10 text-cool">
-              <MessagesSquare size={20} />
-            </span>
-            <p className="mt-4 text-sm text-ink-muted">
-              Select a conversation to read it.
-            </p>
-          </div>
-        ) : thread.length === 0 ? (
-          <p className="p-4 text-sm text-ink-muted">No messages in this conversation.</p>
-        ) : (
-          <ul className="grid gap-3">
-            {thread.map((m) => (
-              <li
-                key={m.id}
-                className="rounded-2xl border border-line bg-surface/70 p-4 transition-colors hover:border-line-strong"
-              >
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-xs font-medium text-ink">{nameOf(m.sender_id)}</p>
-                  <div className="flex items-center gap-3">
-                    <span className="text-[11px] text-ink-subtle">{fmt(m.created_at)}</span>
-                    <form
-                      action={action}
-                      onSubmit={(event) => {
-                        if (
-                          !window.confirm(
-                            `Delete this message from ${nameOf(m.sender_id)}? This cannot be undone.`,
-                          )
-                        ) {
-                          event.preventDefault();
-                        }
-                      }}
-                    >
-                      <input type="hidden" name="id" value={m.id} />
-                      <button
-                        type="submit"
-                        disabled={pending}
-                        aria-label={`Delete message from ${nameOf(m.sender_id)}`}
-                        className="flex h-8 w-8 items-center justify-center rounded-xl text-ink-subtle transition-colors hover:bg-red-500/10 hover:text-red-400"
-                      >
-                        <Trash2 size={13} />
-                      </button>
-                    </form>
-                  </div>
-                </div>
-                <p className="mt-1.5 whitespace-pre-wrap text-sm text-ink-muted">
-                  {m.message}
-                </p>
-              </li>
-            ))}
-          </ul>
-        )}
-      </div>
-    </div>
-  );
-}
+function DeliveryTab({ projects, updates, files, nameOf }: { projects: Project[]; updates: ProjectUpdate[]; files: ProjectFile[]; nameOf: (id: string) => string }) { const [updateState, updateAction, updatePending] = useActionState(adminCreateProjectUpdate, null); const [fileState, fileAction, filePending] = useActionState(adminAddProjectFile, null); useActionToast(updateState); useActionToast(fileState); if (!projects.length) return <Empty icon={FolderKanban} text="Assign a project before adding delivery updates or file links."/>; return <div className="grid gap-5 lg:grid-cols-2"><Panel><div className="flex items-center gap-3"><Send className="text-cool" size={20}/><div><p className="font-semibold text-ink">Publish a project update</p><p className="text-sm text-ink-muted">Visible to the assigned workspace.</p></div></div><form action={updateAction} className="mt-5 grid gap-3"><ProjectSelect projects={projects}/><textarea name="body" required maxLength={3000} placeholder="Milestone, decision, or next step…" className={`${INPUT} min-h-32`}/><Button type="submit" disabled={updatePending}>Post update</Button></form></Panel><Panel><div className="flex items-center gap-3"><FileText className="text-cool" size={20}/><div><p className="font-semibold text-ink">Share a file link</p><p className="text-sm text-ink-muted">Attach a Drive, Figma, repository, or delivery link.</p></div></div><form action={fileAction} className="mt-5 grid gap-3"><ProjectSelect projects={projects}/><input name="name" required maxLength={140} placeholder="File name" className={INPUT}/><input name="url" type="url" required placeholder="https://…" className={INPUT}/><Button type="submit" variant="secondary" disabled={filePending}>Add file link</Button></form></Panel><Panel className="lg:col-span-2"><p className="font-semibold text-ink">Delivery activity</p><div className="mt-5 grid gap-3 md:grid-cols-2">{updates.slice(0, 8).map((u) => <div key={u.id} className="rounded-2xl border border-line p-4"><p className="text-xs text-cool">{projects.find((p) => p.id === u.project_id)?.title ?? "Project"} · {fmt(u.created_at)}</p><p className="mt-2 text-sm text-ink-muted">{u.body}</p></div>)}{files.slice(0, 8).map((f) => <a key={f.id} href={f.url} target="_blank" rel="noreferrer" className="rounded-2xl border border-line p-4 transition-colors hover:border-cool/40"><p className="text-xs text-cool">{projects.find((p) => p.id === f.project_id)?.title ?? "Project"}</p><p className="mt-2 text-sm font-medium text-ink">{f.name}</p></a>)}{!updates.length && !files.length && <p className="py-8 text-center text-sm text-ink-muted md:col-span-2">No delivery updates or file links yet.</p>}</div></Panel></div>; }
+function ProjectSelect({ projects }: { projects: Project[] }) { return <select name="project_id" required defaultValue="" className={INPUT}><option value="" disabled>Choose a project</option>{projects.map((p) => <option key={p.id} value={p.id}>{p.title}</option>)}</select>; }
+function Empty({ icon: Icon, text }: { icon: typeof ClipboardList; text: string }) { return <div className="rounded-[2rem] border border-dashed border-line-strong bg-surface-raised/60 p-14 text-center"><Icon size={25} className="mx-auto text-cool"/><p className="mt-4 text-sm text-ink-muted">{text}</p></div>; }

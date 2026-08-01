@@ -9,6 +9,8 @@ import { getService, SERVICES } from "@/components/services-data";
 import { Button } from "@/components/ui/Button";
 import { InternationalPhoneField } from "@/components/ui/InternationalPhoneField";
 import { MIN_FILL_MS, validateEnquiry, type FieldErrors } from "./validate";
+import { createClient } from "@/utils/supabase/client";
+import { isSupabaseConfigured } from "@/utils/supabase/config";
 
 /**
  * Submits straight from the browser to Web3Forms.
@@ -131,6 +133,12 @@ export default function ContactForm() {
       });
 
       if (!res.ok) throw new Error(`Web3Forms responded ${res.status}`);
+
+      // This is intentionally best-effort: a working email delivery must never
+      // appear failed just because the optional admin inbox has not been migrated yet.
+      if (isSupabaseConfigured) {
+        void createClient().from("enquiries").insert(fields);
+      }
 
       setStatus("success");
       setMessage(

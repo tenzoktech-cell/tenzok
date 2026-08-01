@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { ArrowUpRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { isSupabaseConfigured } from "@/utils/supabase/config";
 import { createClient } from "@/utils/supabase/server";
@@ -22,7 +22,14 @@ export default async function LoginPage() {
     const {
       data: { user },
     } = await supabase.auth.getUser();
-    if (user) redirect("/profile");
+    if (user) {
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id", user.id)
+        .single();
+      redirect(profile?.role === "admin" ? "/admin" : "/profile");
+    }
   }
 
   return (
@@ -95,16 +102,13 @@ export default async function LoginPage() {
                   <LoginForm />
                 </div>
 
-                <p className="mt-7 border-t border-line pt-6 text-sm text-ink-muted">
-                  New to Tenzok?{" "}
-                  <Link
-                    href="/signup"
-                    className="inline-flex items-center gap-1 font-medium text-ink transition-colors hover:text-cool"
-                  >
-                    Create an account
-                    <ArrowUpRight size={14} />
+                <div className="mt-7 border-t border-line pt-6">
+                  <Link href="/signup" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-line-strong bg-surface-overlay px-5 text-sm font-medium text-ink transition-all hover:border-cool/40 hover:bg-surface hover:text-cool">
+                    Create account
+                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
                   </Link>
-                </p>
+                </div>
+
               </div>
             </div>
           </div>

@@ -29,11 +29,21 @@ export async function login(_prev: AuthState, formData: FormData): Promise<AuthS
   if (!email || !password) return { error: "Enter your email and password." };
 
   const supabase = createClient(await cookies());
-  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.signInWithPassword({ email, password });
   if (error) return { error: friendly(error.message) };
+  if (!user) return { error: "We couldn't start your session. Please try again." };
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("role")
+    .eq("id", user.id)
+    .single();
 
   revalidatePath("/", "layout");
-  redirect("/profile");
+  redirect(profile?.role === "admin" ? "/admin" : "/profile");
 }
 
 const DESIGNATIONS = ["Student", "Company"];
@@ -49,11 +59,11 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
   const email = String(formData.get("email") ?? "").trim();
   const password = String(formData.get("password") ?? "");
 
-  if (!name || !email || !password || !designation || !phone || !country || !address)
+  if (!name || !email || !password || !designation || !country)
     return { error: "Fill in every field." };
   if (!DESIGNATIONS.includes(designation))
     return { error: "Choose whether you're a student or a company." };
-  if (!isValidPhoneNumber(phone)) {
+  if (phone && !isValidPhoneNumber(phone)) {
     return { error: "Enter a valid mobile number." };
   }
   if (password.length < 6) return { error: "Password needs at least 6 characters." };
