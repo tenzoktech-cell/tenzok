@@ -110,7 +110,7 @@ function ActionForm({
     <form action={formAction} className="grid gap-5 sm:grid-cols-2">
       {children}
       <div className="mt-1 border-t border-line pt-5 sm:col-span-2">
-        <Button type="submit" disabled={pending} className="min-w-36 shadow-lg shadow-black/15">
+        <Button type="submit" disabled={pending} className="min-w-36 shadow-lg shadow-ink/5">
           {pending ? "Saving…" : submitLabel}
         </Button>
       </div>
@@ -128,10 +128,10 @@ function Card({
   children: ReactNode;
 }) {
   return (
-    <section className="relative overflow-hidden rounded-[2rem] border border-line bg-surface-raised/80 p-6 shadow-xl shadow-black/10 backdrop-blur sm:p-8">
+    <section className="relative overflow-hidden rounded-xl border border-line bg-surface-raised/80 p-6 shadow-xl shadow-ink/5 backdrop-blur sm:p-8">
       <div
         aria-hidden
-        className="pointer-events-none absolute right-0 top-0 h-28 w-28 rounded-full bg-cool/5 blur-2xl"
+        className="pointer-events-none absolute right-0 top-0 h-28 w-28 rounded-full bg-cool/5 hidden"
       />
       <h2 className="relative flex items-center gap-3 text-lg font-semibold tracking-tight text-ink">
         <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cool/25 bg-cool/10 text-cool">
@@ -185,11 +185,11 @@ export default function ProfileDashboard({
     <div className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-36">
       <div
         aria-hidden
-        className="pointer-events-none absolute right-[-10rem] top-12 -z-10 h-[34rem] w-[34rem] rounded-full bg-cool/10 blur-[150px]"
+        className="pointer-events-none absolute right-[-10rem] top-12 -z-10 h-[34rem] w-[34rem] rounded-full bg-cool/10 hidden"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute left-[-14rem] top-[38rem] -z-10 h-[30rem] w-[30rem] rounded-full bg-accent/[0.08] blur-[140px]"
+        className="pointer-events-none absolute left-[-14rem] top-[38rem] -z-10 h-[30rem] w-[30rem] rounded-full bg-accent/[0.08] hidden"
       />
       <Container className="max-w-7xl">
         <div className="mb-7 flex flex-wrap items-end justify-between gap-4">
@@ -212,7 +212,7 @@ export default function ProfileDashboard({
         <div
           role="group"
           aria-label="Profile sections"
-          className="mt-8 flex w-full flex-wrap gap-1.5 rounded-2xl border border-line bg-surface-raised/70 p-1.5 shadow-lg shadow-black/10 backdrop-blur sm:w-fit"
+          className="mt-8 flex w-full flex-wrap gap-1.5 rounded-2xl border border-line bg-surface-raised/70 p-1.5 shadow-lg shadow-ink/5 backdrop-blur sm:w-fit"
         >
           {TABS.map((t) => (
             <button
@@ -312,7 +312,7 @@ function IdentityCard({
   ];
 
   return (
-    <section className="overflow-hidden rounded-[2rem] border border-line bg-surface-raised/90 shadow-2xl shadow-black/20">
+    <section className="overflow-hidden rounded-xl border border-line bg-surface-raised/90 shadow-sm shadow-ink/5">
       {/* Cover */}
       <div
         className="relative h-40 bg-gradient-to-br from-cool/25 via-surface-overlay to-accent/20 bg-cover bg-center sm:h-52"
@@ -328,7 +328,7 @@ function IdentityCard({
           type="button"
           onClick={() => coverInput.current?.click()}
           disabled={uploading}
-          className="absolute right-4 top-4 flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-white/15 bg-surface/70 px-4 text-xs font-medium text-ink shadow-lg shadow-black/20 backdrop-blur-xl transition-all hover:border-white/25 hover:bg-surface-overlay"
+          className="absolute right-4 top-4 flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-ink/15 bg-surface/70 px-4 text-xs font-medium text-ink shadow-lg shadow-ink/5 backdrop-blur-xl transition-all hover:border-ink/25 hover:bg-surface-overlay"
         >
           <Camera size={14} />
           Change cover
@@ -346,7 +346,7 @@ function IdentityCard({
         <div className="flex flex-wrap items-end gap-5">
           {/* Avatar */}
           <div className="relative -mt-20 sm:-mt-24">
-            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-3xl border-4 border-surface-raised bg-surface-overlay shadow-xl shadow-black/30 sm:h-28 sm:w-28">
+            <div className="flex h-24 w-24 items-center justify-center overflow-hidden rounded-3xl border-4 border-surface-raised bg-surface-overlay shadow-xl shadow-ink/5 sm:h-28 sm:w-28">
               {profile.avatar_url ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
@@ -363,7 +363,7 @@ function IdentityCard({
               onClick={() => avatarInput.current?.click()}
               disabled={uploading}
               aria-label="Change profile picture"
-              className="absolute -bottom-2 -right-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-2xl border border-cool/30 bg-cool text-cool-ink shadow-lg shadow-black/30 transition-transform hover:scale-105"
+              className="absolute -bottom-2 -right-2 flex h-10 w-10 cursor-pointer items-center justify-center rounded-2xl border border-cool/30 bg-cool text-cool-ink shadow-lg shadow-ink/5 transition-transform hover:scale-105"
             >
               <Camera size={14} />
             </button>
@@ -438,7 +438,7 @@ function IdentityCard({
 const STATUS_STYLES: Record<Project["status"], string> = {
   draft: "border-line text-ink-subtle",
   active: "border-accent/40 text-accent",
-  completed: "border-emerald-500/40 text-emerald-400",
+  completed: "border-emerald-500/40 text-emerald-700",
 };
 
 function ProjectsSection({ projects }: { projects: Project[] }) {
@@ -454,7 +454,7 @@ function ProjectsSection({ projects }: { projects: Project[] }) {
       ) : (
         <>
           {projects.length === 0 ? (
-            <div className="rounded-[1.75rem] border border-dashed border-line-strong bg-gradient-to-br from-cool/[0.06] to-transparent px-6 py-16 text-center">
+            <div className="rounded-xl border border-dashed border-line-strong bg-gradient-to-br from-cool/[0.06] to-transparent px-6 py-16 text-center">
               <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl border border-cool/25 bg-cool/10 text-cool">
                 <FolderKanban size={24} />
               </span>
@@ -470,7 +470,7 @@ function ProjectsSection({ projects }: { projects: Project[] }) {
               {projects.map((project) => (
                 <article
                   key={project.id}
-                  className="group flex min-h-56 flex-col rounded-[1.6rem] border border-line bg-surface/70 p-5 transition-all hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface"
+                  className="group flex min-h-56 flex-col rounded-xl border border-line bg-surface/70 p-5 transition-all hover:-translate-y-0.5 hover:border-line-strong hover:bg-surface"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <h3 className="text-base font-medium text-ink">{project.title}</h3>
@@ -531,7 +531,7 @@ function ProjectForm({
   }, [saveState, deleteState]);
 
   return (
-    <div className="grid gap-5 rounded-[1.75rem] border border-line bg-surface/50 p-5 sm:p-6">
+    <div className="grid gap-5 rounded-xl border border-line bg-surface/50 p-5 sm:p-6">
       <div>
         <p className="text-xs font-medium uppercase tracking-[0.14em] text-cool">
           {project ? "Edit project" : "New project"}
@@ -594,7 +594,7 @@ function ProjectForm({
           <button
             type="submit"
             disabled={deleting}
-            className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-3 text-sm text-red-400 transition-colors hover:bg-red-500/10 hover:text-red-300"
+            className="flex min-h-11 cursor-pointer items-center gap-2 rounded-xl px-3 text-sm text-red-700 transition-colors hover:bg-red-500/10 hover:text-red-800"
           >
             <Trash2 size={14} />
             {deleting ? "Deleting…" : "Delete this project"}
@@ -723,7 +723,7 @@ function StudentSection({
           type="button"
           onClick={() => resumeInput.current?.click()}
           disabled={uploading}
-          className={buttonClass("secondary", "md", "shadow-lg shadow-black/10")}
+          className={buttonClass("secondary", "md", "shadow-lg shadow-ink/5")}
         >
           <Upload size={15} />
           {uploading ? "Uploading…" : student?.resume_url ? "Replace resume" : "Upload resume"}
@@ -789,7 +789,7 @@ function CompanySection({ company }: { company: CompanyProfile | null }) {
         </Field>
       </ActionForm>
 
-      <div className="mt-8 rounded-[1.5rem] border border-cool/20 bg-gradient-to-br from-cool/[0.08] to-transparent p-5 text-sm leading-relaxed text-ink-muted">
+      <div className="mt-8 rounded-xl border border-cool/20 bg-gradient-to-br from-cool/[0.08] to-transparent p-5 text-sm leading-relaxed text-ink-muted">
         <p className="flex items-center gap-2 font-medium text-ink">
           <span className="flex h-8 w-8 items-center justify-center rounded-xl bg-cool/10 text-cool">
             <Briefcase size={15} />

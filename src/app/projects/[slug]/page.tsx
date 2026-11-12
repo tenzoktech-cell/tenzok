@@ -90,14 +90,14 @@ export default async function DomainPage({
         ]}
       />
 
-      <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
+      <section className="relative overflow-hidden pt-28 pb-10 sm:pt-32 sm:pb-12">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-cool/10 blur-2xl"
+          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-cool/10 hidden"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-accent/10 blur-2xl"
+          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-accent/10 hidden"
         />
 
         <Container className="relative">
@@ -112,7 +112,7 @@ export default async function DomainPage({
           <div className="mt-9 grid items-end gap-12 lg:grid-cols-[minmax(0,1.25fr)_minmax(19rem,0.75fr)] lg:gap-16">
             <Reveal>
               <div className="flex items-center gap-4">
-                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-cool/30 bg-cool/10 shadow-lg shadow-black/20">
+                <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-cool/30 bg-cool/10 shadow-lg shadow-ink/5">
                   <Icon size={24} className="text-cool" />
                 </span>
                 <div>
@@ -123,10 +123,10 @@ export default async function DomainPage({
                 </div>
               </div>
 
-              <h1 className="mt-7 max-w-4xl text-[clamp(2.75rem,1.8rem+3vw,5rem)] leading-[0.98] text-ink">
+              <h1 className="mt-5 max-w-4xl text-[clamp(2.25rem,1.7rem+2.2vw,3.5rem)] leading-[1.02] text-ink">
                 {domain.name}
               </h1>
-              <p className="mt-6 max-w-3xl text-lg leading-relaxed text-ink-muted">
+              <p className="mt-5 max-w-3xl text-base leading-7 text-ink-muted">
                 {domain.intro}
               </p>
               <div className="mt-7 flex flex-wrap gap-2">
@@ -149,10 +149,10 @@ export default async function DomainPage({
             </Reveal>
 
             <Reveal delay={120}>
-              <aside className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 shadow-2xl shadow-black/25">
+              <aside className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 shadow-sm shadow-ink/5">
                 <div
                   aria-hidden
-                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 blur-2xl"
+                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 hidden"
                 />
                 <div className="relative">
                   <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10">
@@ -185,7 +185,7 @@ export default async function DomainPage({
             </>
           }
         />
-        <div className="mt-12 grid gap-5 md:grid-cols-2">
+        <div className="mt-8 grid gap-5 md:grid-cols-2">
           <Reveal className="h-full">
             <article className="relative h-full overflow-hidden rounded-3xl border border-cool/25 bg-cool/[0.06] p-7 sm:p-8">
               <GraduationCap size={22} className="text-cool" />
@@ -246,7 +246,7 @@ export default async function DomainPage({
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
             <Eyebrow>Explore more</Eyebrow>
-            <h2 className="mt-6 text-3xl leading-tight text-ink sm:text-4xl">
+            <h2 className="mt-4 text-2xl leading-tight text-ink sm:text-3xl">
               Other engineering domains
             </h2>
           </div>
@@ -307,7 +307,7 @@ function ProjectTier({
       <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
         <Reveal>
           <Eyebrow>{eyebrow}</Eyebrow>
-          <h2 className="mt-6 max-w-2xl text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">
+          <h2 className="mt-4 max-w-2xl text-2xl leading-tight text-ink sm:text-3xl">
             {title}
           </h2>
           <p className="mt-5 max-w-2xl text-base leading-relaxed text-ink-muted">
@@ -322,7 +322,7 @@ function ProjectTier({
         </Reveal>
       </div>
 
-      <div className="mt-12 grid gap-6 lg:grid-cols-2">
+      <div className="mt-8 grid gap-6 lg:grid-cols-2">
         {projects.map((project, index) => (
           <Reveal key={project.title} delay={(index % 2) * 70} className="h-full">
             <ProjectCard project={project} />

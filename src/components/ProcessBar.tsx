@@ -7,10 +7,10 @@ import type { ServiceStep } from "./services-data";
 // h-11/w-11 = 44px. The connector offsets below are derived from this size —
 // change one and you must change the others.
 const NODE_BASE =
-  "relative z-10 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border text-sm font-medium shadow-lg shadow-black/20 transition-[border-color,background-color,color,transform]";
+  "relative z-10 flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-full border text-sm font-medium shadow-lg shadow-ink/5 transition-[border-color,background-color,color,transform]";
 const NODE_DONE = "border-accent bg-accent-strong text-accent-ink";
 const NODE_CURRENT =
-  "scale-110 border-accent bg-gradient-to-br from-[#3566dc] to-[#7134c9] text-white";
+  "scale-110 border-accent bg-accent text-accent-ink";
 const NODE_UPCOMING =
   "border-line-strong bg-surface-overlay text-ink-subtle hover:border-accent hover:text-ink";
 
@@ -30,14 +30,14 @@ export default function ProcessBar({ steps }: { steps: ServiceStep[] }) {
   const step = steps[active];
 
   return (
-    <div className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-6 shadow-2xl shadow-black/20 sm:p-8 lg:p-10">
+    <div className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-6 shadow-sm shadow-ink/5 sm:p-8 lg:p-10">
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full bg-cool/10 blur-2xl"
+        className="pointer-events-none absolute -right-28 -top-28 h-72 w-72 rounded-full bg-cool/10 hidden"
       />
       <div
         aria-hidden
-        className="pointer-events-none absolute -bottom-28 left-1/4 h-64 w-64 rounded-full bg-accent/10 blur-2xl"
+        className="pointer-events-none absolute -bottom-28 left-1/4 h-64 w-64 rounded-full bg-accent/10 hidden"
       />
 
       {/* ------------------------- Desktop ------------------------- */}
@@ -77,7 +77,7 @@ export default function ProcessBar({ steps }: { steps: ServiceStep[] }) {
           ))}
         </ol>
 
-        <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-line bg-surface-overlay/80 p-7 shadow-xl shadow-black/10">
+        <div className="mx-auto mt-12 max-w-2xl rounded-2xl border border-line bg-surface-overlay/80 p-7 shadow-xl shadow-ink/5">
           <div className="flex items-center justify-between gap-4">
             <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-subtle">
               Step {active + 1} of {steps.length}

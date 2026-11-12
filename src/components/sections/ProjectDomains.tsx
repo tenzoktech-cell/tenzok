@@ -29,7 +29,7 @@ export default function ProjectDomains() {
         <Reveal delay={120}>
           <Link
             href="/projects"
-            className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-full border border-line-strong bg-surface-raised px-5 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay"
+            className="inline-flex min-h-11 items-center gap-2 whitespace-nowrap rounded-md border border-ink px-5 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay"
           >
             Browse every project
             <ArrowRight size={15} />
@@ -37,7 +37,7 @@ export default function ProjectDomains() {
         </Reveal>
       </div>
 
-      <div className="mt-16 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {DOMAINS.map((domain, i) => {
           const Icon = domain.icon;
           const mini = domain.projects.filter((p) => p.tier === "mini").length;

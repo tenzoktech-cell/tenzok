@@ -6,10 +6,10 @@ export default function ProfileLoading() {
     <div className="relative isolate overflow-hidden pb-24 pt-28 sm:pt-36">
       <div
         aria-hidden
-        className="pointer-events-none absolute right-[-10rem] top-12 -z-10 h-[28rem] w-[28rem] rounded-full bg-cool/10 blur-[130px]"
+        className="pointer-events-none absolute right-[-10rem] top-12 -z-10 h-[28rem] w-[28rem] rounded-full bg-cool/10 hidden"
       />
       <Container className="max-w-7xl">
-        <div className="animate-pulse overflow-hidden rounded-[2rem] border border-line bg-surface-raised/80 shadow-2xl shadow-black/20">
+        <div className="animate-pulse overflow-hidden rounded-xl border border-line bg-surface-raised/80 shadow-sm shadow-ink/5">
           <div className="h-40 bg-gradient-to-r from-cool/10 via-surface-overlay to-accent/10 sm:h-52" />
           <div className="p-6 sm:p-9">
             <div className="-mt-20 h-24 w-24 rounded-3xl border-4 border-surface-raised bg-surface-overlay sm:-mt-24 sm:h-28 sm:w-28" />
@@ -23,7 +23,7 @@ export default function ProfileLoading() {
           </div>
         </div>
         <div className="mt-8 h-14 w-full max-w-xl animate-pulse rounded-2xl bg-surface-overlay" />
-        <div className="mt-8 h-72 animate-pulse rounded-[2rem] border border-line bg-surface-raised" />
+        <div className="mt-8 h-72 animate-pulse rounded-xl border border-line bg-surface-raised" />
       </Container>
     </div>
   );

@@ -40,7 +40,7 @@ const ROLES = [
 // entire page in when a focused input has a font-size below 16px, and the user
 // then has to pinch back out after every single field.
 const INPUT =
-  "min-h-12 w-full rounded-xl border border-line bg-surface-overlay px-4 py-3 text-base text-ink outline-none placeholder:text-ink-subtle transition-[border-color,background-color,box-shadow] hover:border-line-strong focus:border-accent focus:bg-surface";
+  "min-h-11 w-full rounded-lg border border-line bg-surface px-3.5 py-2.5 text-base text-ink sm:text-sm outline-none placeholder:text-ink-subtle transition-[border-color,background-color,box-shadow] hover:border-line-strong focus:border-accent focus:bg-surface";
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -162,7 +162,7 @@ export default function ContactForm() {
       >
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cool/15 blur-2xl"
+          className="pointer-events-none absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cool/15 hidden"
         />
         <span className="relative flex h-12 w-12 items-center justify-center rounded-full border border-accent/30 bg-accent/10">
           <CheckCircle2 size={23} className="text-accent" />
@@ -171,7 +171,7 @@ export default function ContactForm() {
         <p className="relative mt-3 text-base leading-relaxed text-ink-muted">{message}</p>
         <Link
           href="/"
-          className="relative mt-7 inline-flex min-h-11 items-center rounded-full border border-line-strong bg-surface-overlay px-5 text-sm font-medium text-ink transition-colors hover:bg-surface"
+          className="relative mt-7 inline-flex min-h-11 items-center rounded-md border border-ink px-5 text-sm font-medium text-ink transition-colors hover:bg-surface"
         >
           Back to Tenzok
         </Link>
@@ -184,13 +184,14 @@ export default function ContactForm() {
   const deliveryFailed = failed && Object.keys(errors).length === 0;
 
   return (
-    <form onSubmit={onSubmit} className="flex flex-col gap-6" noValidate>
+    <form onSubmit={onSubmit} className="flex flex-col gap-4" noValidate>
       {/* Honeypot. Web3Forms treats a filled "botcheck" as spam too. */}
       <div aria-hidden className="absolute left-[-9999px] h-0 w-0 overflow-hidden">
         <label htmlFor="botcheck">Do not fill this in</label>
         <input id="botcheck" name="botcheck" tabIndex={-1} autoComplete="off" />
       </div>
 
+      <div className="grid gap-4 sm:grid-cols-2">
       <Field label="Your name" name="name" error={errors.name}>
         <input
           id="name"
@@ -217,7 +218,9 @@ export default function ContactForm() {
           aria-describedby={errors.email ? "email-error" : undefined}
         />
       </Field>
+      </div>
 
+      <div className="grid gap-4 sm:grid-cols-2">
       <Field label="Mobile number" name="phone" error={errors.phone}>
         <InternationalPhoneField
           id="phone"
@@ -225,7 +228,7 @@ export default function ContactForm() {
           required
           invalid={Boolean(errors.phone)}
           describedBy={errors.phone ? "phone-error" : undefined}
-          radiusClassName="rounded-xl"
+          radiusClassName="rounded-lg"
         />
       </Field>
 
@@ -247,12 +250,13 @@ export default function ContactForm() {
           ))}
         </select>
       </Field>
+      </div>
 
       <Field label="What are you building?" name="message" error={errors.message}>
         <textarea
           id="message"
           name="message"
-          rows={5}
+          rows={4}
           required
           placeholder="A sentence or two is plenty. Your problem statement, your product, or just where you're stuck."
           className={`${INPUT} resize-y`}
@@ -320,14 +324,14 @@ function Field({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-2.5">
-      <label htmlFor={name} className="flex items-center gap-2 text-sm font-medium text-ink">
+    <div className="flex min-w-0 flex-col gap-1.5">
+      <label htmlFor={name} className="flex items-center gap-2 text-[13px] font-medium text-ink">
         {label}
         {optional && <span className="text-xs font-normal text-ink-subtle">Optional</span>}
       </label>
       {children}
       {error && (
-        <p id={`${name}-error`} className="text-sm text-red-400" role="alert">
+        <p id={`${name}-error`} className="text-sm text-red-700" role="alert">
           {error}
         </p>
       )}

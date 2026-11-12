@@ -41,7 +41,7 @@ export default function FeaturedBlueprints() {
         </Reveal>
       </div>
 
-      <div className="mt-14 grid gap-5 lg:grid-cols-2">
+      <div className="mt-8 grid gap-5 lg:grid-cols-2">
         {FEATURED.map(({ domain, project }, index) => {
           const Icon = domain.icon;
           return (
@@ -52,10 +52,10 @@ export default function FeaturedBlueprints() {
               >
                 <div
                   aria-hidden
-                  className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-gradient-to-br from-cool/12 to-accent/12 blur-2xl"
+                  className="absolute -right-20 -top-20 h-64 w-64 rounded-full bg-accent/10 hidden"
                 />
                 <div className="relative flex items-start justify-between">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-white/[0.05]">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-ink/10 bg-ink/[0.05]">
                     <Icon size={21} className="text-cool" />
                   </span>
                   <ArrowUpRight

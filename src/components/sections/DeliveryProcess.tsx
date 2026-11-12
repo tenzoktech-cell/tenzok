@@ -37,7 +37,7 @@ const STEPS = [
 
 export default function DeliveryProcess() {
   return (
-    <Section id="process" bordered>
+    <Section id="process" className="theme-ink bg-surface text-ink">
       <div className="grid gap-14 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
         <SectionHeading
           eyebrow="How we work"

@@ -1,22 +1,19 @@
 import type { Metadata } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
+import { Space_Grotesk } from "next/font/google";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import LazyChatWidget from "@/components/chat/LazyChatWidget";
+import MobileCtaBar from "@/components/MobileCtaBar";
 import TenzokNav from "@/components/TenzokNav";
 import { ToastProvider } from "@/components/ui/Toast";
 import { SITE } from "@/lib/site";
 import "./globals.css";
 
-// Variable fonts: no `weight` array needed — one woff2 covers every weight.
-const inter = Inter({
+// Headings, body and labels use system fonts (see globals.css).
+// Brand wordmark only: one weight keeps the extra download tiny.
+const brand = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  weight: "700",
+  variable: "--font-brand-face",
   display: "swap",
 });
 
@@ -53,7 +50,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="auto"
-      className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${brand.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-surface text-ink">
         <a href="#main" className="skip-link">
@@ -63,6 +60,7 @@ export default function RootLayout({
           <ToastProvider>
             <TenzokNav />
             {children}
+            <MobileCtaBar />
             {/* Floating messenger; renders nothing while signed out. */}
             <LazyChatWidget />
           </ToastProvider>

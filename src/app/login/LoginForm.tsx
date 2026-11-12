@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { login } from "@/lib/auth-actions";
 
 // text-base (16px) prevents iOS Safari from zooming when a field receives focus.
-const INPUT = "w-full rounded-2xl border border-line bg-surface/70 py-3.5 pl-11 pr-12 text-base text-ink placeholder:text-ink-subtle transition-all hover:border-line-strong focus:border-cool focus:bg-surface focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-cool)_12%,transparent)]";
+const INPUT = "w-full rounded-lg border border-line bg-surface/70 py-2.5 pl-11 pr-12 text-base sm:text-sm text-ink placeholder:text-ink-subtle transition-all hover:border-line-strong focus:border-cool focus:bg-surface focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-cool)_12%,transparent)]";
 
 export default function LoginForm() {
   const [state, action, pending] = useActionState(login, null);
@@ -41,10 +41,10 @@ export default function LoginForm() {
       </div>
 
       <div aria-live="polite" className="empty:hidden">
-        {state?.error && <div className="rounded-2xl border border-red-400/30 bg-red-500/10 p-4"><p className="text-sm leading-relaxed text-red-100">{state.error}</p><p className="mt-1 text-xs text-red-100/70">Your email is still here—check the password and try again.</p></div>}
+        {state?.error && <div className="rounded-2xl border border-red-400/30 bg-red-500/10 p-4"><p className="text-sm leading-relaxed text-red-800">{state.error}</p><p className="mt-1 text-xs text-red-800/70">Your email is still here—check the password and try again.</p></div>}
       </div>
 
-      <Button type="submit" size="lg" disabled={pending} className="group mt-1 w-full shadow-lg shadow-black/20">
+      <Button type="submit" size="lg" disabled={pending} className="group mt-1 w-full shadow-lg shadow-ink/5">
         {pending ? "Logging in…" : "Log in"}
         {!pending && <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />}
       </Button>

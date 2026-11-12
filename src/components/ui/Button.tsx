@@ -5,17 +5,17 @@ export type ButtonVariant = "primary" | "secondary" | "inverse" | "ghost";
 export type ButtonSize = "md" | "lg";
 
 const BASE =
-  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-full font-semibold whitespace-nowrap transition-all duration-200 disabled:cursor-not-allowed disabled:opacity-60";
+  "inline-flex cursor-pointer items-center justify-center gap-2 rounded-md font-medium whitespace-nowrap transition-colors duration-150 disabled:cursor-not-allowed disabled:opacity-60";
 
 const VARIANTS: Record<ButtonVariant, string> = {
   primary:
-    "bg-gradient-to-r from-[#3566dc] via-[#5746d9] to-[#7134c9] text-white shadow-[0_12px_36px_rgba(87,70,217,0.28)] hover:-translate-y-0.5 hover:shadow-[0_16px_44px_rgba(87,70,217,0.38)]",
+    "bg-accent text-accent-ink hover:bg-accent-strong",
   secondary:
-    "border border-line-strong bg-white/[0.045] text-ink backdrop-blur-sm hover:-translate-y-0.5 hover:border-white/30 hover:bg-white/[0.08]",
-  // The nav's "Book a Call": solid light on dark. Distinct from the accent, so
+    "border border-ink text-ink hover:bg-ink hover:text-surface",
+  // The nav's "Book a Call": solid ink on paper. Distinct from the accent, so
   // it never competes with the single primary CTA in the view below it.
-  inverse: "bg-ink text-surface shadow-lg shadow-black/20 hover:-translate-y-0.5 hover:bg-white",
-  ghost: "text-ink-muted hover:bg-white/[0.05] hover:text-ink",
+  inverse: "bg-ink text-surface hover:bg-accent",
+  ghost: "text-ink-muted hover:bg-ink/[0.05] hover:text-ink",
 };
 
 // min-h-11 keeps every control at a 44px tap target.

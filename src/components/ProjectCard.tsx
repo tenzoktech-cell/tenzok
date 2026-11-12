@@ -15,7 +15,7 @@ export default function ProjectCard({ project }: { project: ProjectBrief }) {
   return (
     <article
       id={projectAnchor(project.title)}
-      className="group relative flex h-full scroll-mt-28 flex-col overflow-hidden rounded-3xl border border-line bg-surface-raised p-6 shadow-xl shadow-black/10 transition-[border-color,background-color,transform] duration-300 hover:-translate-y-1 hover:border-line-strong hover:bg-surface-overlay sm:p-7"
+      className="group relative flex h-full scroll-mt-28 flex-col overflow-hidden rounded-3xl border border-line bg-surface-raised p-6 shadow-xl shadow-ink/5 transition-[border-color,background-color,transform] duration-300 hover:-translate-y-1 hover:border-line-strong hover:bg-surface-overlay sm:p-7"
     >
       <div
         aria-hidden

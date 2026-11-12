@@ -71,14 +71,14 @@ export default async function ServicePage({ params }: ServicePageProps) {
         ]}
       />
 
-      <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
+      <section className="relative overflow-hidden pt-28 pb-10 sm:pt-32 sm:pb-12">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-2xl"
+          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 hidden"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-2xl"
+          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 hidden"
         />
 
         <Container className="relative">
@@ -102,13 +102,13 @@ export default async function ServicePage({ params }: ServicePageProps) {
                 </span>
               </div>
 
-              <h1 className="mt-7 max-w-4xl text-[clamp(2.75rem,1.8rem+3.5vw,5.25rem)] leading-[0.98] text-ink">
+              <h1 className="mt-5 max-w-4xl text-[clamp(2.25rem,1.7rem+2.2vw,3.5rem)] leading-[1.02] text-ink">
                 {service.headline.plain}{" "}
-                <span className="bg-gradient-to-r from-accent to-cool bg-clip-text text-transparent">
+                <span className="gradient-text">
                   {service.headline.accent}
                 </span>
               </h1>
-              <p className="mt-7 max-w-3xl text-lg leading-relaxed text-ink-muted sm:text-xl">
+              <p className="mt-5 max-w-3xl text-base leading-7 text-ink-muted">
                 {service.intro}
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
@@ -119,7 +119,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
                 />
                 <a
                   href="#process"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-line-strong bg-surface-raised px-7 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay sm:text-base"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-ink px-7 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface sm:text-base"
                 >
                   See how it works
                   <ArrowRight size={16} />
@@ -128,10 +128,10 @@ export default async function ServicePage({ params }: ServicePageProps) {
             </Reveal>
 
             <Reveal delay={120}>
-              <aside className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 shadow-2xl shadow-black/25">
+              <aside className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 shadow-sm shadow-ink/5">
                 <div
                   aria-hidden
-                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cool/15 blur-2xl"
+                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cool/15 hidden"
                 />
                 <div className="relative flex items-center gap-3">
                   <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-cool/30 bg-cool/10">
@@ -176,7 +176,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
           }
           copy={`Every ${service.name} engagement follows the same transparent path. You know what is happening, what is next, and what exists at the end.`}
         />
-        <Reveal delay={120} className="mt-12">
+        <Reveal delay={120} className="mt-8">
           <ProcessBar steps={service.steps} />
         </Reveal>
       </Section>
@@ -185,7 +185,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
         <div className="grid items-center gap-12 lg:grid-cols-[1.15fr_0.85fr] lg:gap-16">
           <Reveal>
             <Eyebrow>{service.big.eyebrow}</Eyebrow>
-            <h2 className="mt-7 text-3xl leading-tight text-ink sm:text-4xl md:text-5xl">
+            <h2 className="mt-4 text-2xl leading-tight text-ink sm:text-3xl">
               {service.big.headline.plain}{" "}
               <span className="gradient-text">
                 {service.big.headline.accent}
@@ -210,12 +210,12 @@ export default async function ServicePage({ params }: ServicePageProps) {
           </Reveal>
 
           <Reveal delay={120}>
-            <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-accent/[0.06] p-8 shadow-2xl shadow-black/20 sm:p-10">
+            <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-accent/[0.06] p-8 shadow-sm shadow-ink/5 sm:p-10">
               <div
                 aria-hidden
-                className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cool/15 blur-2xl"
+                className="absolute -right-16 -top-20 h-56 w-56 rounded-full bg-cool/15 hidden"
               />
-              <p className="relative bg-gradient-to-r from-accent to-cool bg-clip-text text-6xl font-medium tracking-tight text-transparent sm:text-7xl">
+              <p className="relative bg-gradient-to-r from-accent to-cool bg-clip-text text-4xl font-medium tracking-tight text-transparent sm:text-5xl">
                 {service.big.stat.value}
               </p>
               <p className="relative mt-6 max-w-sm text-base leading-relaxed text-ink-muted">
@@ -239,7 +239,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
           copy="The work is only complete when you have the assets, context, and confidence to own what comes next."
         />
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {service.deliverables.map((item, index) => {
             const ItemIcon = item.icon;
             return (
@@ -267,10 +267,10 @@ export default async function ServicePage({ params }: ServicePageProps) {
         </div>
 
         <Reveal delay={120}>
-          <div className="relative mt-12 flex flex-col items-center justify-between gap-6 overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-8 text-center sm:flex-row sm:text-left">
+          <div className="relative mt-8 flex flex-col items-center justify-between gap-6 overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-6 text-center sm:flex-row sm:text-left">
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 blur-2xl"
+              className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 hidden"
             />
             <p className="relative max-w-xl text-base text-ink">{service.ctaLine}</p>
             <ButtonLink
@@ -289,7 +289,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
         <div className="flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
           <div>
             <Eyebrow>Explore more from Tenzok</Eyebrow>
-            <h2 className="mt-6 text-3xl leading-tight text-ink sm:text-4xl">
+            <h2 className="mt-4 text-2xl leading-tight text-ink sm:text-3xl">
               The rest of the studio
             </h2>
           </div>

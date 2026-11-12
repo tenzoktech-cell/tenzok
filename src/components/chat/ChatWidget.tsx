@@ -333,11 +333,11 @@ function ChatPanel({
         aria-label={open ? "Minimise chat" : "Open chat"}
         aria-expanded={open}
         aria-controls="tenzok-chat-panel"
-        className="fixed bottom-5 right-4 z-[90] flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl border border-white/15 bg-gradient-to-br from-[#3566dc] to-[#7134c9] text-white shadow-2xl shadow-black/50 transition-all hover:-translate-y-0.5 hover:shadow-cool/20 sm:right-6"
+        className="fixed bottom-20 right-4 z-[90] md:bottom-5 flex h-14 w-14 cursor-pointer items-center justify-center rounded-2xl border border-ink/15 bg-accent text-accent-ink shadow-sm shadow-ink/5 transition-all hover:-translate-y-0.5 hover:shadow-cool/20 sm:right-6"
       >
         {open ? <Minus size={22} /> : <MessageCircle size={22} />}
         {!open && totalUnread > 0 && (
-          <span className="absolute -right-2 -top-2 flex h-6 min-w-6 items-center justify-center rounded-full border-2 border-surface bg-red-500 px-1.5 text-xs font-semibold text-white shadow-lg">
+          <span className="absolute -right-2 -top-2 flex h-6 min-w-6 items-center justify-center rounded-full border-2 border-surface bg-red-500 px-1.5 text-xs font-semibold text-accent-ink shadow-lg">
             {totalUnread > 99 ? "99+" : totalUnread}
           </span>
         )}
@@ -351,7 +351,7 @@ function ChatPanel({
           aria-modal="false"
           aria-label="Messages"
           tabIndex={-1}
-          className="fade-up fixed bottom-24 right-3 z-[90] flex h-[min(620px,calc(100dvh-7.5rem))] w-[calc(100vw-1.5rem)] max-w-md flex-col overflow-hidden rounded-[1.75rem] border border-white/10 bg-surface-raised/95 shadow-2xl shadow-black/70 backdrop-blur-xl sm:right-6"
+          className="fade-up fixed bottom-36 right-3 z-[90] flex h-[min(620px,calc(100dvh-11rem))] md:bottom-24 md:h-[min(620px,calc(100dvh-7.5rem))] w-[calc(100vw-1.5rem)] max-w-md flex-col overflow-hidden rounded-xl border border-ink/10 bg-surface-raised/95 shadow-sm shadow-ink/5 backdrop-blur-xl sm:right-6"
         >
           {/* Header */}
           <header className="relative flex min-h-16 items-center gap-3 overflow-hidden border-b border-line bg-gradient-to-r from-cool/10 via-surface-overlay to-accent/10 px-4 py-3.5">
@@ -428,14 +428,14 @@ function ChatPanel({
                           <div
                             className={`max-w-[82%] rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-sm ${
                               mine
-                                ? "rounded-br-md bg-gradient-to-br from-cool to-accent text-cool-ink"
+                                ? "rounded-br-md bg-ink text-surface"
                                 : "rounded-bl-md border border-line bg-surface-overlay text-ink"
                             }`}
                           >
                             <p className="whitespace-pre-wrap break-words">{m.message}</p>
                             <p
                               className={`mt-1 flex items-center justify-end gap-1 text-[10px] ${
-                                mine ? "text-cool-ink/70" : "text-ink-subtle"
+                                mine ? "text-surface/70" : "text-ink-subtle"
                               }`}
                             >
                               {fmtTime(m.created_at)}
@@ -482,7 +482,7 @@ function ChatPanel({
                   onClick={send}
                   disabled={!draft.trim()}
                   aria-label="Send"
-                  className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-2xl bg-gradient-to-br from-[#3566dc] to-[#7134c9] text-white shadow-lg shadow-black/20 transition-all hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-40"
+                  className="flex h-11 w-11 shrink-0 cursor-pointer items-center justify-center rounded-2xl bg-accent text-accent-ink shadow-lg shadow-ink/5 transition-all hover:-translate-y-0.5 disabled:translate-y-0 disabled:opacity-40"
                 >
                   <Send size={16} />
                 </button>
@@ -496,7 +496,7 @@ function ChatPanel({
                   <button
                     type="button"
                     onClick={() => startWith(null)}
-                    className="w-full cursor-pointer rounded-2xl bg-gradient-to-r from-[#3566dc] to-[#7134c9] px-4 py-3.5 text-sm font-semibold text-white shadow-lg shadow-black/20 transition-transform hover:-translate-y-0.5"
+                    className="w-full cursor-pointer rounded-2xl bg-accent px-4 py-3.5 text-sm font-semibold text-accent-ink shadow-lg shadow-ink/5 transition-transform hover:-translate-y-0.5"
                   >
                     Message Tenzok support
                   </button>

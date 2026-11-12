@@ -56,7 +56,7 @@ export default function CompanyServices() {
           <Reveal delay={120}>
             <Link
               href="/contact?service=company-services"
-              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-full border border-line-strong bg-surface-raised px-5 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay"
+              className="mt-8 inline-flex min-h-11 items-center gap-2 rounded-md border border-ink px-5 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay"
             >
               Book a scoping call
               <ArrowRight size={15} />
@@ -69,7 +69,7 @@ export default function CompanyServices() {
             const Icon = offer.icon;
             return (
               <Reveal key={offer.title} delay={i * 70}>
-                <div className="flex items-start gap-5 p-7 transition-colors hover:bg-white/[0.025]">
+                <div className="flex items-start gap-5 p-7 transition-colors hover:bg-ink/[0.025]">
                   <span className="font-display text-sm font-bold text-accent">
                     0{i + 1}
                   </span>

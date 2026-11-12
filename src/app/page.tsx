@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import HeroTenzok from "@/components/HeroTenzok";
 import JsonLd from "@/components/JsonLd";
+import AudiencePaths from "@/components/sections/AudiencePaths";
 import AgencyServices from "@/components/sections/AgencyServices";
 import CapabilityMarquee from "@/components/sections/CapabilityMarquee";
 import CtaFooter from "@/components/sections/CtaFooter";
@@ -23,6 +24,7 @@ export default function Home() {
     <main id="main" tabIndex={-1} className="bg-surface">
       <JsonLd schema={[organizationSchema(), websiteSchema()]} />
       <HeroTenzok />
+      <AudiencePaths />
       <CapabilityMarquee />
       <AgencyServices />
       <DeliveryProcess />

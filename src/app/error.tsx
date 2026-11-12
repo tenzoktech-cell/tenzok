@@ -19,7 +19,7 @@ export default function ErrorPage({
   return (
     <main id="main" tabIndex={-1} className="min-h-screen bg-surface">
       <Container className="flex min-h-screen items-center justify-center py-32">
-        <div className="premium-card w-full max-w-xl rounded-[2rem] p-8 text-center sm:p-12">
+        <div className="premium-card w-full max-w-xl rounded-xl p-8 text-center sm:p-12">
           <CircleAlert size={30} className="mx-auto text-accent" />
           <h1 className="mt-6 text-4xl text-ink">Something interrupted the build.</h1>
           <p className="mt-4 text-base leading-7 text-ink-muted">

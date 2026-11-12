@@ -52,7 +52,7 @@ export default function InsightsFaq() {
           </Reveal>
         </div>
 
-        <div className="mt-14 grid gap-4 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
           {posts.map((post, index) => (
             <Reveal key={post.slug} delay={index * 60} className="h-full">
               <Link
@@ -115,7 +115,7 @@ export default function InsightsFaq() {
                     <span className="font-display text-base font-semibold text-ink sm:text-lg">
                       {item.q}
                     </span>
-                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-white/[0.035]">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-line bg-ink/[0.035]">
                       <Plus
                         size={15}
                         className="transition-transform duration-200 group-open:rotate-45"

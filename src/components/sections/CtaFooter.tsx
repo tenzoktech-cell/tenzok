@@ -24,16 +24,16 @@ export default function CtaFooter() {
     >
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-[34rem] max-w-5xl bg-[radial-gradient(ellipse_at_top,rgba(117,93,255,0.16),transparent_66%)]"
+        className="pointer-events-none absolute inset-x-0 top-0 mx-auto h-[34rem] max-w-5xl hidden"
       />
 
       <Container>
-        <div className="relative flex flex-col items-center py-24 text-center md:py-32">
+        <div className="relative flex flex-col items-center py-16 text-center md:py-20">
           <Reveal className="flex flex-col items-center">
-            <span className="rounded-full border border-accent/25 bg-accent/10 px-4 py-2 text-xs font-semibold uppercase tracking-[0.18em] text-cool">
+            <span className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
               Your next build starts here
             </span>
-            <h2 className="text-balance mt-7 max-w-4xl text-4xl leading-[1.02] text-ink sm:text-5xl md:text-6xl">
+            <h2 className="text-balance mt-5 max-w-3xl text-3xl leading-[1.05] text-ink sm:text-4xl md:text-[2.5rem]">
               Turn the idea into{" "}
               <span className="gradient-text">software people trust.</span>
             </h2>
@@ -65,15 +65,15 @@ export default function CtaFooter() {
         </div>
       </Container>
 
-      <footer className="relative border-t border-line bg-black/10">
+      <footer className="theme-ink relative bg-surface text-ink">
         <Container>
-          <div className="grid gap-12 py-14 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+          <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
             <div>
               <div className="flex items-center gap-2.5">
-                <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-line bg-white/[0.05]">
+                <span className="flex h-10 w-10 items-center justify-center rounded-md bg-ink text-surface">
                   <TenzokLogo size={20} />
                 </span>
-                <span className="font-display text-xl font-bold tracking-[-0.04em] text-ink">
+                <span className="font-brand text-xl font-bold tracking-[-0.04em] text-ink">
                   Tenzok
                 </span>
               </div>
@@ -167,7 +167,7 @@ export default function CtaFooter() {
 function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
   return (
     <nav aria-label={title}>
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-ink">
+      <p className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ink-subtle">
         {title}
       </p>
       <div className="mt-4 flex flex-col">{children}</div>

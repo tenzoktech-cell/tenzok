@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { BookOpen, Code2, Lightbulb, Search } from "lucide-react";
+import { Code2, Lightbulb, Search } from "lucide-react";
 import BlogExplorer, { type ExplorerPost } from "@/components/BlogExplorer";
 import JsonLd from "@/components/JsonLd";
 import { POSTS } from "@/components/blog-posts";
@@ -71,40 +71,39 @@ export default function BlogsPage() {
         ]}
       />
 
-      <section className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
+      <section className="relative overflow-hidden pt-28 pb-10 sm:pt-32 sm:pb-12">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-cool/10 blur-2xl"
+          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-cool/10 hidden"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-accent/10 blur-2xl"
+          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-accent/10 hidden"
         />
 
         <Container className="relative">
-          <div className="grid items-end gap-12 lg:grid-cols-[minmax(0,1.3fr)_minmax(18rem,0.7fr)] lg:gap-16">
+          <div className="grid items-end gap-8 lg:grid-cols-[minmax(0,1.3fr)_minmax(18rem,0.7fr)] lg:gap-16">
             <Reveal>
               <Eyebrow>Insights</Eyebrow>
-              <h1 className="mt-6 max-w-4xl text-[clamp(2.6rem,1.9rem+3vw,4.75rem)] leading-[0.98] text-ink">
+              <h1 className="mt-5 max-w-4xl text-[clamp(2.25rem,1.7rem+2.2vw,3.5rem)] leading-[1.02] text-ink">
                 Engineering notes from the{" "}
-                <span className="bg-gradient-to-r from-accent to-cool bg-clip-text text-transparent">
+                <span className="gradient-text">
                   workshop floor.
                 </span>
               </h1>
-              <p className="mt-7 max-w-2xl text-lg leading-relaxed text-ink-muted sm:text-xl">
+              <p className="mt-5 max-w-2xl text-base leading-7 text-ink-muted">
                 The bugs, scope decisions, and hard questions that keep appearing in
                 code reviews—written down clearly enough to use in your next build.
               </p>
             </Reveal>
 
             <Reveal delay={120}>
-              <aside className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-7 shadow-2xl shadow-black/25">
+              <aside className="relative border-l-2 border-accent pl-6">
                 <div
                   aria-hidden
-                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cool/15 blur-2xl"
+                  className="absolute -right-20 -top-24 h-64 w-64 rounded-full bg-cool/15 hidden"
                 />
-                <BookOpen size={22} className="relative text-cool" />
-                <p className="relative mt-6 text-5xl font-medium tracking-tight text-ink">
+                                <p className="relative font-display text-4xl text-ink">
                   {POSTS.length}
                 </p>
                 <p className="relative mt-2 text-sm font-medium text-ink">
@@ -120,8 +119,8 @@ export default function BlogsPage() {
         </Container>
       </section>
 
-      <Section bordered>
-        <SectionHeading
+      <Section compact bordered>
+        <SectionHeading compact
           eyebrow="Explore the library"
           title={
             <>
@@ -131,13 +130,13 @@ export default function BlogsPage() {
           }
           copy="Browse every existing article by title, topic, or the specific engineering challenge inside it."
         />
-        <Reveal delay={100} className="mt-12">
+        <Reveal delay={100} className="mt-8">
           <BlogExplorer posts={EXPLORER_POSTS} />
         </Reveal>
       </Section>
 
-      <Section bordered>
-        <SectionHeading
+      <Section compact bordered>
+        <SectionHeading compact
           align="center"
           eyebrow="Editorial standard"
           title={
@@ -147,7 +146,7 @@ export default function BlogsPage() {
             </>
           }
         />
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
           {EDITORIAL_VALUES.map((item, index) => {
             const Icon = item.icon;
             return (

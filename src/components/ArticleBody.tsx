@@ -92,7 +92,7 @@ function BlockView({ block }: { block: Block }) {
         // min-w-0 + max-w-full: without them a long code line propagates its
         // intrinsic width up through every ancestor and widens the page itself.
         // The code must scroll inside this box and nowhere else.
-        <div className="mt-9 min-w-0 max-w-full overflow-hidden rounded-2xl border border-line bg-surface-overlay shadow-2xl shadow-black/20">
+        <div className="mt-9 min-w-0 max-w-full overflow-hidden rounded-2xl border border-line bg-surface-overlay shadow-sm shadow-ink/5">
           <div className="flex items-center justify-between border-b border-line bg-surface-raised px-4 py-3">
             <span className="text-xs uppercase tracking-[0.14em] text-ink-subtle">
               {block.lang}

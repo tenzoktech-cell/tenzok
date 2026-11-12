@@ -53,7 +53,7 @@ export default function GrowthLaunch() {
         copy="Shipping is the midpoint, not the finish line. Tenzok carries products through the noisy part — being seen, tried, and adopted."
       />
 
-      <div className="mt-16 grid gap-6 md:grid-cols-2">
+      <div className="mt-8 grid gap-6 md:grid-cols-2">
         {PANELS.map((panel, i) => {
           const Icon = panel.icon;
           return (

@@ -83,7 +83,7 @@ export default function AboutPage() {
         </div>
       </PageHero>
 
-      <Section bordered>
+      <Section compact bordered>
         <div className="grid gap-6 lg:grid-cols-2">
           <AudienceCard
             icon={Building2}
@@ -104,8 +104,8 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section bordered>
-        <SectionHeading
+      <Section compact bordered>
+        <SectionHeading compact
           eyebrow="Leadership"
           title={
             <>
@@ -116,19 +116,19 @@ export default function AboutPage() {
           copy="A preview of how the leadership profiles will appear. Names, photographs, and profile details can be added later."
         />
 
-        <div className="mt-12 grid gap-5 md:grid-cols-3">
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
           {LEADERSHIP_DEMO.map((profile, index) => (
             <Reveal key={profile.role} delay={index * 70} className="h-full">
               <article className="premium-card premium-card-hover group h-full overflow-hidden rounded-3xl">
-                <div className="relative aspect-[4/3] overflow-hidden border-b border-line bg-surface-overlay">
+                <div className="relative aspect-[16/10] overflow-hidden border-b border-line bg-surface-overlay">
                   <div
                     aria-hidden
                     className={`absolute inset-0 ${
                       index === 0
-                        ? "bg-[radial-gradient(circle_at_25%_20%,rgba(85,199,255,0.22),transparent_45%),linear-gradient(145deg,#171a26,#0d0f16)]"
+                        ? "bg-surface-overlay"
                         : index === 1
-                          ? "bg-[radial-gradient(circle_at_72%_22%,rgba(139,108,255,0.28),transparent_45%),linear-gradient(145deg,#171a26,#0d0f16)]"
-                          : "bg-[radial-gradient(circle_at_50%_85%,rgba(85,199,255,0.18),transparent_48%),linear-gradient(145deg,#171a26,#0d0f16)]"
+                          ? "bg-surface-overlay"
+                          : "bg-surface-overlay"
                     }`}
                   />
                   <div
@@ -136,11 +136,11 @@ export default function AboutPage() {
                     className="page-grid absolute inset-0 opacity-30 transition-transform duration-500 group-hover:scale-105"
                   />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="flex h-24 w-24 items-center justify-center rounded-full border border-white/10 bg-white/[0.045] text-lg font-semibold tracking-[0.12em] text-ink-muted shadow-2xl shadow-black/30 backdrop-blur-sm">
+                    <div className="flex h-24 w-24 items-center justify-center rounded-full border border-ink/10 bg-ink/[0.045] text-lg font-semibold tracking-[0.12em] text-ink-muted shadow-sm shadow-ink/5">
                       {profile.initials}
                     </div>
                   </div>
-                  <span className="absolute left-4 top-4 rounded-full border border-white/10 bg-black/25 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-muted backdrop-blur-md">
+                  <span className="absolute left-4 top-4 rounded-full border border-ink/10 bg-surface/85 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.14em] text-ink-muted backdrop-blur-md">
                     Demo profile
                   </span>
                   <span className="absolute bottom-4 right-4 text-[10px] uppercase tracking-[0.16em] text-ink-subtle">
@@ -160,19 +160,19 @@ export default function AboutPage() {
         </div>
       </Section>
 
-      <Section bordered>
+      <Section compact bordered>
         <div className="max-w-2xl">
           <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-subtle">
             How we work
           </p>
-          <h2 className="mt-5 text-3xl leading-[1.12] text-ink sm:text-4xl">
+          <h2 className="mt-4 text-2xl leading-[1.12] text-ink sm:text-3xl">
             A simple operating model, applied{" "}
             <span className="gradient-text">
               to every engagement.
             </span>
           </h2>
         </div>
-        <div className="mt-12 grid gap-4 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 lg:grid-cols-3">
           {WORKING_MODEL.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -186,7 +186,7 @@ export default function AboutPage() {
                     0{index + 1}
                   </span>
                 </div>
-                <h3 className="mt-7 text-lg text-ink">{item.title}</h3>
+                <h3 className="mt-5 text-lg text-ink">{item.title}</h3>
                 <p className="mt-3 text-sm leading-relaxed text-ink-muted">
                   {item.copy}
                 </p>
@@ -218,12 +218,12 @@ function AudienceCard({
   linkLabel: string;
 }) {
   return (
-    <article className="premium-card premium-card-hover flex h-full flex-col rounded-3xl p-7 sm:p-8">
+    <article className="premium-card premium-card-hover flex h-full flex-col rounded-3xl p-6">
       <Icon aria-hidden size={22} className="text-accent" />
       <p className="mt-8 text-xs font-medium uppercase tracking-[0.14em] text-ink-subtle">
         {eyebrow}
       </p>
-      <h2 className="mt-3 text-2xl text-ink">{title}</h2>
+      <h2 className="mt-3 text-xl text-ink">{title}</h2>
       <p className="mt-4 flex-1 text-base leading-relaxed text-ink-muted">{copy}</p>
       <ButtonLink href={href} variant="secondary" className="mt-8 self-start">
         {linkLabel}

@@ -7,16 +7,16 @@ export default function NotFound() {
   return (
     <main id="main" tabIndex={-1} className="min-h-screen bg-surface">
       <Container className="flex min-h-screen items-center justify-center py-32">
-        <div className="premium-card relative w-full max-w-2xl overflow-hidden rounded-[2rem] p-8 text-center sm:p-12">
+        <div className="premium-card relative w-full max-w-2xl overflow-hidden rounded-xl p-8 text-center sm:p-12">
           <div
             aria-hidden
-            className="absolute inset-x-0 top-0 h-40 bg-[radial-gradient(ellipse_at_top,rgba(117,93,255,0.2),transparent_70%)]"
+            className="absolute inset-x-0 top-0 h-40 hidden"
           />
           <Search size={28} className="relative mx-auto text-cool" />
           <p className="relative mt-6 text-xs font-semibold uppercase tracking-[0.18em] text-accent">
             Error 404
           </p>
-          <h1 className="text-balance relative mt-4 text-4xl text-ink sm:text-5xl">
+          <h1 className="text-balance relative mt-4 text-3xl text-ink sm:text-4xl">
             This page is outside the build.
           </h1>
           <p className="relative mx-auto mt-5 max-w-lg text-base leading-7 text-ink-muted">

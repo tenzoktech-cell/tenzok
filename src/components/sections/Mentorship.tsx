@@ -59,7 +59,7 @@ function TrackCard({ track }: { track: Track }) {
       }`}
     >
       {track.featured && (
-        <span className="absolute -top-3 left-6 rounded-full bg-gradient-to-r from-cool to-accent px-3 py-1 text-xs font-semibold text-cool-ink">
+        <span className="absolute -top-3 left-6 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-ink">
           Most chosen
         </span>
       )}
@@ -108,7 +108,7 @@ export default function Mentorship() {
         copy="Code reviews, architecture, deployment, and the soft skills nobody teaches — on real work, not slide decks. Pick the track that matches where you actually are."
       />
 
-      <div className="mt-16 grid items-stretch gap-6 md:grid-cols-3">
+      <div className="mt-8 grid items-stretch gap-6 md:grid-cols-3">
         {TRACKS.map((track, i) => (
           <Reveal key={track.name} delay={i * 90} className="h-full">
             <TrackCard track={track} />

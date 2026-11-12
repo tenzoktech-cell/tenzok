@@ -44,7 +44,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
         {toasts.map((toast) => (
           <div
             key={toast.id}
-            className={`fade-up pointer-events-auto flex max-w-md items-center gap-3 rounded-2xl border px-4 py-3 text-sm text-ink shadow-2xl shadow-black/50 backdrop-blur-xl ${
+            className={`fade-up pointer-events-auto flex max-w-md items-center gap-3 rounded-2xl border px-4 py-3 text-sm text-ink shadow-sm shadow-ink/5 backdrop-blur-xl ${
               toast.kind === "success"
                 ? "border-cool/30 bg-surface-overlay/95"
                 : "border-red-400/30 bg-surface-overlay/95"
@@ -55,7 +55,7 @@ export function ToastProvider({ children }: { children: ReactNode }) {
                 <CircleCheck size={16} />
               </span>
             ) : (
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-red-500/10 text-red-400">
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-red-500/10 text-red-700">
                 <CircleX size={16} />
               </span>
             )}

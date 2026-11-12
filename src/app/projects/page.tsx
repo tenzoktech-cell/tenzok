@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, ArrowUpRight, Layers3, Search, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUpRight, Layers3, Search } from "lucide-react";
 import JsonLd from "@/components/JsonLd";
 import ProjectExplorer, { type ExplorerProject } from "@/components/ProjectExplorer";
 import StartJourneyButton from "@/components/StartJourneyModal";
@@ -82,14 +82,14 @@ export default function ProjectsIndexPage() {
         ]}
       />
 
-      <section className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-20">
+      <section className="relative overflow-hidden pt-28 pb-10 sm:pt-32 sm:pb-12">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-2xl"
+          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 hidden"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-2xl"
+          className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-cool/10 hidden"
         />
         <div
           aria-hidden
@@ -100,13 +100,13 @@ export default function ProjectsIndexPage() {
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(19rem,0.92fr)] lg:gap-14">
             <Reveal>
               <Eyebrow>Student project studio</Eyebrow>
-              <h1 className="mt-6 max-w-3xl text-[clamp(2.6rem,1.9rem+3vw,4.75rem)] leading-[0.98] text-ink">
+              <h1 className="mt-5 max-w-3xl text-[clamp(2.25rem,1.7rem+2.2vw,3.5rem)] leading-[1.02] text-ink">
                 Build a project you can{" "}
-                <span className="bg-gradient-to-r from-accent to-cool bg-clip-text text-transparent">
+                <span className="gradient-text">
                   explain, defend, and deploy.
                 </span>
               </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-ink-muted sm:text-lg">
+              <p className="mt-5 max-w-2xl text-base leading-7 text-ink-muted">
                 Pick a scoped brief, bring your department&rsquo;s problem statement, or
                 start with an idea. We turn it into a real engineering plan and build it
                 with you—never behind a black box.
@@ -121,15 +121,12 @@ export default function ProjectsIndexPage() {
             </Reveal>
 
             <Reveal delay={120}>
-              <div className="relative max-w-md overflow-hidden rounded-3xl border border-line bg-surface-raised p-5 shadow-2xl shadow-black/25 sm:p-6 lg:ml-auto">
+              <div className="relative max-w-md border-l-2 border-accent pl-6 lg:ml-auto">
                 <div
                   aria-hidden
-                  className="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cool/15 blur-2xl"
+                  className="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-cool/15 hidden"
                 />
-                <div className="relative flex items-center gap-3">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/30 bg-accent/10">
-                    <Sparkles size={19} className="text-accent" />
-                  </span>
+                <div className="relative">
                   <div>
                     <p className="text-sm font-medium text-ink">Built for the viva</p>
                     <p className="mt-0.5 text-xs text-ink-subtle">
@@ -138,13 +135,13 @@ export default function ProjectsIndexPage() {
                   </div>
                 </div>
 
-                <dl className="relative mt-5 grid grid-cols-3 gap-px overflow-hidden rounded-2xl border border-line bg-line">
+                <dl className="relative mt-5 grid grid-cols-3 gap-4 border-t border-line pt-4">
                   {STATS.map((stat) => (
-                    <div key={stat.label} className="flex flex-col bg-surface-overlay p-3 sm:p-4">
+                    <div key={stat.label} className="flex flex-col">
                       <dt className="order-2 mt-1 text-xs leading-snug text-ink-subtle">
                         {stat.label}
                       </dt>
-                      <dd className="order-1 text-xl font-medium tracking-tight text-ink sm:text-2xl">
+                      <dd className="order-1 font-display text-2xl text-ink sm:text-3xl">
                         {stat.value}
                       </dd>
                     </div>
@@ -176,7 +173,7 @@ export default function ProjectsIndexPage() {
           </Reveal>
         </div>
 
-        <Reveal delay={120} className="mt-12">
+        <Reveal delay={120} className="mt-8">
           <ProjectExplorer
             projects={EXPLORER_PROJECTS}
             domains={DOMAINS.map((domain) => ({
@@ -207,7 +204,7 @@ export default function ProjectsIndexPage() {
           </Reveal>
         </div>
 
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {DOMAINS.map((domain, index) => {
             const Icon = domain.icon;
             const mini = domain.projects.filter((project) => project.tier === "mini").length;
@@ -266,11 +263,11 @@ export default function ProjectsIndexPage() {
           <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-8 sm:p-10 lg:flex lg:items-center lg:justify-between lg:gap-10">
             <div
               aria-hidden
-              className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full bg-accent/15 blur-2xl"
+              className="pointer-events-none absolute -right-20 -top-28 h-80 w-80 rounded-full bg-accent/15 hidden"
             />
             <div className="relative max-w-2xl">
               <Eyebrow>Your own problem statement</Eyebrow>
-              <h2 className="mt-6 text-3xl leading-tight text-ink sm:text-4xl">
+              <h2 className="mt-4 text-2xl leading-tight text-ink sm:text-3xl">
                 Don&rsquo;t see the exact project you need?
               </h2>
               <p className="mt-4 text-base leading-relaxed text-ink-muted">

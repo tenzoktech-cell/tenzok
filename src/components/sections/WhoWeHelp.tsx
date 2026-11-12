@@ -56,13 +56,13 @@ export default function WhoWeHelp() {
         copy="We adjust the scope, pace, and collaboration model—not the standard of engineering."
       />
 
-      <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         {AUDIENCES.map((item, index) => {
           const Icon = item.icon;
           return (
             <Reveal key={item.title} delay={index * 60} className="h-full">
               <article className="premium-card premium-card-hover flex h-full flex-col rounded-3xl p-6">
-                <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-white/[0.04]">
+                <span className="flex h-11 w-11 items-center justify-center rounded-2xl border border-line bg-ink/[0.04]">
                   <Icon size={19} className="text-cool" />
                 </span>
                 <h3 className="mt-6 text-xl text-ink">{item.title}</h3>

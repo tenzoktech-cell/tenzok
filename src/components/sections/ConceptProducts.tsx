@@ -56,7 +56,7 @@ export default function ConceptProducts() {
         </Reveal>
       </div>
 
-      <div className="mt-14 grid gap-5 lg:grid-cols-3">
+      <div className="mt-8 grid gap-5 lg:grid-cols-3">
         {PRODUCTS.map((product, index) => {
           const Icon = product.icon;
           return (
@@ -77,7 +77,7 @@ export default function ConceptProducts() {
                       className="text-ink-subtle transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-accent"
                     />
                   </div>
-                  <h3 className="mt-5 text-2xl text-ink">{product.name}</h3>
+                  <h3 className="mt-4 text-xl text-ink">{product.name}</h3>
                   <p className="mt-2 text-sm font-medium text-ink-muted">{product.tagline}</p>
                   <p className="mt-4 flex-1 text-sm leading-6 text-ink-muted">{product.copy}</p>
                   <div className="mt-6 flex flex-wrap gap-2 border-t border-line pt-5">
@@ -100,10 +100,10 @@ export default function ConceptProducts() {
 function ProductPreview({ variant }: { variant: (typeof PRODUCTS)[number]["variant"] }) {
   return (
     <div className={"relative h-52 overflow-hidden border-b border-line bg-surface-overlay p-5 " + variant}>
-      <div aria-hidden className="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-accent/15 blur-2xl" />
-      <div aria-hidden className="absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-cool/10 blur-2xl" />
-      <div className="relative h-full rounded-2xl border border-white/10 bg-[#0b0d14]/90 p-4 shadow-2xl shadow-black/30">
-        <div className="flex items-center justify-between border-b border-white/10 pb-3">
+      <div aria-hidden className="absolute -right-12 -top-16 h-44 w-44 rounded-full bg-accent/15 hidden" />
+      <div aria-hidden className="absolute -bottom-20 left-8 h-40 w-40 rounded-full bg-cool/10 hidden" />
+      <div className="relative h-full rounded-2xl border border-ink/10 bg-surface-raised p-4 shadow-sm shadow-ink/5">
+        <div className="flex items-center justify-between border-b border-ink/10 pb-3">
           <div className="flex gap-1.5">
             <span className="h-2 w-2 rounded-full bg-red-300/70" />
             <span className="h-2 w-2 rounded-full bg-amber-300/70" />
@@ -114,14 +114,14 @@ function ProductPreview({ variant }: { variant: (typeof PRODUCTS)[number]["varia
         <div className="mt-4 grid grid-cols-[0.72fr_1.28fr] gap-3">
           <div className="space-y-2">
             <span className="block h-2 w-16 rounded-full bg-cool/40" />
-            <span className="block h-2 w-24 rounded-full bg-white/10" />
-            <span className="block h-2 w-20 rounded-full bg-white/10" />
-            <span className="block h-2 w-28 rounded-full bg-white/10" />
+            <span className="block h-2 w-24 rounded-full bg-ink/10" />
+            <span className="block h-2 w-20 rounded-full bg-ink/10" />
+            <span className="block h-2 w-28 rounded-full bg-ink/10" />
           </div>
           <div className="grid grid-cols-3 gap-2">
             <span className="h-16 rounded-xl border border-cool/20 bg-cool/10" />
             <span className="h-16 rounded-xl border border-accent/20 bg-accent/10" />
-            <span className="h-16 rounded-xl border border-white/10 bg-white/[0.04]" />
+            <span className="h-16 rounded-xl border border-ink/10 bg-ink/[0.04]" />
           </div>
         </div>
         <div className="mt-3 h-2 rounded-full bg-gradient-to-r from-cool/60 via-accent/70 to-transparent" />

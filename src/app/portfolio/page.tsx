@@ -69,7 +69,7 @@ export default function PortfolioPage() {
           <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-subtle">
             Representative briefs
           </p>
-          <h2 className="mt-5 text-3xl leading-[1.12] text-ink sm:text-4xl">
+          <h2 className="mt-4 text-2xl leading-[1.12] text-ink sm:text-3xl">
             Real scopes, stacks, and{" "}
             <span className="gradient-text">deliverables.</span>
           </h2>
@@ -79,7 +79,7 @@ export default function PortfolioPage() {
             presented as completed client work.
           </p>
         </div>
-        <div className="mt-12">
+        <div className="mt-8">
           <RepresentativeBriefs />
         </div>
       </Section>
@@ -89,7 +89,7 @@ export default function PortfolioPage() {
           <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-subtle">
             Engineering coverage
           </p>
-          <h2 className="mt-5 text-3xl leading-[1.12] text-ink sm:text-4xl">
+          <h2 className="mt-4 text-2xl leading-[1.12] text-ink sm:text-3xl">
             {DOMAINS.length} domains.{" "}
             <span className="gradient-text">
               One delivery standard.
@@ -100,7 +100,7 @@ export default function PortfolioPage() {
             for every domain.
           </p>
         </div>
-        <div className="mt-12">
+        <div className="mt-8">
           <CapabilityGrid />
         </div>
       </Section>

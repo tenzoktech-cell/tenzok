@@ -93,14 +93,14 @@ export default async function BlogPostPage({ params }: PostPageProps) {
       />
 
       <article>
-        <header className="relative overflow-hidden pt-32 pb-20 sm:pt-44 sm:pb-28">
+        <header className="relative overflow-hidden pt-28 pb-10 sm:pt-32 sm:pb-12">
           <div
             aria-hidden
-            className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-cool/10 blur-2xl"
+            className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-cool/10 hidden"
           />
           <div
             aria-hidden
-            className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-accent/10 blur-2xl"
+            className="pointer-events-none absolute -right-48 top-24 h-[38rem] w-[38rem] rounded-full bg-accent/10 hidden"
           />
           <Container className="relative">
             <Link
@@ -129,10 +129,10 @@ export default async function BlogPostPage({ params }: PostPageProps) {
                 </span>
               </div>
 
-              <h1 className="mt-7 text-[clamp(2.5rem,1.7rem+3.3vw,5rem)] leading-[1.02] text-ink">
+              <h1 className="mt-5 text-[clamp(2.25rem,1.7rem+2.2vw,3.5rem)] leading-[1.02] text-ink">
                 {post.title}
               </h1>
-              <p className="mt-7 max-w-3xl text-lg leading-relaxed text-ink-muted sm:text-xl">
+              <p className="mt-5 max-w-3xl text-base leading-7 text-ink-muted sm:text-lg">
                 {post.excerpt}
               </p>
               <div className="mt-8 flex flex-wrap gap-2">
@@ -150,14 +150,14 @@ export default async function BlogPostPage({ params }: PostPageProps) {
         </header>
 
         <Container>
-          <div className="grid grid-cols-1 gap-14 border-t border-line pt-12 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-20">
+          <div className="grid grid-cols-1 gap-12 border-t border-line pt-10 lg:grid-cols-[minmax(0,1fr)_260px] lg:gap-20">
             <div className="min-w-0 max-w-3xl">
               <ArticleBody body={post.body} />
 
               {post.faq.length > 0 && (
-                <section className="mt-24 border-t border-line pt-14">
+                <section className="mt-16 border-t border-line pt-10">
                   <Eyebrow>Frequently asked</Eyebrow>
-                  <h2 className="mt-6 text-3xl leading-tight text-ink sm:text-4xl">
+                  <h2 className="mt-4 text-2xl leading-tight text-ink sm:text-3xl">
                     Questions people actually ask
                   </h2>
                   <div className="mt-8 flex flex-col gap-3">
@@ -184,14 +184,14 @@ export default async function BlogPostPage({ params }: PostPageProps) {
                 </section>
               )}
 
-              <aside className="relative mt-24 overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-8 sm:p-10">
+              <aside className="relative mt-16 overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-6 sm:p-8">
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 blur-2xl"
+                  className="pointer-events-none absolute -right-20 -top-24 h-64 w-64 rounded-full bg-accent/15 hidden"
                 />
                 <div className="relative">
                   <Eyebrow>Apply it to your project</Eyebrow>
-                  <h2 className="mt-6 text-2xl leading-tight text-ink sm:text-3xl">
+                  <h2 className="mt-4 text-xl leading-tight text-ink sm:text-2xl">
                     Stuck on this in your own build?
                   </h2>
                   <p className="mt-4 max-w-xl text-base leading-relaxed text-ink-muted">
@@ -251,11 +251,11 @@ export default async function BlogPostPage({ params }: PostPageProps) {
       </article>
 
       {more.length > 0 && (
-        <Section bordered className="mt-24">
+        <Section compact bordered className="mt-16">
           <div className="flex flex-col gap-7 md:flex-row md:items-end md:justify-between">
             <div>
               <Eyebrow>Keep reading</Eyebrow>
-              <h2 className="mt-6 text-3xl leading-tight text-ink sm:text-4xl">
+              <h2 className="mt-4 text-2xl leading-tight text-ink sm:text-3xl">
                 Related engineering notes
               </h2>
             </div>

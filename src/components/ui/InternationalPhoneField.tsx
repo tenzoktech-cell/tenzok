@@ -127,7 +127,7 @@ export function InternationalPhoneField({
             setOpen((current) => !current);
             setQuery("");
           }}
-          className="flex min-w-[7.4rem] shrink-0 items-center justify-between gap-2 border-r border-line px-4 py-3.5 text-sm font-semibold text-ink transition-colors hover:bg-white/[0.04]"
+          className="flex min-w-[7.4rem] shrink-0 items-center justify-between gap-2 border-r border-line px-4 py-3.5 text-sm font-semibold text-ink transition-colors hover:bg-ink/[0.04]"
         >
           <span>
             {country} +{callingCode}
@@ -202,7 +202,7 @@ export function InternationalPhoneField({
           id={menuId}
           role="dialog"
           aria-label="Choose a country calling code"
-          className="absolute left-0 top-full z-50 mt-2 w-[min(22rem,calc(100vw-3rem))] overflow-hidden rounded-2xl border border-line-strong bg-surface-raised/98 p-2 shadow-2xl shadow-black/60 backdrop-blur-xl"
+          className="absolute left-0 top-full z-50 mt-2 w-[min(22rem,calc(100vw-3rem))] overflow-hidden rounded-2xl border border-line-strong bg-surface-raised/98 p-2 shadow-sm shadow-ink/5 backdrop-blur-xl"
         >
           <label htmlFor={searchId} className="sr-only">
             Search countries
@@ -242,7 +242,7 @@ export function InternationalPhoneField({
                     className={`flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left transition-colors ${
                       selected
                         ? "bg-accent/15 text-ink"
-                        : "text-ink-muted hover:bg-white/[0.05] hover:text-ink"
+                        : "text-ink-muted hover:bg-ink/[0.05] hover:text-ink"
                     }`}
                   >
                     <span className="w-8 text-xs font-bold tracking-[0.08em] text-cool">

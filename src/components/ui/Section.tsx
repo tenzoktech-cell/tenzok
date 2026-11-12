@@ -18,6 +18,8 @@ export function Container({
 interface SectionProps {
   id?: string;
   bordered?: boolean;
+  /** Tighter vertical rhythm for inner pages. */
+  compact?: boolean;
   className?: string;
   children: ReactNode;
 }
@@ -26,13 +28,14 @@ interface SectionProps {
 export function Section({
   id,
   bordered = false,
+  compact = true,
   className = "",
   children,
 }: SectionProps) {
   return (
     <section
       id={id}
-      className={`deferred-section relative scroll-mt-24 overflow-hidden py-24 md:py-32 ${
+      className={`deferred-section relative scroll-mt-24 overflow-hidden ${compact ? "py-14 md:py-20" : "py-24 md:py-32"} ${
         bordered ? "border-t border-line" : ""
       } ${className}`.trim()}
     >
@@ -51,9 +54,9 @@ export function Eyebrow({
 }) {
   return (
     <p
-      className={`flex items-center gap-3 text-xs font-semibold uppercase tracking-[0.18em] text-cool ${className}`.trim()}
+      className={`flex items-center gap-2.5 font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ink-muted ${className}`.trim()}
     >
-      <span aria-hidden className="h-px w-7 bg-gradient-to-r from-cool to-accent" />
+      <span aria-hidden className="h-1.5 w-1.5 bg-accent" />
       {children}
     </p>
   );

@@ -92,14 +92,14 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
 
   return (
     <div>
-      <div className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-5 shadow-2xl shadow-black/20 sm:p-7">
+      <div className="relative overflow-hidden rounded-3xl border border-line bg-surface-raised p-5 shadow-sm shadow-ink/5 sm:p-7">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cool/10 blur-2xl"
+          className="pointer-events-none absolute -right-24 -top-24 h-64 w-64 rounded-full bg-cool/10 hidden"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -bottom-28 left-1/4 h-56 w-56 rounded-full bg-accent/10 blur-2xl"
+          className="pointer-events-none absolute -bottom-28 left-1/4 h-56 w-56 rounded-full bg-accent/10 hidden"
         />
 
         <div className="relative">
@@ -296,7 +296,7 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
               <button
                 type="button"
                 onClick={() => setVisibleCount((count) => count + PAGE_SIZE)}
-                className="min-h-12 cursor-pointer rounded-full border border-line-strong bg-surface-overlay px-6 text-sm font-medium text-ink transition-colors hover:border-accent hover:text-accent"
+                className="min-h-12 cursor-pointer rounded-md border border-ink px-6 text-sm font-medium text-ink transition-colors hover:border-accent hover:text-accent"
               >
                 Load more projects ({Math.min(PAGE_SIZE, filtered.length - visibleCount)})
               </button>
@@ -314,7 +314,7 @@ export default function ProjectExplorer({ projects, domains }: ProjectExplorerPr
           <button
             type="button"
             onClick={resetFilters}
-            className="mt-6 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-full border border-line-strong bg-surface-overlay px-5 text-sm font-medium text-ink transition-colors hover:border-accent"
+            className="mt-6 inline-flex min-h-11 cursor-pointer items-center gap-2 rounded-md border border-ink px-5 text-sm font-medium text-ink transition-colors hover:border-accent"
           >
             <RotateCcw size={14} />
             Reset filters

@@ -4,8 +4,6 @@ import {
   Bot,
   Cloud,
   Code2,
-  FileCheck2,
-  GraduationCap,
   LayoutDashboard,
   Megaphone,
   Smartphone,
@@ -84,34 +82,19 @@ export default function AgencyServices() {
         copy="Tenzok brings strategy, design, engineering, deployment, and support into one delivery system—built for businesses first, with the same professional standard extended to student work."
       />
 
-      <div className="mt-14 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-8 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
         {BUSINESS.map((item, index) => {
-          const Icon = item.icon;
           return (
             <Reveal key={item.title} delay={(index % 3) * 60} className="h-full">
-              <article className="premium-card premium-card-hover group flex h-full flex-col rounded-3xl p-6 sm:p-7">
-                <div className="flex items-start justify-between">
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-white/10 bg-gradient-to-br from-cool/15 to-accent/15">
-                    <Icon size={21} className="text-cool" />
-                  </span>
-                  <span className="font-display text-sm font-semibold text-ink-subtle">
-                    0{index + 1}
-                  </span>
-                </div>
-                <h3 className="mt-7 text-xl text-ink">{item.title}</h3>
+              <article className="premium-card premium-card-hover group flex h-full flex-col rounded-3xl p-6">
+                <span className="font-mono text-xs text-accent">0{index + 1}</span>
+                <h3 className="mt-4 text-xl text-ink">{item.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-6 text-ink-muted">
                   {item.copy}
                 </p>
-                <div className="mt-6 flex flex-wrap gap-2">
-                  {item.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded-full border border-line bg-white/[0.025] px-2.5 py-1 text-[11px] text-ink-subtle"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                <p className="mt-6 border-t border-line pt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-subtle">
+                  {item.tags.join(" · ")}
+                </p>
               </article>
             </Reveal>
           );
@@ -121,10 +104,7 @@ export default function AgencyServices() {
       <Reveal delay={100}>
         <div className="premium-card mt-6 grid overflow-hidden rounded-3xl border border-accent/20 p-6 sm:p-8 lg:grid-cols-[0.85fr_1.15fr] lg:items-center lg:gap-12">
           <div>
-            <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-accent/25 bg-accent/12">
-              <GraduationCap size={20} className="text-accent" />
-            </span>
-            <p className="mt-5 text-xs font-semibold uppercase tracking-[0.16em] text-cool">
+            <p className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
               Student engineering
             </p>
             <h3 className="mt-3 max-w-md text-2xl leading-tight text-ink sm:text-3xl">
@@ -137,21 +117,19 @@ export default function AgencyServices() {
             </p>
             <Link
               href="/projects"
-              className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-full border border-cool/25 bg-cool/10 px-5 text-sm font-semibold text-cool transition-colors hover:bg-cool/15"
+              className="mt-6 inline-flex min-h-11 items-center gap-2 rounded-md border border-cool px-5 text-sm font-semibold text-cool transition-colors hover:bg-cool/15"
             >
               Explore student projects
               <ArrowUpRight size={15} />
             </Link>
           </div>
-          <div className="mt-8 grid gap-2.5 sm:grid-cols-2 lg:mt-0">
+          <div className="mt-8 grid gap-x-8 sm:grid-cols-2 lg:mt-0">
             {STUDENT.map((item) => (
               <div
                 key={item}
-                className="flex min-h-14 items-center gap-3 rounded-2xl border border-line bg-white/[0.025] px-4 py-3 transition-colors hover:border-accent/25 hover:bg-accent/[0.04]"
+                className="flex min-h-12 items-center gap-3 border-b border-line py-3"
               >
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-accent/10">
-                  <FileCheck2 size={15} className="text-accent" />
-                </span>
+                <span aria-hidden className="h-1.5 w-1.5 shrink-0 bg-accent" />
                 <p className="text-sm leading-5 text-ink-muted">{item}</p>
               </div>
             ))}

@@ -15,10 +15,10 @@ export default function CapabilityMarquee() {
   return (
     <section
       aria-label="Tenzok capabilities"
-      className="border-y border-line bg-surface-raised/55 py-4"
+      className="border-y border-line py-3.5"
     >
       <div className="capability-marquee-window overflow-hidden">
-        <div className="marquee-track flex min-w-max whitespace-nowrap text-xs font-semibold uppercase tracking-[0.2em] text-ink-subtle sm:text-sm">
+        <div className="marquee-track flex min-w-max whitespace-nowrap font-mono text-xs uppercase tracking-[0.14em] text-ink-subtle">
           <CapabilityGroup />
           <CapabilityGroup duplicate />
         </div>
@@ -36,9 +36,7 @@ function CapabilityGroup({ duplicate = false }: { duplicate?: boolean }) {
       {CAPABILITIES.map((item) => (
         <span key={item} className="inline-flex items-center gap-8 sm:gap-12">
           {item}
-          <span aria-hidden className="marquee-star text-cool">
-            ✦
-          </span>
+          <span aria-hidden className="text-accent">/</span>
         </span>
       ))}
     </div>

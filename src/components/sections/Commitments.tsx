@@ -57,7 +57,7 @@ export default function Commitments() {
         copy="We are young enough that we cannot yet show you a wall of client logos. So instead of asking you to take our word for it, here is what you can hold us to — in writing, on every single engagement."
       />
 
-      <div className="mt-16 grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
+      <div className="mt-8 grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2 lg:grid-cols-3">
         {COMMITMENTS.map((item, i) => {
           const Icon = item.icon;
           return (

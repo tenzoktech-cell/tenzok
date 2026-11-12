@@ -93,26 +93,26 @@ export default function ServicesIndexPage() {
         ]}
       />
 
-      <section className="relative overflow-hidden pt-28 pb-16 sm:pt-32 sm:pb-20">
+      <section className="relative overflow-hidden pt-28 pb-10 sm:pt-32 sm:pb-12">
         <div
           aria-hidden
-          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-2xl"
+          className="pointer-events-none absolute -left-40 top-0 h-[34rem] w-[34rem] rounded-full bg-accent/10 hidden"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-48 top-20 h-[38rem] w-[38rem] rounded-full bg-cool/10 blur-2xl"
+          className="pointer-events-none absolute -right-48 top-20 h-[38rem] w-[38rem] rounded-full bg-cool/10 hidden"
         />
         <Container className="relative">
           <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.08fr)_minmax(18rem,0.92fr)] lg:gap-14">
             <Reveal>
               <Eyebrow>Services</Eyebrow>
-              <h1 className="mt-6 max-w-3xl text-[clamp(2.6rem,1.9rem+3vw,4.75rem)] leading-[0.98] text-ink">
+              <h1 className="mt-5 max-w-3xl text-[clamp(2.25rem,1.7rem+2.2vw,3.5rem)] leading-[1.02] text-ink">
                 From the first brief to a{" "}
-                <span className="bg-gradient-to-r from-accent to-cool bg-clip-text text-transparent">
+                <span className="gradient-text">
                   confident launch.
                 </span>
               </h1>
-              <p className="mt-5 max-w-2xl text-base leading-7 text-ink-muted sm:text-lg">
+              <p className="mt-5 max-w-2xl text-base leading-7 text-ink-muted">
                 Product delivery for companies, guided engineering for students, and
                 growth support when the work is ready to meet the world. One team owns
                 the journey end to end.
@@ -121,7 +121,7 @@ export default function ServicesIndexPage() {
                 <StartJourneyButton size="lg" label="Start your project" />
                 <a
                   href="#services"
-                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-line-strong bg-surface-raised px-7 text-sm font-medium text-ink transition-colors hover:bg-surface-overlay sm:text-base"
+                  className="inline-flex min-h-12 items-center justify-center gap-2 rounded-md border border-ink px-7 text-sm font-medium text-ink transition-colors hover:bg-ink hover:text-surface sm:text-base"
                 >
                   Explore services
                   <ArrowRight size={16} />
@@ -130,35 +130,28 @@ export default function ServicesIndexPage() {
             </Reveal>
 
             <Reveal delay={120}>
-              <div className="relative max-w-md overflow-hidden rounded-3xl border border-line bg-surface-raised/80 p-6 shadow-2xl shadow-black/20 lg:ml-auto">
+              <div className="relative max-w-md border-l-2 border-accent pl-6 lg:ml-auto">
                 <div
                   aria-hidden
-                  className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-cool/12 blur-2xl"
+                  className="absolute -right-16 -top-20 h-48 w-48 rounded-full bg-cool/12 hidden"
                 />
-                <p className="relative text-xs font-semibold uppercase tracking-[0.16em] text-cool">
+                <p className="relative font-mono text-[11px] uppercase tracking-[0.14em] text-ink-subtle">
                   End-to-end delivery
                 </p>
                 <p className="relative mt-4 text-base leading-7 text-ink-muted">
                 From idea to launch — we handle every layer of your digital product.
                 </p>
-                <div className="relative mt-5 flex flex-wrap gap-2">
-                  {["Strategy", "Design", "Engineering", "Launch"].map((item) => (
-                    <span
-                      key={item}
-                      className="rounded-full border border-line bg-white/[0.035] px-3 py-1.5 text-xs text-ink-muted"
-                    >
-                      {item}
-                    </span>
-                  ))}
-                </div>
+                <p className="relative mt-4 font-mono text-[11px] uppercase tracking-[0.12em] text-ink">
+                  {["Strategy", "Design", "Engineering", "Launch"].join(" → ")}
+                </p>
               </div>
             </Reveal>
           </div>
         </Container>
       </section>
 
-      <Section id="capabilities" bordered>
-        <SectionHeading
+      <Section compact id="capabilities" bordered>
+        <SectionHeading compact
           eyebrow="What we do"
           title={
             <>
@@ -168,19 +161,19 @@ export default function ServicesIndexPage() {
           }
           copy="A focused team across product strategy, design, engineering, and growth — assembled around what you need next."
         />
-        <div className="mt-12 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {CAPABILITIES.map((item, index) => {
             const Icon = item.icon;
             return (
               <Reveal key={item.title} delay={(index % 4) * 60} className="h-full">
                 <Link
                   href={item.href}
-                  className="premium-card premium-card-hover group flex h-full min-h-64 flex-col rounded-2xl p-6"
+                  className="premium-card premium-card-hover group flex h-full min-h-52 flex-col rounded-2xl p-5"
                 >
                   <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-cool/20 bg-cool/10 text-cool">
                     <Icon size={20} />
                   </span>
-                  <h2 className="mt-8 text-xl leading-tight text-ink">{item.title}</h2>
+                  <h2 className="mt-6 text-lg leading-tight text-ink">{item.title}</h2>
                   <p className="mt-3 flex-1 text-sm leading-relaxed text-ink-muted">{item.copy}</p>
                   <span className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-ink-muted transition-colors group-hover:text-cool">
                     Explore capability <ArrowUpRight size={15} />
@@ -192,8 +185,8 @@ export default function ServicesIndexPage() {
         </div>
       </Section>
 
-      <Section id="services" bordered>
-        <SectionHeading
+      <Section compact id="services" bordered>
+        <SectionHeading compact
           eyebrow="Choose your starting point"
           title={
             <>
@@ -204,7 +197,7 @@ export default function ServicesIndexPage() {
           copy="Each service has its own pace and deliverables, but every engagement stays transparent, reviewable, and built for a clean handover."
         />
 
-        <div className="mt-12 grid gap-5 lg:grid-cols-2">
+        <div className="mt-8 grid gap-4 lg:grid-cols-2">
           {SERVICES.map((service, index) => {
             const Icon = service.icon;
             const featured = service.slug === "company-services";
@@ -256,7 +249,7 @@ export default function ServicesIndexPage() {
                     />
                   </div>
 
-                  <h2 className="mt-7 text-2xl text-ink sm:text-3xl">{service.name}</h2>
+                  <h2 className="mt-5 text-xl text-ink sm:text-2xl">{service.name}</h2>
                   <p className="mt-4 max-w-2xl flex-1 text-base leading-relaxed text-ink-muted">
                     {service.intro}
                   </p>
@@ -282,8 +275,8 @@ export default function ServicesIndexPage() {
         </div>
       </Section>
 
-      <Section bordered>
-        <SectionHeading
+      <Section compact bordered>
+        <SectionHeading compact
           align="center"
           eyebrow="The operating standard"
           title={
@@ -294,7 +287,7 @@ export default function ServicesIndexPage() {
           }
           copy="The format changes with the engagement. These three principles do not."
         />
-        <div className="mt-12 grid gap-4 md:grid-cols-3">
+        <div className="mt-8 grid gap-4 md:grid-cols-3">
           {PRINCIPLES.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -312,16 +305,16 @@ export default function ServicesIndexPage() {
         </div>
       </Section>
 
-      <Section bordered>
+      <Section compact bordered>
         <Reveal>
-          <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-8 text-center sm:p-10">
+          <div className="relative overflow-hidden rounded-3xl border border-accent/25 bg-surface-raised p-7 text-center sm:p-8">
             <div
               aria-hidden
-              className="pointer-events-none absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-accent/15 blur-2xl"
+              className="pointer-events-none absolute left-1/2 top-0 h-72 w-72 -translate-x-1/2 rounded-full bg-accent/15 hidden"
             />
             <div className="relative mx-auto max-w-2xl">
               <Eyebrow className="justify-center">Not sure where to begin?</Eyebrow>
-              <h2 className="mt-6 text-3xl leading-tight text-ink sm:text-4xl">
+              <h2 className="mt-4 text-2xl leading-tight text-ink sm:text-3xl">
                 Bring the goal. We&rsquo;ll map the route.
               </h2>
               <p className="mt-4 text-base leading-relaxed text-ink-muted">

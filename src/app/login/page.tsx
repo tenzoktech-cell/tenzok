@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowRight, CheckCircle2, ShieldCheck } from "lucide-react";
+import { ArrowRight, ShieldCheck } from "lucide-react";
 import { Container, Eyebrow } from "@/components/ui/Section";
 import { url } from "@/lib/site";
 import LoginForm from "./LoginForm";
@@ -18,75 +18,58 @@ export default function LoginPage() {
     <main id="main" tabIndex={-1} className="bg-surface">
       <LoginSessionRedirect />
 
-      <section className="relative isolate min-h-screen overflow-hidden pb-20 pt-28 sm:pt-36 lg:flex lg:items-center lg:py-36">
+      <section className="relative isolate overflow-hidden pb-16 pt-28 sm:pt-32 lg:pb-20">
         <div
           aria-hidden
-          className="pointer-events-none absolute left-[-12rem] top-24 -z-10 h-[30rem] w-[30rem] rounded-full bg-cool/10 blur-[120px]"
+          className="pointer-events-none absolute left-[-12rem] top-24 -z-10 h-[30rem] w-[30rem] rounded-full bg-cool/10 hidden"
         />
         <div
           aria-hidden
-          className="pointer-events-none absolute bottom-[-12rem] right-[-8rem] -z-10 h-[34rem] w-[34rem] rounded-full bg-accent/10 blur-[140px]"
+          className="pointer-events-none absolute bottom-[-12rem] right-[-8rem] -z-10 h-[34rem] w-[34rem] rounded-full bg-accent/10 hidden"
         />
 
         <Container className="max-w-7xl">
-          <div className="grid items-center gap-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(25rem,0.75fr)] lg:gap-20">
+          <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(25rem,0.75fr)] lg:gap-14">
             <div className="max-w-2xl">
               <Eyebrow>Client workspace</Eyebrow>
-              <h1 className="mt-7 text-[clamp(3rem,2rem+4vw,6.5rem)] font-semibold leading-[0.95] tracking-[-0.055em] text-ink">
+              <h1 className="mt-5 text-[clamp(2.25rem,1.7rem+2.2vw,3.5rem)] font-normal leading-[1.02] tracking-[-0.03em] text-ink">
                 Welcome back.
-                <span className="mt-2 block bg-gradient-to-r from-cool via-ink to-accent bg-clip-text text-transparent">
+                <span className="mt-1 block gradient-text">
                   Let&rsquo;s keep building.
                 </span>
               </h1>
-              <p className="mt-7 max-w-xl text-base leading-7 text-ink-muted sm:text-lg">
+              <p className="mt-5 max-w-xl text-base leading-7 text-ink-muted">
                 Return to your projects, profile, and conversations with the
                 Tenzok team from one focused workspace.
               </p>
-
-              <div className="mt-10 grid max-w-xl gap-3 sm:grid-cols-2">
-                {[
-                  "Manage active projects",
-                  "Continue team conversations",
-                  "Keep your profile current",
-                  "Track every next step",
-                ].map((item) => (
-                  <div
-                    key={item}
-                    className="flex items-center gap-3 rounded-2xl border border-line bg-surface-raised/50 px-4 py-3 text-sm text-ink-muted backdrop-blur"
-                  >
-                    <CheckCircle2 size={16} className="shrink-0 text-cool" />
-                    {item}
-                  </div>
-                ))}
-              </div>
             </div>
 
             <div className="relative">
               <div
                 aria-hidden
-                className="absolute -inset-px rounded-[2rem] bg-gradient-to-br from-cool/50 via-line to-accent/40 blur-[1px]"
+                className="absolute -inset-px rounded-xl bg-gradient-to-br from-cool/50 via-line to-accent/40 hidden"
               />
-              <div className="relative overflow-hidden rounded-[2rem] border border-white/10 bg-surface-raised/90 p-6 shadow-2xl shadow-black/40 backdrop-blur-xl sm:p-9">
-                <div className="flex items-center justify-between gap-4 border-b border-line pb-6">
+              <div className="relative overflow-hidden rounded-xl border border-ink/10 bg-surface-raised/90 p-6 sm:p-7">
+                <div className="flex items-center justify-between gap-4 border-b border-line pb-5">
                   <div>
                     <p className="text-xs font-medium uppercase tracking-[0.18em] text-cool">
                       Secure access
                     </p>
-                    <h2 className="mt-2 text-2xl font-semibold tracking-tight text-ink">
+                    <h2 className="mt-1.5 text-xl font-semibold tracking-tight text-ink">
                       Log in to Tenzok
                     </h2>
                   </div>
-                  <span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cool/30 bg-cool/10 text-cool">
+                  <span className="flex h-10 w-10 items-center justify-center rounded-2xl border border-cool/30 bg-cool/10 text-cool">
                     <ShieldCheck size={21} />
                   </span>
                 </div>
 
-                <div className="mt-7">
+                <div className="mt-5">
                   <LoginForm />
                 </div>
 
-                <div className="mt-7 border-t border-line pt-6">
-                  <Link href="/signup" className="group inline-flex min-h-12 w-full items-center justify-center gap-2 rounded-2xl border border-line-strong bg-surface-overlay px-5 text-sm font-medium text-ink transition-all hover:border-cool/40 hover:bg-surface hover:text-cool">
+                <div className="mt-5 border-t border-line pt-5">
+                  <Link href="/signup" className="group inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-md border border-ink px-5 text-sm font-medium text-ink transition-all hover:border-cool/40 hover:bg-surface hover:text-cool">
                     Create account
                     <ArrowRight size={16} className="transition-transform group-hover:translate-x-0.5" />
                   </Link>

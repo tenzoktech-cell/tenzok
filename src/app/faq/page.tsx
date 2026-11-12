@@ -56,7 +56,7 @@ export default function FaqPage() {
             <p className="text-xs font-medium uppercase tracking-[0.14em] text-ink-subtle">
               The practical details
             </p>
-            <h2 className="mt-5 text-3xl leading-[1.12] text-ink sm:text-4xl">
+            <h2 className="mt-4 text-2xl leading-[1.12] text-ink sm:text-3xl">
               No vague promises.{" "}
               <span className="gradient-text">
                 Just the working model.

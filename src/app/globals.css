@@ -6,40 +6,45 @@
    Next's CSS pipeline strips remote @imports and the font silently never loads. */
 
 @theme {
-  /* ---- Premium midnight surfaces ---- */
-  --color-surface: #08090d;
-  --color-surface-raised: #10121a;
-  --color-surface-overlay: #171a26;
+  /* ---- Warm paper surfaces ---- */
+  --color-surface: #f4f0e8;
+  --color-surface-raised: #fbf9f4;
+  --color-surface-overlay: #ebe5d9;
 
-  /* ---- Lines: two, no more ---- */
-  --color-line: #ffffff12;
-  --color-line-strong: #ffffff2b;
+  /* ---- Lines ---- */
+  --color-line: #1b17121c;
+  --color-line-strong: #1b171238;
 
-  /* ---- Ink: opaque, so contrast is the same on every surface ---- */
-  --color-ink: #f7f8fc;
-  --color-ink-muted: #aeb4c5;
-  --color-ink-subtle: #838aa0;
+  /* ---- Ink ---- */
+  --color-ink: #1b1712;
+  --color-ink-muted: #4f4840;
+  --color-ink-subtle: #6b6358;
 
-  /* ---- Product-studio blue / violet ---- */
-  --color-accent: #8b6cff;
-  --color-accent-strong: #7354ed;
-  --color-accent-ink: #ffffff;
+  /* ---- One accent: vermilion ---- */
+  --color-accent: #c8451c;
+  --color-accent-strong: #a83812;
+  --color-accent-ink: #fffaf3;
 
-  /* ---- Cool secondary: informational only (audience, domains) ---- */
-  --color-cool: #55c7ff;
-  --color-cool-ink: #06131d;
+  /* ---- Secondary: deep pine, informational only ---- */
+  --color-cool: #2c5a4a;
+  --color-cool-ink: #f6f2ea;
+
+  /* ---- Tighter, less "app-like" radii ---- */
+  --radius-xl: 0.5rem;
+  --radius-2xl: 0.625rem;
+  --radius-3xl: 0.625rem;
 
   /* ---- Type ---- */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
-    system-ui, sans-serif;
-  --font-hero: var(--font-space-grotesk), var(--font-inter), ui-sans-serif,
-    system-ui, sans-serif;
+  --font-sans: ui-sans-serif, system-ui, sans-serif;
+  --font-display: ui-serif, Georgia, serif;
+  --font-hero: ui-serif, Georgia, serif;
+  --font-brand: var(--font-brand-face), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, monospace;
 }
 
 @layer base {
   :root {
-    color-scheme: dark;
+    color-scheme: light;
   }
 
   * {
@@ -49,9 +54,6 @@
   body {
     font-family: var(--font-sans);
     background-color: var(--color-surface);
-    background-image:
-      radial-gradient(circle at 8% -10%, rgb(93 79 255 / 0.13), transparent 32rem),
-      radial-gradient(circle at 92% 4%, rgb(38 167 255 / 0.09), transparent 30rem);
     color: var(--color-ink);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -61,47 +63,45 @@
   h2,
   h3 {
     font-family: var(--font-display);
+    font-optical-sizing: auto;
   }
 
   h1,
   h2 {
-    font-weight: 650;
-    letter-spacing: -0.045em;
+    font-weight: 500;
+    letter-spacing: -0.025em;
   }
 
-  /* Main page titles share the homepage hero's Space Grotesk identity. */
   h1 {
     font-family: var(--font-hero);
-    font-weight: 600;
-    letter-spacing: -0.055em;
+    font-weight: 400;
+    letter-spacing: -0.03em;
   }
 
   h3,
   h4 {
-    font-weight: 600;
-    letter-spacing: -0.025em;
+    font-weight: 500;
+    letter-spacing: -0.01em;
   }
 
   ::selection {
-    background: color-mix(in srgb, var(--color-accent) 35%, transparent);
-    color: #ffffff;
+    background: var(--color-accent);
+    color: var(--color-accent-ink);
   }
 
   details > summary::-webkit-details-marker {
     display: none;
   }
 
-  /* Two-tone: over photography no single-colour ring can be guaranteed
-     contrast, so one of the two bands always reads. */
   a:focus-visible,
   button:focus-visible,
   input:focus-visible,
   select:focus-visible,
   textarea:focus-visible,
   [tabindex]:not([tabindex="-1"]):focus-visible {
-    outline: 2px solid #ffffff;
-    outline-offset: 2px;
-    box-shadow: 0 0 0 5px color-mix(in srgb, var(--color-accent) 90%, transparent);
+    outline: 2px solid var(--color-ink);
+    outline-offset: 3px;
+    box-shadow: none;
     border-radius: 4px;
   }
 
@@ -117,9 +117,9 @@
   left: 1rem;
   top: -100%;
   z-index: 200;
-  border-radius: 9999px;
-  background: var(--color-accent);
-  color: var(--color-accent-ink);
+  border-radius: 4px;
+  background: var(--color-ink);
+  color: var(--color-surface);
   padding: 0.75rem 1.25rem;
   font-size: 0.875rem;
   font-weight: 500;
@@ -134,72 +134,58 @@
 /* Shared premium surfaces                                           */
 /* ---------------------------------------------------------------- */
 
+/* Former gradient headline accent: now an italic serif in the accent. */
 .gradient-text {
-  background: linear-gradient(120deg, #ffffff 8%, #9bd8ff 46%, #ad8cff 88%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
+  color: var(--color-accent);
+  font-style: italic;
+  font-weight: inherit;
 }
 
 .gradient-border {
   position: relative;
-  isolation: isolate;
-}
-
-.gradient-border::before {
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  padding: 1px;
-  background: linear-gradient(
-    135deg,
-    rgb(111 168 255 / 0.65),
-    rgb(143 91 255 / 0.32),
-    transparent 72%
-  );
-  content: "";
-  pointer-events: none;
-  -webkit-mask:
-    linear-gradient(#000 0 0) content-box,
-    linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-  mask-composite: exclude;
 }
 
 .premium-card {
   border: 1px solid var(--color-line);
-  background:
-    linear-gradient(145deg, rgb(255 255 255 / 0.055), transparent 55%),
-    color-mix(in srgb, var(--color-surface-raised) 92%, transparent);
-  box-shadow:
-    0 16px 42px rgb(0 0 0 / 0.2),
-    inset 0 1px 0 rgb(255 255 255 / 0.035);
+  background: var(--color-surface-raised);
+  box-shadow: none;
 }
 
 .premium-card-hover {
   transition:
-    border-color 180ms ease,
-    background-color 180ms ease,
-    transform 180ms ease,
-    box-shadow 180ms ease;
+    border-color 160ms ease,
+    background-color 160ms ease;
 }
 
 .premium-card-hover:hover {
-  border-color: color-mix(in srgb, var(--color-accent) 42%, var(--color-line));
-  box-shadow:
-    0 20px 50px rgb(0 0 0 / 0.28),
-    0 0 28px rgb(112 82 255 / 0.06);
-  transform: translateY(-3px);
+  border-color: var(--color-ink);
+  background: #fffdf8;
 }
 
+/* Former glowing grid: a quiet ruled-paper texture. */
 .page-grid {
-  background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.035) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.035) 1px, transparent 1px);
-  background-size: 72px 72px;
-  mask-image: linear-gradient(to bottom, #000, transparent 92%);
-  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 92%);
+  background-image: linear-gradient(
+    to bottom,
+    rgb(27 23 18 / 0.045) 1px,
+    transparent 1px
+  );
+  background-size: 100% 2.25rem;
+  mask-image: linear-gradient(to bottom, #000, transparent 85%);
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 85%);
+}
+
+/* Inverted ink block (footer): same utilities, swapped tokens. */
+.theme-ink {
+  --color-surface: #1b1712;
+  --color-surface-raised: #24201a;
+  --color-surface-overlay: #2e2922;
+  --color-line: #f4f0e81f;
+  --color-line-strong: #f4f0e83d;
+  --color-ink: #f4f0e8;
+  --color-ink-muted: #c9c1b4;
+  --color-ink-subtle: #9a9184;
+  --color-accent: #e8653a;
+  --color-cool: #9cc7b5;
 }
 
 .text-balance {
@@ -207,9 +193,7 @@
 }
 
 .premium-scrollbar {
-  scrollbar-color:
-    color-mix(in srgb, var(--color-accent) 62%, var(--color-ink-subtle))
-    transparent;
+  scrollbar-color: var(--color-ink-subtle) transparent;
   scrollbar-width: thin;
 }
 
@@ -225,18 +209,11 @@
 .premium-scrollbar::-webkit-scrollbar-thumb {
   border: 2px solid transparent;
   border-radius: 9999px;
-  background:
-    linear-gradient(
-        180deg,
-        color-mix(in srgb, var(--color-cool) 72%, var(--color-accent)),
-        var(--color-accent)
-      )
-      padding-box;
+  background: var(--color-ink-subtle) padding-box;
 }
 
 .premium-scrollbar::-webkit-scrollbar-thumb:hover {
-  background:
-    linear-gradient(180deg, var(--color-cool), var(--color-accent)) padding-box;
+  background: var(--color-ink) padding-box;
 }
 
 .deferred-section {

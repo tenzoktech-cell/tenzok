@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronDown, LogOut, Menu, UserRound, X } from "lucide-react";
+import { ArrowRight, ChevronDown, LogOut, Menu, UserRound, X } from "lucide-react";
 import { useAuth } from "@/components/auth/AuthProvider";
 import { PROJECTS_MENU, SERVICES_MENU } from "./nav-links";
 import TenzokLogo from "./TenzokLogo";
@@ -12,9 +12,9 @@ import { Button, ButtonLink } from "./ui/Button";
 /* The floating centre pill group. min-h-11 keeps every item at a 44px tap
    target — the old version was 32px, which fails at the md breakpoint (iPad). */
 const PILL =
-  "inline-flex min-h-11 items-center gap-1.5 rounded-full px-3.5 text-[13px] font-medium transition-colors";
-const PILL_ACTIVE = `${PILL} bg-white/[0.1] text-white`;
-const PILL_INACTIVE = `${PILL} text-ink-muted hover:bg-white/[0.06] hover:text-ink`;
+  "inline-flex min-h-10 items-center gap-1.5 rounded-full px-4 text-[13px] font-medium transition-colors";
+const PILL_ACTIVE = `${PILL} bg-ink text-surface`;
+const PILL_INACTIVE = `${PILL} text-ink-muted hover:bg-ink/[0.05] hover:text-ink`;
 
 /** Disclosure navigation: plain links behind an aria-expanded toggle.
  *  Deliberately NOT role="menu" — these are navigation links, and menuitem
@@ -129,7 +129,7 @@ export default function TenzokNav() {
       ref={navRef}
       className={`fixed inset-x-0 top-0 z-60 border-b px-4 py-3 transition-colors duration-300 sm:px-6 ${
         scrolled || menuOpen || openId
-          ? "border-line bg-surface/95 shadow-[0_12px_30px_rgba(0,0,0,0.2)] backdrop-blur-sm"
+          ? "border-line bg-surface/80 shadow-[0_1px_0_rgba(27,23,18,0.04)] backdrop-blur-md"
           : "border-transparent bg-transparent"
       }`}
     >
@@ -140,15 +140,15 @@ export default function TenzokNav() {
           aria-label="Tenzok — home"
           className="flex min-h-11 items-center gap-2.5"
         >
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] shadow-lg shadow-black/20">
+          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-ink text-surface">
             <TenzokLogo size={20} />
           </span>
-          <span className="font-display text-xl font-bold tracking-[-0.04em] text-ink">
+          <span className="font-brand text-xl font-bold tracking-[-0.04em] text-ink">
             Tenzok
           </span>
         </Link>
 
-        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-0.5 rounded-full border border-white/10 bg-white/[0.045] p-1 backdrop-blur-sm xl:flex">
+        <div className="absolute left-1/2 hidden -translate-x-1/2 items-center gap-0.5 rounded-full border border-line bg-surface-raised/80 p-1 shadow-[0_1px_2px_rgba(27,23,18,0.05)] xl:flex">
           <Link
             href="/"
             onClick={closeAll}
@@ -165,16 +165,18 @@ export default function TenzokNav() {
             return (
               <div
                 key={menu.id}
-                className={`inline-flex min-h-11 items-center rounded-full transition-colors ${
+                className={`inline-flex min-h-10 items-center rounded-full transition-colors ${
                   active
-                    ? "bg-white/[0.1] text-white"
-                    : "text-ink-muted hover:bg-white/[0.06] hover:text-ink"
+                    ? "bg-ink text-surface"
+                    : open
+                      ? "bg-ink/[0.05] text-ink"
+                      : "text-ink-muted hover:bg-ink/[0.05] hover:text-ink"
                 }`}
               >
                 <Link
                   href={menu.base}
                   onClick={closeAll}
-                  className="flex min-h-11 items-center rounded-l-full pl-3.5 pr-1 text-[13px] font-medium"
+                  className="flex min-h-10 items-center rounded-l-full pl-4 pr-1 text-[13px] font-medium"
                 >
                   {menu.label}
                 </Link>
@@ -187,7 +189,7 @@ export default function TenzokNav() {
                   aria-controls={`${menu.id}-panel`}
                   aria-label={`${open ? "Hide" : "Show"} ${menu.label} menu`}
                   onClick={() => setOpenId(open ? null : menu.id)}
-                    className="flex min-h-11 cursor-pointer items-center rounded-r-full pl-0.5 pr-3"
+                    className="flex min-h-10 cursor-pointer items-center rounded-r-full pl-0.5 pr-3"
                 >
                   <ChevronDown
                     size={14}
@@ -224,7 +226,7 @@ export default function TenzokNav() {
               className="absolute left-1/2 top-full hidden -translate-x-1/2 xl:block"
             >
               <div
-                className={`premium-card mt-2 rounded-3xl p-2 shadow-2xl shadow-black/70 ${
+                className={`premium-card mt-2 rounded-3xl p-2 shadow-sm shadow-ink/5 ${
                   twoColumn ? "w-[38rem]" : "w-72"
                 }`}
               >
@@ -238,7 +240,7 @@ export default function TenzokNav() {
                       key={id}
                       href={`${menu.base}/${id}`}
                       onClick={closeAll}
-                      className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-white/[0.06] hover:text-ink"
+                      className="flex min-h-11 items-center gap-3 rounded-xl px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-ink/[0.06] hover:text-ink"
                     >
                       <Icon size={15} className="shrink-0 text-ink-subtle" />
                       <span className="truncate">{label}</span>
@@ -248,7 +250,7 @@ export default function TenzokNav() {
                 <Link
                   href={menu.base}
                   onClick={closeAll}
-                  className="mt-1 flex min-h-11 items-center rounded-xl border-t border-line px-3 text-sm font-semibold text-cool transition-colors hover:bg-white/[0.06]"
+                  className="mt-1 flex min-h-11 items-center rounded-xl border-t border-line px-3 text-sm font-semibold text-cool transition-colors hover:bg-ink/[0.06]"
                 >
                   View all {menu.label.replace("Our ", "").toLowerCase()}
                 </Link>
@@ -269,15 +271,15 @@ export default function TenzokNav() {
               aria-label="Loading account"
               className="flex min-h-11 w-[19rem] items-center justify-end gap-2"
             >
-              <span className="h-3 w-24 animate-pulse rounded-full bg-white/[0.08]" />
-              <span className="h-11 w-24 animate-pulse rounded-full bg-white/[0.08]" />
-              <span className="h-11 w-20 animate-pulse rounded-full bg-white/[0.05]" />
+              <span className="h-3 w-24 animate-pulse rounded-full bg-ink/[0.08]" />
+              <span className="h-11 w-24 animate-pulse rounded-full bg-ink/[0.08]" />
+              <span className="h-11 w-20 animate-pulse rounded-full bg-ink/[0.05]" />
             </div>
           ) : user ? (
-            <div className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.045] p-1.5 shadow-[0_10px_30px_rgba(0,0,0,0.16)]">
+            <div className="flex items-center gap-2 rounded-full border border-ink/10 bg-ink/[0.045] p-1.5 shadow-none">
               <span
                 aria-hidden
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cool/30 bg-gradient-to-br from-cool/25 to-accent/25 text-xs font-bold text-ink"
+                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cool/30 bg-accent/10 text-xs font-bold text-ink"
               >
                 {accountInitial}
               </span>
@@ -305,18 +307,31 @@ export default function TenzokNav() {
                 onClick={signOut}
                 aria-label="Sign out"
                 title="Sign out"
-                className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-red-400/25 bg-red-500/10 text-red-300 transition-colors hover:bg-red-500/20 hover:text-red-100"
+                className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-red-400/25 bg-red-500/10 text-red-700 transition-colors hover:bg-red-500/20 hover:text-red-800"
               >
                 <LogOut size={17} strokeWidth={2.25} />
               </button>
             </div>
           ) : (
             <>
-              <ButtonLink href="/login" onClick={closeAll} variant="inverse">
+              <ButtonLink
+                href="/login"
+                onClick={closeAll}
+                variant="ghost"
+                className="min-h-10! rounded-full! px-4! text-[13px]!"
+              >
                 Login
               </ButtonLink>
-              <ButtonLink href="/contact" onClick={closeAll}>
+              <ButtonLink
+                href="/contact"
+                onClick={closeAll}
+                className="group min-h-10! rounded-full! pl-5! pr-4! text-[13px]!"
+              >
                 Start Your Project
+                <ArrowRight
+                  size={15}
+                  className="transition-transform group-hover:translate-x-0.5"
+                />
               </ButtonLink>
             </>
           )}
@@ -328,14 +343,14 @@ export default function TenzokNav() {
           aria-label={menuOpen ? "Close menu" : "Open menu"}
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((o) => !o)}
-          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-ink transition-colors hover:bg-white/10 xl:hidden"
+          className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-ink transition-colors hover:bg-ink/10 xl:hidden"
         >
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </div>
 
       {menuOpen && (
-        <div className="premium-card absolute inset-x-4 top-full mt-2 flex max-h-[calc(100dvh-6rem)] flex-col overflow-y-auto overscroll-contain rounded-3xl !bg-surface p-3 shadow-2xl shadow-black/70 backdrop-blur-xl xl:hidden">
+        <div className="premium-card absolute inset-x-4 top-full mt-2 flex max-h-[calc(100dvh-6rem)] flex-col overflow-y-auto overscroll-contain rounded-3xl !bg-surface p-3 shadow-sm shadow-ink/5 backdrop-blur-xl xl:hidden">
           <Link
             href="/"
             onClick={closeAll}
@@ -409,8 +424,8 @@ export default function TenzokNav() {
               aria-label="Loading account"
               className="mt-3 grid gap-2 px-1"
             >
-              <span className="h-4 w-32 animate-pulse rounded-full bg-white/[0.08]" />
-              <span className="h-12 w-full animate-pulse rounded-full bg-white/[0.08]" />
+              <span className="h-4 w-32 animate-pulse rounded-full bg-ink/[0.08]" />
+              <span className="h-12 w-full animate-pulse rounded-full bg-ink/[0.08]" />
             </div>
           ) : user ? (
             <>
