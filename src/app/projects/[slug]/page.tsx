@@ -255,7 +255,7 @@ export default async function DomainPage({
             <ArrowRight size={15} />
           </ButtonLink>
         </div>
-        <div className="mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mobile-rail mt-10 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
           {others.map((other) => {
             const OtherIcon = other.icon;
             return (

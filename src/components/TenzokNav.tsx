@@ -127,7 +127,7 @@ export default function TenzokNav() {
   return (
     <nav
       ref={navRef}
-      className={`fixed inset-x-0 top-0 z-60 border-b px-4 py-3 transition-colors duration-300 sm:px-6 ${
+      className={`fixed inset-x-0 top-0 ${menuOpen ? "z-[85]" : "z-60"} border-b px-4 py-3 transition-colors duration-300 sm:px-6 ${
         scrolled || menuOpen || openId
           ? "border-line bg-surface/80 shadow-[0_1px_0_rgba(27,23,18,0.04)] backdrop-blur-md"
           : "border-transparent bg-transparent"
@@ -350,24 +350,26 @@ export default function TenzokNav() {
       </div>
 
       {menuOpen && (
-        <div className="premium-card absolute inset-x-4 top-full mt-2 flex max-h-[calc(100dvh-6rem)] flex-col overflow-y-auto overscroll-contain rounded-3xl !bg-surface p-3 shadow-sm shadow-ink/5 backdrop-blur-xl xl:hidden">
+        <div className="absolute inset-x-0 top-full flex h-[calc(100dvh-68px)] flex-col overflow-y-auto overscroll-contain border-t border-line bg-surface px-5 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-2 xl:hidden">
           <Link
             href="/"
             onClick={closeAll}
-            className="flex min-h-12 items-center rounded-xl px-4 text-sm text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
+            aria-current={isActive("/") ? "page" : undefined}
+            className="flex min-h-14 items-center justify-between border-b border-line font-display text-2xl text-ink transition-colors hover:text-accent"
           >
             Home
+            {isActive("/") && <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-accent" />}
           </Link>
 
           {DROPDOWNS.map((menu) => {
             const open = mobileOpenId === menu.id;
             return (
               <div key={menu.id}>
-                <div className="flex items-center">
+                <div className="flex items-center border-b border-line">
                   <Link
                     href={menu.base}
                     onClick={closeAll}
-                    className="flex min-h-12 flex-1 items-center rounded-xl px-4 text-sm text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
+                    className="flex min-h-14 flex-1 items-center font-display text-2xl text-ink transition-colors hover:text-accent"
                   >
                     {menu.label}
                   </Link>
@@ -377,10 +379,10 @@ export default function TenzokNav() {
                     aria-controls={`${menu.id}-mobile-panel`}
                     aria-label={`${open ? "Hide" : "Show"} ${menu.label} menu`}
                     onClick={() => setMobileOpenId(open ? null : menu.id)}
-                    className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-ink-subtle hover:text-ink"
+                    className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-line text-ink-muted transition-colors hover:bg-ink/[0.05] hover:text-ink"
                   >
                     <ChevronDown
-                      size={15}
+                      size={16}
                       className={`transition-transform duration-200 ${open ? "rotate-180" : ""}`}
                     />
                   </button>
@@ -388,14 +390,14 @@ export default function TenzokNav() {
                 {open && (
                   <div
                     id={`${menu.id}-mobile-panel`}
-                    className="ml-4 flex flex-col border-l border-line pl-3"
+                    className="grid grid-cols-1 gap-0.5 border-b border-line py-2 min-[420px]:grid-cols-2"
                   >
                     {menu.items.map(({ id, label, icon: Icon }) => (
                       <Link
                         key={id}
                         href={`${menu.base}/${id}`}
                         onClick={closeAll}
-                        className="flex min-h-11 items-center gap-2.5 rounded-xl px-3 text-sm font-medium text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
+                        className="flex min-h-11 items-center gap-2.5 rounded-lg px-2 text-sm text-ink-muted transition-colors hover:bg-ink/[0.04] hover:text-ink"
                       >
                         <Icon size={14} className="shrink-0 text-ink-subtle" />
                         {label}
@@ -412,9 +414,11 @@ export default function TenzokNav() {
               key={item.href}
               href={item.href}
               onClick={closeAll}
-              className="flex min-h-12 items-center rounded-xl px-4 text-sm text-ink-muted transition-colors hover:bg-surface-raised hover:text-ink"
+              aria-current={isActive(item.href) ? "page" : undefined}
+              className="flex min-h-14 items-center justify-between border-b border-line font-display text-2xl text-ink transition-colors hover:text-accent"
             >
               {item.label}
+              {isActive(item.href) && <span aria-hidden className="h-1.5 w-1.5 rounded-full bg-accent" />}
             </Link>
           ))}
 
@@ -422,14 +426,14 @@ export default function TenzokNav() {
             <div
               role="status"
               aria-label="Loading account"
-              className="mt-3 grid gap-2 px-1"
+              className="mt-auto grid gap-2 pt-8"
             >
               <span className="h-4 w-32 animate-pulse rounded-full bg-ink/[0.08]" />
               <span className="h-12 w-full animate-pulse rounded-full bg-ink/[0.08]" />
             </div>
           ) : user ? (
             <>
-              <p className="mt-3 px-4 text-sm text-ink-muted">
+              <p className="mt-auto pt-8 text-sm text-ink-muted">
                 Welcome, <span className="font-medium text-ink">{displayName}</span>
               </p>
               <ButtonLink
@@ -454,23 +458,26 @@ export default function TenzokNav() {
             </>
           ) : (
             <>
-              <ButtonLink
-                href="/login"
-                onClick={closeAll}
-                variant="inverse"
-                size="lg"
-                className="mt-2 w-full"
-              >
-                Login
-              </ButtonLink>
-              <ButtonLink
-                href="/contact"
-                onClick={closeAll}
-                size="lg"
-                className="mt-2 w-full"
-              >
-                Start Your Project
-              </ButtonLink>
+              <div className="mt-auto grid gap-2.5 pt-8">
+                <ButtonLink
+                  href="/contact"
+                  onClick={closeAll}
+                  size="lg"
+                  className="w-full rounded-full!"
+                >
+                  Start Your Project
+                  <ArrowRight size={16} />
+                </ButtonLink>
+                <ButtonLink
+                  href="/login"
+                  onClick={closeAll}
+                  variant="secondary"
+                  size="lg"
+                  className="w-full rounded-full!"
+                >
+                  Login
+                </ButtonLink>
+              </div>
             </>
           )}
         </div>

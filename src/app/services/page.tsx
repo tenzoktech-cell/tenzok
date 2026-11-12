@@ -161,7 +161,7 @@ export default function ServicesIndexPage() {
           }
           copy="A focused team across product strategy, design, engineering, and growth — assembled around what you need next."
         />
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mobile-rail mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {CAPABILITIES.map((item, index) => {
             const Icon = item.icon;
             return (
@@ -197,7 +197,7 @@ export default function ServicesIndexPage() {
           copy="Each service has its own pace and deliverables, but every engagement stays transparent, reviewable, and built for a clean handover."
         />
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-2">
+        <div className="mobile-rail mt-8 grid gap-4 lg:grid-cols-2">
           {SERVICES.map((service, index) => {
             const Icon = service.icon;
             const featured = service.slug === "company-services";
@@ -287,7 +287,7 @@ export default function ServicesIndexPage() {
           }
           copy="The format changes with the engagement. These three principles do not."
         />
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
+        <div className="mobile-rail mt-8 grid gap-4 md:grid-cols-3">
           {PRINCIPLES.map((item, index) => {
             const Icon = item.icon;
             return (

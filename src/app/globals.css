@@ -188,6 +188,32 @@
   --color-cool: #9cc7b5;
 }
 
+/* Phone-only swipe row: cards sit side by side and snap, instead of
+   stacking into a very long column. All content stays in the page. */
+@media (max-width: 767px) {
+  .mobile-rail {
+    display: flex;
+    gap: 0.75rem;
+    margin-inline: -1.25rem;
+    padding-inline: 1.25rem;
+    padding-bottom: 0.25rem;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: 1.25rem;
+    scrollbar-width: none;
+  }
+
+  .mobile-rail::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mobile-rail > * {
+    flex: 0 0 82%;
+    scroll-snap-align: start;
+  }
+}
+
 .text-balance {
   text-wrap: balance;
 }

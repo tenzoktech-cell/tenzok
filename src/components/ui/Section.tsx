@@ -35,7 +35,7 @@ export function Section({
   return (
     <section
       id={id}
-      className={`deferred-section relative scroll-mt-24 overflow-hidden ${compact ? "py-14 md:py-20" : "py-24 md:py-32"} ${
+      className={`deferred-section relative scroll-mt-24 overflow-hidden ${compact ? "py-12 md:py-20" : "py-24 md:py-32"} ${
         bordered ? "border-t border-line" : ""
       } ${className}`.trim()}
     >

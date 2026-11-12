@@ -52,7 +52,7 @@ export default function InsightsFaq() {
           </Reveal>
         </div>
 
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+        <div className="mobile-rail mt-8 grid gap-4 lg:grid-cols-3">
           {posts.map((post, index) => (
             <Reveal key={post.slug} delay={index * 60} className="h-full">
               <Link
@@ -69,7 +69,7 @@ export default function InsightsFaq() {
                     className="transition-colors group-hover:text-accent"
                   />
                 </div>
-                <h3 className="mt-8 text-xl leading-snug text-ink">{post.title}</h3>
+                <h3 className="mt-6 text-lg leading-snug text-ink sm:mt-8 sm:text-xl">{post.title}</h3>
                 <p className="mt-3 flex-1 text-sm leading-6 text-ink-muted">
                   {post.excerpt}
                 </p>
@@ -87,7 +87,7 @@ export default function InsightsFaq() {
       </Section>
 
       <Section bordered>
-        <div className="grid gap-14 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
+        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20">
           <div>
             <SectionHeading
               eyebrow="Frequently asked"
@@ -111,7 +111,7 @@ export default function InsightsFaq() {
             {FAQS.map((item) => (
               <Reveal key={item.q}>
                 <details className="group">
-                  <summary className="flex min-h-20 cursor-pointer list-none items-center justify-between gap-5 py-5 text-left">
+                  <summary className="flex min-h-16 cursor-pointer list-none items-center justify-between gap-4 py-4 text-left sm:min-h-20 sm:py-5">
                     <span className="font-display text-base font-semibold text-ink sm:text-lg">
                       {item.q}
                     </span>
@@ -122,7 +122,7 @@ export default function InsightsFaq() {
                       />
                     </span>
                   </summary>
-                  <p className="max-w-2xl pb-6 pr-12 text-sm leading-7 text-ink-muted">
+                  <p className="max-w-2xl pb-5 pr-4 text-sm leading-7 text-ink-muted sm:pr-12">
                     {item.a}
                   </p>
                 </details>

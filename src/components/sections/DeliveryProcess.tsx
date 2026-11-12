@@ -38,7 +38,7 @@ const STEPS = [
 export default function DeliveryProcess() {
   return (
     <Section id="process" className="theme-ink bg-surface text-ink">
-      <div className="grid gap-14 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
+      <div className="grid gap-8 lg:grid-cols-[0.75fr_1.25fr] lg:gap-20">
         <SectionHeading
           eyebrow="How we work"
           title={
@@ -53,7 +53,7 @@ export default function DeliveryProcess() {
         <ol className="grid gap-px overflow-hidden rounded-3xl border border-line bg-line sm:grid-cols-2">
           {STEPS.map((step, index) => (
             <Reveal key={step.number} delay={(index % 2) * 50} className="h-full">
-              <li className="group flex h-full gap-5 bg-surface-raised p-6 transition-colors hover:bg-surface-overlay sm:p-7">
+              <li className="group flex h-full gap-4 bg-surface-raised p-5 transition-colors hover:bg-surface-overlay sm:gap-5 sm:p-7">
                 <span className="font-display text-sm font-bold text-accent">
                   {step.number}
                 </span>

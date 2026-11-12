@@ -239,7 +239,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
           copy="The work is only complete when you have the assets, context, and confidence to own what comes next."
         />
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mobile-rail mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {service.deliverables.map((item, index) => {
             const ItemIcon = item.icon;
             return (
@@ -298,7 +298,7 @@ export default async function ServicePage({ params }: ServicePageProps) {
             <ArrowRight size={15} />
           </ButtonLink>
         </div>
-        <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mobile-rail mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {otherServices.map((other) => {
             const OtherIcon = other.icon;
             return (

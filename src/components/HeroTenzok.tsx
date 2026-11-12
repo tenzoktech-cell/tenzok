@@ -89,13 +89,13 @@ function ProductVisual() {
         <h2 className="mt-3 max-w-sm text-xl leading-[1.15] text-ink sm:text-2xl">
           From product brief to a system ready to scale.
         </h2>
-        <p className="mt-3 max-w-md text-sm leading-6 text-ink-muted">
+        <p className="mt-2 max-w-md text-sm leading-6 text-ink-muted">
           Strategy, interface, engineering, QA, deployment, and knowledge transfer
           in one visible workflow.
         </p>
       </div>
 
-      <ol className="grid border-t border-ink sm:grid-cols-3">
+      <ol className="grid grid-cols-3 border-t border-ink">
         {[
           { step: "01", title: "Scope", copy: "Goals aligned", active: true },
           { step: "02", title: "Build", copy: "Weekly demos", active: true },
@@ -103,7 +103,7 @@ function ProductVisual() {
         ].map((item) => (
           <li
             key={item.step}
-            className="border-b border-line p-4 last:border-b-0 sm:border-b-0 sm:border-r sm:last:border-r-0"
+            className="border-r border-line p-3 last:border-r-0 sm:p-4"
           >
             <div className="flex items-center justify-between">
               <span className="font-mono text-[11px] text-ink-subtle">{item.step}</span>
@@ -113,8 +113,8 @@ function ProductVisual() {
                 <span className="h-3.5 w-3.5 rounded-full border border-line-strong" />
               )}
             </div>
-            <p className="mt-4 font-display text-lg text-ink">{item.title}</p>
-            <p className="mt-0.5 text-xs text-ink-subtle">{item.copy}</p>
+            <p className="mt-3 font-display text-base text-ink sm:mt-4 sm:text-lg">{item.title}</p>
+            <p className="mt-0.5 text-[11px] leading-4 text-ink-subtle sm:text-xs">{item.copy}</p>
           </li>
         ))}
       </ol>

@@ -116,7 +116,7 @@ export default function AboutPage() {
           copy="A preview of how the leadership profiles will appear. Names, photographs, and profile details can be added later."
         />
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
+        <div className="mobile-rail mt-8 grid gap-4 md:grid-cols-3">
           {LEADERSHIP_DEMO.map((profile, index) => (
             <Reveal key={profile.role} delay={index * 70} className="h-full">
               <article className="premium-card premium-card-hover group h-full overflow-hidden rounded-3xl">
@@ -172,7 +172,7 @@ export default function AboutPage() {
             </span>
           </h2>
         </div>
-        <div className="mt-8 grid gap-4 lg:grid-cols-3">
+        <div className="mobile-rail mt-8 grid gap-4 lg:grid-cols-3">
           {WORKING_MODEL.map((item, index) => {
             const Icon = item.icon;
             return (

@@ -146,7 +146,7 @@ export default function BlogsPage() {
             </>
           }
         />
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
+        <div className="mobile-rail mt-8 grid gap-4 md:grid-cols-3">
           {EDITORIAL_VALUES.map((item, index) => {
             const Icon = item.icon;
             return (

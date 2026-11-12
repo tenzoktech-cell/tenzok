@@ -28,7 +28,7 @@ export default function CtaFooter() {
       />
 
       <Container>
-        <div className="relative flex flex-col items-center py-16 text-center md:py-20">
+        <div className="relative flex flex-col items-center py-14 text-center md:py-20">
           <Reveal className="flex flex-col items-center">
             <span className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-accent">
               Your next build starts here
@@ -67,8 +67,8 @@ export default function CtaFooter() {
 
       <footer className="theme-ink relative bg-surface text-ink">
         <Container>
-          <div className="grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
-            <div>
+          <div className="grid grid-cols-2 gap-x-6 gap-y-10 py-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
+            <div className="col-span-2 lg:col-span-1">
               <div className="flex items-center gap-2.5">
                 <span className="flex h-10 w-10 items-center justify-center rounded-md bg-ink text-surface">
                   <TenzokLogo size={20} />
@@ -137,7 +137,11 @@ export default function CtaFooter() {
               ))}
             </FooterColumn>
 
-            <FooterColumn title="Project domains">
+            <FooterColumn
+              title="Project domains"
+              className="col-span-2 lg:col-span-1"
+              listClassName="grid grid-cols-2 gap-x-6 lg:flex lg:flex-col"
+            >
               {DOMAINS.slice(0, 4).map((domain) => (
                 <FooterLink key={domain.slug} href={`/projects/${domain.slug}`}>
                   {domain.shortName ?? domain.name}
@@ -164,13 +168,23 @@ export default function CtaFooter() {
   );
 }
 
-function FooterColumn({ title, children }: { title: string; children: ReactNode }) {
+function FooterColumn({
+  title,
+  className = "",
+  listClassName = "flex flex-col",
+  children,
+}: {
+  title: string;
+  className?: string;
+  listClassName?: string;
+  children: ReactNode;
+}) {
   return (
-    <nav aria-label={title}>
+    <nav aria-label={title} className={className || undefined}>
       <p className="font-mono text-[11px] font-medium uppercase tracking-[0.14em] text-ink-subtle">
         {title}
       </p>
-      <div className="mt-4 flex flex-col">{children}</div>
+      <div className={`mt-4 ${listClassName}`}>{children}</div>
     </nav>
   );
 }
