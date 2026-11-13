@@ -7,6 +7,7 @@ import CapabilityMarquee from "@/components/sections/CapabilityMarquee";
 import CtaFooter from "@/components/sections/CtaFooter";
 import DeliveryProcess from "@/components/sections/DeliveryProcess";
 import InsightsFaq from "@/components/sections/InsightsFaq";
+import ProductShowcase from "@/components/sections/ProductShowcase";
 import { organizationSchema, websiteSchema } from "@/lib/seo";
 import { SITE, socialMetadata, url } from "@/lib/site";
 
@@ -27,6 +28,7 @@ export default function Home() {
       <AudiencePaths />
       <CapabilityMarquee />
       <AgencyServices />
+      <ProductShowcase />
       <DeliveryProcess />
       <InsightsFaq />
       <CtaFooter />

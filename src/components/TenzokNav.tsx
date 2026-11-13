@@ -30,6 +30,7 @@ const DROPDOWNS = [
 ] as const;
 
 const DIRECT_LINKS = [
+  { label: "Products", href: "/products" },
   { label: "Blog", href: "/blogs" },
   { label: "About", href: "/about" },
   { label: "Contact", href: "/contact" },

@@ -126,6 +126,7 @@ export default function CtaFooter() {
                   {item.label}
                 </FooterLink>
               ))}
+              <FooterLink href="/products">Products</FooterLink>
               <FooterLink href="/faq">FAQ</FooterLink>
             </FooterColumn>
 
