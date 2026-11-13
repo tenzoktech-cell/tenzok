@@ -4,25 +4,31 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { ArrowRight, Building2, CheckCircle2, GraduationCap, LockKeyhole, Mail, MapPin, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { InternationalPhoneField } from "@/components/ui/InternationalPhoneField";
-import { signup } from "@/lib/auth-actions";
+import { signup, type AuthState } from "@/lib/auth-actions";
 
 const INPUT = "w-full rounded-lg border border-line bg-surface/70 px-4 py-2.5 text-base sm:text-sm text-ink placeholder:text-ink-subtle transition-all hover:border-line-strong focus:border-cool focus:bg-surface";
 const ICON_INPUT = `${INPUT} pl-11`;
 const LABEL = "text-xs font-medium uppercase tracking-[0.12em] text-ink-muted";
 
 export default function SignupForm() {
-  const [state, action, pending] = useActionState(signup, null);
+  const [password, setPassword] = useState("");
+  // Keep all progress after an error. Only clear the secret that may be wrong.
+  const [state, action, pending] = useActionState(
+    async (prev: AuthState, formData: FormData) => {
+      const result = await signup(prev, formData);
+      if (result?.error) setPassword("");
+      return result;
+    },
+    null,
+  );
   const noticeRef = useRef<HTMLDivElement>(null);
   const [name, setName] = useState("");
   const [designation, setDesignation] = useState("");
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [country, setCountry] = useState("");
   const [address, setAddress] = useState("");
 
   useEffect(() => { if (state?.notice) noticeRef.current?.focus(); }, [state?.notice]);
-  // Keep all progress after an error. Only clear the secret that may be wrong.
-  useEffect(() => { if (state?.error) setPassword(""); }, [state?.error]);
 
   if (state?.notice) return <div ref={noticeRef} role="status" tabIndex={-1} className="rounded-xl border border-cool/30 bg-accent/10 p-8"><span className="flex h-12 w-12 items-center justify-center rounded-2xl border border-cool/30 bg-cool/10 text-cool"><CheckCircle2 size={22} /></span><h2 className="mt-5 text-2xl font-semibold tracking-tight text-ink">Check your inbox</h2><p className="mt-3 text-sm leading-6 text-ink-muted">{state.notice}</p></div>;
 

@@ -119,3 +119,31 @@ export const ROLE_LABELS: Record<UserRole, string> = {
   recruiter: "Recruiter",
   admin: "Admin",
 };
+
+export type FinanceKind = "income" | "expense";
+export type FinanceCategory = "student_project" | "webinar" | "client" | "product" | "other";
+
+export interface FinanceEntry {
+  id: string;
+  entry_date: string;
+  kind: FinanceKind;
+  category: FinanceCategory;
+  title: string;
+  /** Postgres numeric arrives as a string; parse with Number() before maths. */
+  amount: number | string;
+  details: string | null;
+  created_by: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export const FINANCE_CATEGORY_LABELS: Record<FinanceCategory, string> = {
+  student_project: "Student project",
+  webinar: "Webinar",
+  client: "Client",
+  product: "Product",
+  other: "Other",
+};
+
+/** Profit is split equally between the partners. */
+export const FINANCE_PARTNERS = 3;

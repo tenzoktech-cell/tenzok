@@ -1,23 +1,26 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useState } from "react";
 import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from "lucide-react";
 import { Button } from "@/components/ui/Button";
-import { login } from "@/lib/auth-actions";
+import { login, type AuthState } from "@/lib/auth-actions";
 
 // text-base (16px) prevents iOS Safari from zooming when a field receives focus.
 const INPUT = "w-full rounded-lg border border-line bg-surface/70 py-2.5 pl-11 pr-12 text-base sm:text-sm text-ink placeholder:text-ink-subtle transition-all hover:border-line-strong focus:border-cool focus:bg-surface focus:shadow-[0_0_0_4px_color-mix(in_srgb,var(--color-cool)_12%,transparent)]";
 
 export default function LoginForm() {
-  const [state, action, pending] = useActionState(login, null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-
   // Retain the email for a quick correction, but never retain a failed password.
-  useEffect(() => {
-    if (state?.error) setPassword("");
-  }, [state?.error]);
+  const [state, action, pending] = useActionState(
+    async (prev: AuthState, formData: FormData) => {
+      const result = await login(prev, formData);
+      if (result?.error) setPassword("");
+      return result;
+    },
+    null,
+  );
 
   return (
     <form action={action} className="flex flex-col gap-5" noValidate>

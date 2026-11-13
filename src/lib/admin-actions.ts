@@ -189,3 +189,90 @@ export async function adminAddProjectFile(
   revalidatePath("/profile");
   return { notice: "File link added to the project." };
 }
+const FINANCE_KINDS = ["income", "expense"];
+const FINANCE_CATEGORIES = ["student_project", "webinar", "client", "product", "other"];
+
+/** Validates a finance form; returns the row to write or an error message. */
+function readFinanceForm(formData: FormData) {
+  const kind = String(formData.get("kind") ?? "");
+  const category = String(formData.get("category") ?? "");
+  const title = String(formData.get("title") ?? "").trim();
+  const details = String(formData.get("details") ?? "").trim();
+  const entryDate = String(formData.get("entry_date") ?? "");
+  const amount = Number(String(formData.get("amount") ?? "").replace(/,/g, ""));
+
+  if (!FINANCE_KINDS.includes(kind)) return { error: "Choose money in or money out." };
+  if (!FINANCE_CATEGORIES.includes(category)) return { error: "Choose a category." };
+  if (!title || title.length > 140) return { error: "Add a short title (up to 140 characters)." };
+  if (details.length > 2000) return { error: "Details can be up to 2000 characters." };
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(entryDate) || Number.isNaN(Date.parse(entryDate)))
+    return { error: "Choose a valid date." };
+  if (!Number.isFinite(amount) || amount <= 0 || amount >= 1e10)
+    return { error: "Enter an amount greater than zero." };
+
+  return {
+    row: {
+      kind,
+      category,
+      title,
+      details: details || null,
+      entry_date: entryDate,
+      amount: Math.round(amount * 100) / 100,
+    },
+  };
+}
+
+export async function adminCreateFinanceEntry(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const ctx = await requireAdmin();
+  if (!ctx.ok) return ctx.fail;
+
+  const parsed = readFinanceForm(formData);
+  if ("error" in parsed) return { error: parsed.error };
+
+  const { error } = await ctx.supabase
+    .from("finance_entries")
+    .insert({ ...parsed.row, created_by: ctx.user.id });
+  if (error) return { error: error.message };
+  revalidatePath("/admin/finance");
+  return { notice: "Entry saved." };
+}
+
+export async function adminUpdateFinanceEntry(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const ctx = await requireAdmin();
+  if (!ctx.ok) return ctx.fail;
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return { error: "Missing entry id." };
+  const parsed = readFinanceForm(formData);
+  if ("error" in parsed) return { error: parsed.error };
+
+  const { error } = await ctx.supabase
+    .from("finance_entries")
+    .update(parsed.row)
+    .eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/finance");
+  return { notice: "Entry updated." };
+}
+
+export async function adminDeleteFinanceEntry(
+  _prev: ActionState,
+  formData: FormData,
+): Promise<ActionState> {
+  const ctx = await requireAdmin();
+  if (!ctx.ok) return ctx.fail;
+
+  const id = String(formData.get("id") ?? "");
+  if (!id) return { error: "Missing entry id." };
+
+  const { error } = await ctx.supabase.from("finance_entries").delete().eq("id", id);
+  if (error) return { error: error.message };
+  revalidatePath("/admin/finance");
+  return { notice: "Entry deleted." };
+}

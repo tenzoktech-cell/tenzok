@@ -14,11 +14,18 @@ const NOT_CONFIGURED: AuthState = {
     "Accounts aren't live just yet — we're finishing setup. Email info@tenzok.in and we'll onboard you personally.",
 };
 
-/** Network failures surface as a bare "fetch failed" — translate it. */
-const friendly = (message: string) =>
-  /fetch failed/i.test(message)
-    ? "We couldn't reach the accounts server. Please try again in a few minutes — or email info@tenzok.in."
-    : message;
+/** Translate Supabase's raw auth errors into plain language. */
+const friendly = (message: string) => {
+  if (/fetch failed/i.test(message))
+    return "We couldn't reach the accounts server. Please try again in a few minutes — or email info@tenzok.in.";
+  if (/email not confirmed/i.test(message))
+    return "Please confirm your email first — open the link we sent when you signed up, then log in.";
+  if (/invalid login credentials/i.test(message))
+    return "That email and password don't match. Check both and try again.";
+  if (/rate limit|too many/i.test(message))
+    return "Too many attempts. Please wait a minute and try again.";
+  return message;
+};
 
 export async function login(_prev: AuthState, formData: FormData): Promise<AuthState> {
   if (!isSupabaseConfigured) return NOT_CONFIGURED;
@@ -38,9 +45,17 @@ export async function login(_prev: AuthState, formData: FormData): Promise<AuthS
 
   const { data: profile } = await supabase
     .from("profiles")
-    .select("role")
+    .select("role, status")
     .eq("id", user.id)
     .single();
+
+  // The admin panel can suspend an account; honour it at sign-in.
+  if (profile?.status === "suspended") {
+    await supabase.auth.signOut();
+    return {
+      error: "This account is suspended. Email info@tenzok.in if you think this is a mistake.",
+    };
+  }
 
   revalidatePath("/", "layout");
   redirect(profile?.role === "admin" ? "/admin" : "/profile");
@@ -60,7 +75,7 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
   const password = String(formData.get("password") ?? "");
 
   if (!name || !email || !password || !designation || !country)
-    return { error: "Fill in every field." };
+    return { error: "Fill in your name, role, email, password and country." };
   if (!DESIGNATIONS.includes(designation))
     return { error: "Choose whether you're a student or a company." };
   if (phone && !isValidPhoneNumber(phone)) {
@@ -79,6 +94,12 @@ export async function signup(_prev: AuthState, formData: FormData): Promise<Auth
     },
   });
   if (error) return { error: friendly(error.message) };
+
+  // With email confirmation on, Supabase hides an existing account by returning
+  // a user with no identities instead of an error. Say so plainly.
+  if (data.user && data.user.identities?.length === 0) {
+    return { error: "An account with this email already exists. Log in instead." };
+  }
 
   // No session means email confirmation is on — the account isn't live yet.
   if (!data.session) {
