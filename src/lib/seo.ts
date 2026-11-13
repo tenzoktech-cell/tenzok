@@ -130,3 +130,57 @@ export function itemListSchema(
     })),
   };
 }
+
+/** The 14 districts of Kerala, used for areaServed and visible on-page copy. */
+export const KERALA_DISTRICTS = [
+  "Thiruvananthapuram",
+  "Kollam",
+  "Pathanamthitta",
+  "Alappuzha",
+  "Kottayam",
+  "Idukki",
+  "Ernakulam",
+  "Thrissur",
+  "Palakkad",
+  "Malappuram",
+  "Kozhikode",
+  "Wayanad",
+  "Kannur",
+  "Kasaragod",
+] as const;
+
+/**
+ * Local presence for Kerala searches. Address is the team's real base
+ * (Infopark, Kakkanad, Kochi). Only used on pages that show it visibly.
+ */
+export function localBusinessSchema(path: string, description: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "@id": url(`${path}#localbusiness`),
+    name: SITE.name,
+    url: url(path),
+    email: SITE.email,
+    description,
+    parentOrganization: { "@id": url("/#organization") },
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "Infopark, Kakkanad",
+      addressLocality: "Kochi",
+      addressRegion: "Kerala",
+      addressCountry: "IN",
+    },
+    areaServed: [
+      { "@type": "State", name: "Kerala" },
+      ...KERALA_DISTRICTS.map((name) => ({ "@type": "AdministrativeArea", name })),
+    ],
+    knowsAbout: [
+      "Final year projects",
+      "KTU mini projects",
+      "KTU main projects",
+      "Computer science engineering projects",
+      "Machine learning projects",
+      "IoT and embedded projects",
+    ],
+  };
+}

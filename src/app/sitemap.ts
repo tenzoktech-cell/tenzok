@@ -10,6 +10,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: url("/"), priority: 1, changeFrequency: "monthly" },
     { url: url("/about"), priority: 0.7, changeFrequency: "yearly" },
     { url: url("/projects"), priority: 0.9, changeFrequency: "monthly" },
+    { url: url("/final-year-projects-kerala"), priority: 0.9, changeFrequency: "monthly" },
     { url: url("/portfolio"), priority: 0.8, changeFrequency: "monthly" },
     { url: url("/services"), priority: 0.9, changeFrequency: "monthly" },
     { url: url("/products"), priority: 0.8, changeFrequency: "monthly" },

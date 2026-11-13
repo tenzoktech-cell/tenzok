@@ -148,6 +148,7 @@ export default function CtaFooter() {
                   {domain.shortName ?? domain.name}
                 </FooterLink>
               ))}
+              <FooterLink href="/final-year-projects-kerala">KTU projects in Kerala</FooterLink>
               <FooterLink href="/projects">Explore all 18 domains</FooterLink>
               <a
                 href="/blogs/rss.xml"

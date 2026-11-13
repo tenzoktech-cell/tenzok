@@ -1623,6 +1623,181 @@ export const POSTS: BlogPost[] = [
         "a": "Nothing is lost if the saga state is persisted before any command is published and every event leaves through an outbox table. The saga simply waits. The window in which balances are inconsistent is bounded by how fast your sweeper reclaims stuck sagas, so set that interval deliberately and be able to state it: a thirty second step timeout, a sweeper every ten seconds, and after five re-drives the saga is marked STALLED for a human. Re-drives must republish the original command under its original event id, or your own retry will defeat your own dedupe table."
       }
     ]
+  },
+  {
+    "slug": "unique-ktu-final-year-project-ideas",
+    "title": "Unique Final Year Project Ideas for KTU Students in Kerala",
+    "excerpt": "Thirty project ideas built around real Kerala problems, plus a simple test for whether your topic is unique enough to impress a review panel.",
+    "description": "Unique final year, mini and major project ideas for KTU CSE, IT, ECE and EEE students in Kerala, with a test for originality and tips to pick the right topic.",
+    "keywords": [
+      "unique final year project ideas",
+      "KTU final year project ideas",
+      "KTU mini project ideas",
+      "final year projects Kerala",
+      "mini project ideas for CSE",
+      "major project ideas for CSE",
+      "KTU main project ideas",
+      "final year project ideas for ECE",
+      "project ideas for computer science students Kerala"
+    ],
+    "publishedAt": "2026-11-13",
+    "readingMinutes": 10,
+    "tags": [
+      "Final Year Projects",
+      "KTU",
+      "Project Ideas",
+      "Kerala"
+    ],
+    "body": [
+      {
+        "type": "p",
+        "text": "Every year, thousands of KTU engineering students across Kerala search for unique final year project ideas, and most end up with the same handful of topics: a library management system, a chatbot, a disease predictor trained on a Kaggle dataset. None of these are bad, but review panels have seen them hundreds of times. If you are a KTU student choosing a mini project or a final year main project, the fastest way to stand out is not a fancier algorithm. It is a better problem."
+      },
+      {
+        "type": "p",
+        "text": "This guide gives you thirty project ideas grouped by branch and level, most of them built around problems that are specific to Kerala. It also gives you a simple test to check whether a topic is genuinely unique, and the mistakes that sink otherwise good projects at the review stage."
+      },
+      {
+        "type": "h2",
+        "text": "What makes a final year project unique"
+      },
+      {
+        "type": "p",
+        "text": "A unique project is not one nobody has ever attempted. It is one where your version answers a question the common versions do not. Examiners look for three things: a real user with a real problem, a decision you had to make and can defend, and a result you can demonstrate rather than describe."
+      },
+      {
+        "type": "p",
+        "text": "Local problems give you all three almost for free. A flood alert system for Kerala's monsoon has a real user, forces you to choose data sources and thresholds, and can be demonstrated on a live map. A generic weather app does none of that."
+      },
+      {
+        "type": "callout",
+        "tone": "note",
+        "text": "The originality test: if you can replace the name of your project with a famous app's name and nothing else changes, it is not unique yet. Add a specific user, a specific constraint or a specific dataset."
+      },
+      {
+        "type": "h2",
+        "text": "Computer Science and IT project ideas"
+      },
+      {
+        "type": "h3",
+        "text": "Major project ideas"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Malayalam handwriting recognition: read handwritten Malayalam from a phone photo using a CNN, with a web or mobile demo.",
+          "Manglish sentiment analysis: classify Malayalam-English code-mixed social media posts, an area most public datasets ignore.",
+          "KSRTC bus arrival prediction: estimate arrival times from GPS history and show them in a passenger app.",
+          "Monsoon flood alert dashboard: combine rainfall and river-level data into district-wise risk alerts on a live map.",
+          "Coconut and banana leaf disease detection: identify common diseases from photos and suggest treatment steps.",
+          "University regulations chatbot: a retrieval-augmented assistant that answers questions from syllabus and regulation PDFs and cites the page it used.",
+          "Kerala itinerary planner: an LLM-based trip planner that respects travel time, opening hours and budget.",
+          "Face attendance with a liveness check: attendance that a printed photo cannot fool, with a teacher dashboard.",
+          "Fish price tracker for coastal markets: collect daily prices and forecast short-term trends for small traders.",
+          "Network intrusion detection on a simulated campus LAN: generate traffic, detect attacks and visualise alerts."
+        ]
+      },
+      {
+        "type": "h3",
+        "text": "Mini project ideas"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Fake internship offer detector: flag scam job and internship posts aimed at students.",
+          "Campus lost-and-found portal: post and search lost items with image matching and email alerts.",
+          "Hostel mess feedback analytics: turn daily menu ratings into waste and preference insights.",
+          "Phishing link checker browser extension: score a link before the user clicks it.",
+          "Exam timetable and reminder app: a progressive web app that works offline during exam week.",
+          "CI/CD pipeline for a college events site: automated tests, deployment and uptime monitoring."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Electronics and Communication project ideas"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Landslide early-warning node: soil moisture and tilt sensors with LoRa alerts, designed for hilly districts such as Idukki and Wayanad.",
+          "Smart irrigation for paddy fields: water-level sensing and automatic pump control with a simple farmer app.",
+          "Offline Malayalam voice commands: keyword spotting for a few Malayalam commands on a microcontroller.",
+          "RISC-V processor on an FPGA: design, simulate and run a small RISC-V core on a development board.",
+          "Drone-based crop health mapping: capture aerial images and generate a field health map.",
+          "Smart helmet for two-wheelers: crash detection with automatic SMS alerts to emergency contacts."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Electrical and Electronics project ideas"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Solar EV charging monitor: track solar input, battery state and charging sessions on a dashboard.",
+          "Smart energy meter with theft detection: measure consumption and flag tampering patterns.",
+          "BLDC motor controller for electric bicycles: build, tune and load-test a controller.",
+          "Home energy advisor: break a household bill down by appliance and suggest savings.",
+          "Fault detection on a distribution feeder: classify fault types from simulated current and voltage data."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "How to choose the right topic in three steps"
+      },
+      {
+        "type": "ol",
+        "items": [
+          "Start from a user, not a technology. Write one sentence: who is this for, and what problem does it solve for them?",
+          "Check the data or hardware first. A great idea with no dataset, or with parts you cannot buy in time, will stall before the second review.",
+          "Scope to your timeline. A mini project should prove one idea well. A main project can be a full system, but it still needs a working demo before the final review."
+        ]
+      },
+      {
+        "type": "h2",
+        "text": "Mistakes that hurt projects at review"
+      },
+      {
+        "type": "ul",
+        "items": [
+          "Choosing a topic only because it sounds advanced, then being unable to explain the core algorithm in the viva.",
+          "Reporting a suspiciously high accuracy without checking for data leakage.",
+          "Leaving deployment to the last week, so the demo only runs on one laptop.",
+          "Writing the report at the end instead of documenting design decisions as you make them."
+        ]
+      },
+      {
+        "type": "callout",
+        "tone": "warn",
+        "text": "Your department's scheme and your project guide decide the exact format, deadlines and evaluation criteria. Confirm the topic with your guide before you start building."
+      },
+      {
+        "type": "h2",
+        "text": "Getting help with your KTU project"
+      },
+      {
+        "type": "p",
+        "text": "Tenzok is an engineering team based at Infopark, Kakkanad in Kochi. We work with KTU students from every district of Kerala, online, over WhatsApp and in person in Kochi, on mini projects and final year main projects. We build the project with you rather than for you, so you understand every part of it when the panel starts asking questions."
+      }
+    ],
+    "faq": [
+      {
+        "q": "What are some unique final year project ideas for KTU CSE students?",
+        "a": "Projects built around local problems stand out: Malayalam handwriting recognition, Manglish sentiment analysis, a KSRTC bus arrival predictor, a monsoon flood alert dashboard, or coconut leaf disease detection."
+      },
+      {
+        "q": "How do I know if my project idea is unique?",
+        "a": "Replace your project's name with a famous app's name. If nothing else changes, it is not unique yet. Add a specific user, constraint or dataset, ideally a problem specific to Kerala."
+      },
+      {
+        "q": "What is a good mini project idea for computer science?",
+        "a": "A good mini project proves one idea well: for example a fake internship offer detector, a campus lost-and-found portal with image matching, or a phishing link checker browser extension."
+      },
+      {
+        "q": "Is there final year project help in Kerala for KTU students?",
+        "a": "Yes. Tenzok, based at Infopark in Kochi, works with KTU students across all 14 districts of Kerala online and in person, building projects with students so they can defend them in the viva."
+      }
+    ]
   }
 ];
 
