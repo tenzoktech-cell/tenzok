@@ -276,40 +276,39 @@ export default function TenzokNav() {
               <span className="h-11 w-20 animate-pulse rounded-full bg-ink/[0.05]" />
             </div>
           ) : user ? (
-            <div className="flex items-center gap-2 rounded-full border border-ink/10 bg-ink/[0.045] p-1.5 shadow-none">
-              <span
-                aria-hidden
-                className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full border border-cool/30 bg-accent/10 text-xs font-bold text-ink"
-              >
-                {accountInitial}
-              </span>
-              <span className="hidden min-w-0 pr-1 lg:block">
-                <span className="block text-[10px] font-medium uppercase tracking-[0.14em] text-ink-subtle">
-                  Workspace
-                </span>
-                <span className="block max-w-24 truncate text-sm font-semibold text-ink">
-                  {displayName}
-                </span>
-              </span>
-              <ButtonLink
+            <div className="flex items-center gap-1 rounded-full border border-line bg-surface-raised/80 p-1 shadow-[0_1px_2px_rgba(27,23,18,0.05)]">
+              <Link
                 href="/profile"
                 prefetch={true}
                 onPointerEnter={() => router.prefetch("/profile")}
                 onClick={closeAll}
-                variant="inverse"
-                className="min-h-9 px-4"
+                aria-label={`Open your profile (${displayName})`}
+                className="group flex min-h-9 items-center gap-2.5 rounded-full py-0.5 pl-0.5 pr-3.5 transition-colors hover:bg-ink/[0.05]"
               >
-                <UserRound size={15} />
-                <span className="hidden 2xl:inline">Profile</span>
-              </ButtonLink>
+                <span
+                  aria-hidden
+                  className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-ink font-brand text-[13px] font-bold text-surface"
+                >
+                  {accountInitial}
+                </span>
+                <span className="max-w-28 truncate text-[13px] font-medium capitalize text-ink">
+                  {displayName.toLowerCase()}
+                </span>
+                <UserRound
+                  size={14}
+                  aria-hidden
+                  className="text-ink-subtle transition-colors group-hover:text-ink"
+                />
+              </Link>
+              <span aria-hidden className="h-5 w-px bg-line" />
               <button
                 type="button"
                 onClick={signOut}
                 aria-label="Sign out"
                 title="Sign out"
-                className="flex h-10 w-10 shrink-0 cursor-pointer items-center justify-center rounded-full border border-red-400/25 bg-red-500/10 text-red-700 transition-colors hover:bg-red-500/20 hover:text-red-800"
+                className="flex h-9 w-9 shrink-0 cursor-pointer items-center justify-center rounded-full text-ink-subtle transition-colors hover:bg-red-500/10 hover:text-red-700"
               >
-                <LogOut size={17} strokeWidth={2.25} />
+                <LogOut size={16} />
               </button>
             </div>
           ) : (
